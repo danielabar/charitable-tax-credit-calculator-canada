@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charitable Tax Credit Calculator</title>
+  <meta name="description" content="Find out what your charitable donation actually costs you — the only calculator that checks whether you can really use the tax credit.">
+  <link rel="stylesheet" href="css/index.css">
+  <script>
+    // Restore URL after 404.html SPA redirect (GitHub Pages).
+    // Must run before the router module so the URL is correct when it starts.
+    (function () {
+      var redirect = sessionStorage.getItem("redirect");
+      if (redirect) {
+        sessionStorage.removeItem("redirect");
+        history.replaceState(null, "", redirect);
+      }
+    })();
+  </script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+  <header class="top-nav">
+    <a href="./" data-route="/" class="logo">Charitable Tax Credit Calculator</a>
+    <nav>
+      <a href="./" data-route="/" class="active">Calculator</a>
+      <a href="about" data-route="/about">About</a>
+    </nav>
+  </header>
+
+  <main id="content">
+  </main>
+
+  <footer class="site-footer">
+    Built by <a href="https://danielabaron.me">Daniela Baron</a> in collaboration with <a href="https://openpolicyontario.com">Open Policy Ontario</a>
+  </footer>
+
+</body>
+</html>

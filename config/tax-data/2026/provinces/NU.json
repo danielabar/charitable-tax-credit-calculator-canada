@@ -1,0 +1,19 @@
+{
+  "jurisdiction": "NU",
+  "name": "Nunavut",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 55801, "rate": 0.04 },
+      { "upTo": 111602, "rate": 0.07 },
+      { "upTo": 181439, "rate": 0.09 },
+      { "upTo": null, "rate": 0.115 }
+    ],
+    "basicPersonalAmount": 19659
+  },
+  "donationCredit": {
+    "lowRate": 0.04,
+    "highRate": 0.115,
+    "lowRateThreshold": 200
+  }
+}

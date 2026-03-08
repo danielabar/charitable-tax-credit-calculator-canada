@@ -1,0 +1,22 @@
+{
+  "jurisdiction": "BC",
+  "name": "British Columbia",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 50363, "rate": 0.056 },
+      { "upTo": 100728, "rate": 0.077 },
+      { "upTo": 115648, "rate": 0.105 },
+      { "upTo": 140430, "rate": 0.1229 },
+      { "upTo": 190405, "rate": 0.147 },
+      { "upTo": 265545, "rate": 0.168 },
+      { "upTo": null, "rate": 0.205 }
+    ],
+    "basicPersonalAmount": 13216
+  },
+  "donationCredit": {
+    "lowRate": 0.0506,
+    "highRate": 0.168,
+    "lowRateThreshold": 200
+  }
+}

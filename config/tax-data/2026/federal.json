@@ -1,0 +1,20 @@
+{
+  "jurisdiction": "federal",
+  "name": "Federal",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 58523, "rate": 0.14 },
+      { "upTo": 117045, "rate": 0.205 },
+      { "upTo": 181440, "rate": 0.26 },
+      { "upTo": 258482, "rate": 0.29 },
+      { "upTo": null, "rate": 0.33 }
+    ],
+    "basicPersonalAmount": 16452
+  },
+  "donationCredit": {
+    "lowRate": 0.14,
+    "highRate": 0.29,
+    "lowRateThreshold": 200
+  }
+}

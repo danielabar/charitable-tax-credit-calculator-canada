@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting…</title>
+  <script type="module">
+    import { basePath } from "./js/base-path.js";
+
+    // SPA fallback for GitHub Pages (and similar static hosts).
+    // When the server can't find a file (e.g. /about), it serves this 404.html.
+    // We store the intended URL and redirect to the app root so the SPA router
+    // can load the correct view.
+    sessionStorage.setItem("redirect", location.pathname + location.search + location.hash);
+    location.replace(basePath);
+  </script>
+</head>
+<body></body>
+</html>

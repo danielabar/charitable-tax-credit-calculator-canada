@@ -1,0 +1,117 @@
+@layer components {
+  .narrative {
+    margin-bottom: 40px;
+  }
+
+  .narrative h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.3px;
+  }
+
+  .narrative-section {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .narrative-section:last-child {
+    border-bottom: none;
+  }
+
+  .narrative-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    color: var(--color-text);
+  }
+
+  .narrative-section p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  .narrative-section p + p {
+    margin-top: 10px;
+  }
+
+  /* Highlighted amounts */
+  .hl {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .hl-teal {
+    color: var(--color-primary-dark);
+    font-weight: 600;
+  }
+
+  .hl-red {
+    color: var(--color-wasted);
+    font-weight: 600;
+  }
+
+  /* Callout boxes */
+  .callout {
+    border-radius: var(--radius);
+    padding: 20px var(--space-lg);
+    margin: var(--space-md) 0;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .callout strong {
+    font-weight: 600;
+  }
+
+  .callout-info {
+    background: var(--color-primary-light);
+    border-left: 3px solid var(--color-primary);
+  }
+
+  .callout-warning {
+    background: var(--color-wasted-bg);
+    border-left: 3px solid var(--color-wasted);
+  }
+
+  .callout-warm {
+    background: var(--color-accent-light);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  /* About page */
+  .about-page {
+    padding: var(--space-2xl) 0 80px;
+  }
+
+  .about-page h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.5px;
+  }
+
+  .about-page h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: var(--space-xl) 0 12px;
+  }
+
+  .about-page p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: 12px;
+  }
+
+  .about-page ul {
+    margin: var(--space-sm) 0 var(--space-md) 20px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .about-page a {
+    color: var(--color-primary);
+  }
+}

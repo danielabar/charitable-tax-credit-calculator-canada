@@ -1,0 +1,33 @@
+@layer base {
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-stack);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-skip-ink: auto;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-lg);
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .site-footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+}
