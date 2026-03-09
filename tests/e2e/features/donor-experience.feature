@@ -20,6 +20,7 @@ Feature: Donor experience
     And the visual breakdown should show cost versus credit
     # Narrative
     And the explanation should show tiered rates for donations above $200
+    And the explanation should not mention the top bracket bonus rate
     And the tax situation should confirm the full credit is usable
     # Sections that should NOT appear for full benefit
     And the results should not include the $200 threshold nudge
@@ -219,5 +220,55 @@ Feature: Donor experience
     And the results should include the closing encouragement
     # No nudge — credit wasted AND far from $200
     And the results should not include the $200 threshold nudge
+    # Disclaimer
+    And the disclaimer should be shown
+
+  Scenario: Full benefit — top bracket earner, donation above $200
+    When I select "Ontario" as my province
+    And I enter "300000" as my income
+    And I enter "500" as my donation
+    And I click Calculate
+    # Bottom line
+    Then the bottom line should say "Actually costs you"
+    And the bottom line should not show a warning
+    # Credit summary
+    And the credit summary should show federal credit, provincial credit, and total credit
+    # Visual breakdown
+    And the visual breakdown should show cost versus credit
+    # Narrative — should mention the 33% top bracket bonus
+    And the explanation should show tiered rates for donations above $200
+    And the explanation should mention the top bracket bonus rate
+    And the tax situation should confirm the full credit is usable
+    # Sections that should NOT appear
+    And the results should not include the $200 threshold nudge
+    And the results should not include the non-refundable credit explanation
+    And the results should not include carry-forward or spouse options
+    And the results should not include the minimum income section
+    And the results should not include the closing encouragement
+    # Disclaimer
+    And the disclaimer should be shown
+
+  Scenario: Full benefit — top bracket earner, donation below $200
+    When I select "Ontario" as my province
+    And I enter "300000" as my income
+    And I enter "100" as my donation
+    And I click Calculate
+    # Bottom line
+    Then the bottom line should say "Actually costs you"
+    And the bottom line should not show a warning
+    # Credit summary
+    And the credit summary should show federal credit, provincial credit, and total credit
+    # Visual breakdown
+    And the visual breakdown should show cost versus credit
+    # Narrative — should NOT mention 33% (donation is below $200, only lowRate applies)
+    And the explanation should show a single rate for donations under $200
+    And the explanation should not mention the top bracket bonus rate
+    And the tax situation should confirm the full credit is usable
+    # Sections that should NOT appear — no nudge (well below $200)
+    And the results should not include the $200 threshold nudge
+    And the results should not include the non-refundable credit explanation
+    And the results should not include carry-forward or spouse options
+    And the results should not include the minimum income section
+    And the results should not include the closing encouragement
     # Disclaimer
     And the disclaimer should be shown

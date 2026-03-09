@@ -24,7 +24,7 @@ test.describe("calculateMinimumIncome", () => {
   });
 
   test("small credit ($38 from $200 donation in ON)", () => {
-    const credit = calculateDonationCredit(200, federalConfig, onConfig).totalCredit;
+    const credit = calculateDonationCredit(200, 80000, federalConfig, onConfig).totalCredit;
     const minIncome = calculateMinimumIncome(credit, federalConfig, onConfig);
     // Combined BPAs mean tax starts below federal BPA
     expect(minIncome).toBeGreaterThan(12000);
@@ -32,7 +32,7 @@ test.describe("calculateMinimumIncome", () => {
   });
 
   test("medium credit ($159 from $500 donation in ON)", () => {
-    const credit = calculateDonationCredit(500, federalConfig, onConfig).totalCredit;
+    const credit = calculateDonationCredit(500, 80000, federalConfig, onConfig).totalCredit;
     const minIncome = calculateMinimumIncome(credit, federalConfig, onConfig);
     expect(minIncome).toBeGreaterThan(14000);
     expect(minIncome).toBeLessThan(18000);

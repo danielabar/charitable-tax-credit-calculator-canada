@@ -109,6 +109,25 @@ Then(
 );
 
 Then(
+  "the explanation should mention the top bracket bonus rate",
+  async ({ page }) => {
+    const section = page.locator('[data-narrative="basic-math"]');
+    await expect(section).toBeVisible();
+    await expect(section).toContainText("33%");
+  },
+);
+
+Then(
+  "the explanation should not mention the top bracket bonus rate",
+  async ({ page }) => {
+    const section = page.locator('[data-narrative="basic-math"]');
+    await expect(section).toBeVisible();
+    const text = await section.textContent();
+    expect(text).not.toContain("33%");
+  },
+);
+
+Then(
   "the tax situation should confirm the full credit is usable",
   async ({ page }) => {
     const section = page.locator('[data-narrative="tax-situation"]');

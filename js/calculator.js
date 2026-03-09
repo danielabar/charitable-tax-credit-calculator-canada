@@ -24,6 +24,7 @@ import { calculateMinimumIncome } from "./calculate-minimum-income.js";
  * @property {number} credit.federalCredit
  * @property {number} credit.provincialCredit
  * @property {number} credit.totalCredit
+ * @property {number} credit.topBracketPortion - Amount of donation that received the 33% top bracket rate (0 if not applicable)
  * @property {object} usability
  * @property {number} usability.creditCalculated
  * @property {number} usability.estimatedTax
@@ -39,7 +40,7 @@ import { calculateMinimumIncome } from "./calculate-minimum-income.js";
  * @property {number} nudge.currentCredit
  * @property {object} donationRates
  * @property {number} donationRates.threshold
- * @property {{lowRate: number, highRate: number}} donationRates.federal
+ * @property {{lowRate: number, highRate: number, topRate: number, topRateThreshold: number}} donationRates.federal
  * @property {{lowRate: number, highRate: number}} donationRates.provincial
  * @property {object} appSettings
  */
@@ -59,7 +60,7 @@ export async function runCalculation(provinceCode, income, donationAmount) {
   ]);
 
   const tax = calculateTotalTax(income, federal, province);
-  const credit = calculateDonationCredit(donationAmount, federal, province);
+  const credit = calculateDonationCredit(donationAmount, income, federal, province);
   const usability = checkCreditUsability(credit.totalCredit, tax.totalTax, donationAmount);
 
   let minimumIncome = null;
@@ -77,7 +78,7 @@ export async function runCalculation(provinceCode, income, donationAmount) {
   ) {
     const nudgeAbovePercent = appSettings.narrative.nudgeAboveThresholdPercent;
     const nudgeAmount = Math.round(threshold * (1 + nudgeAbovePercent));
-    const nudgeCredit = calculateDonationCredit(nudgeAmount, federal, province);
+    const nudgeCredit = calculateDonationCredit(nudgeAmount, income, federal, province);
     const nudgeUsability = checkCreditUsability(nudgeCredit.totalCredit, tax.totalTax, nudgeAmount);
     if (nudgeUsability.state === UsabilityState.FULLY_USABLE) {
       nudge = {
@@ -93,6 +94,8 @@ export async function runCalculation(provinceCode, income, donationAmount) {
     federal: {
       lowRate: federal.donationCredit.lowRate,
       highRate: federal.donationCredit.highRate,
+      topRate: federal.donationCredit.topRate,
+      topRateThreshold: federal.donationCredit.topRateThreshold,
     },
     provincial: {
       lowRate: province.donationCredit.lowRate,

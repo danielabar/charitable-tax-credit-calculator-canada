@@ -88,10 +88,28 @@ async function buildBasicMathSection(results) {
 
   const lowPortion = threshold;
   const highPortion = donationAmount - threshold;
-  const fedLowCredit = lowPortion * federal.lowRate;
-  const fedHighCredit = highPortion * federal.highRate;
 
-  const body = `<p>You donated <span class="hl">${$(donationAmount)}</span>. The federal credit rate on the first $${threshold} is ${fmtRate(federal.lowRate)}, which equals <span class="hl">${$(fedLowCredit)}</span>. On the remaining <span class="hl">${$(highPortion)}</span>, the rate is ${fmtRate(federal.highRate)}, which equals <span class="hl">${$(fedHighCredit)}</span>. Your total federal credit is <span class="hl">${$(credit.federalCredit)}</span>.</p>
+  let federalBreakdown;
+  if (credit.topBracketPortion > 0) {
+    const fedLowCredit = lowPortion * federal.lowRate;
+    const fedTopCredit = credit.topBracketPortion * federal.topRate;
+    const remainingHighPortion = highPortion - credit.topBracketPortion;
+    const fedHighCredit = remainingHighPortion * federal.highRate;
+
+    if (remainingHighPortion > 0) {
+      // Split: some at 33%, some at 29%
+      federalBreakdown = `<p>You donated <span class="hl">${$(donationAmount)}</span>. The federal credit rate on the first $${threshold} is ${fmtRate(federal.lowRate)}, which equals <span class="hl">${$(fedLowCredit)}</span>. Because your income is above <span class="hl">${$(federal.topRateThreshold)}</span>, <span class="hl">${$(credit.topBracketPortion)}</span> of the remainder qualifies for the higher ${fmtRate(federal.topRate)} rate (<span class="hl">${$(fedTopCredit)}</span>). The remaining <span class="hl">${$(remainingHighPortion)}</span> is at ${fmtRate(federal.highRate)} (<span class="hl">${$(fedHighCredit)}</span>). Your total federal credit is <span class="hl">${$(credit.federalCredit)}</span>.</p>`;
+    } else {
+      // All of the high portion at 33%
+      federalBreakdown = `<p>You donated <span class="hl">${$(donationAmount)}</span>. The federal credit rate on the first $${threshold} is ${fmtRate(federal.lowRate)}, which equals <span class="hl">${$(fedLowCredit)}</span>. Because your income is above <span class="hl">${$(federal.topRateThreshold)}</span>, the remaining <span class="hl">${$(highPortion)}</span> qualifies for the higher ${fmtRate(federal.topRate)} rate instead of ${fmtRate(federal.highRate)}, which equals <span class="hl">${$(fedTopCredit)}</span>. Your total federal credit is <span class="hl">${$(credit.federalCredit)}</span>.</p>`;
+    }
+  } else {
+    const fedLowCredit = lowPortion * federal.lowRate;
+    const fedHighCredit = highPortion * federal.highRate;
+    federalBreakdown = `<p>You donated <span class="hl">${$(donationAmount)}</span>. The federal credit rate on the first $${threshold} is ${fmtRate(federal.lowRate)}, which equals <span class="hl">${$(fedLowCredit)}</span>. On the remaining <span class="hl">${$(highPortion)}</span>, the rate is ${fmtRate(federal.highRate)}, which equals <span class="hl">${$(fedHighCredit)}</span>. Your total federal credit is <span class="hl">${$(credit.federalCredit)}</span>.</p>`;
+  }
+
+  const body = `${federalBreakdown}
 <p>In ${input.provinceName}, the provincial credit adds <span class="hl">${$(credit.provincialCredit)}</span> — that's ${fmtRate(provRate.lowRate)} on the first $${threshold} plus ${fmtRate(provRate.highRate)} on the rest. Your combined credit is <span class="hl-teal">${$(credit.totalCredit)}</span>.</p>`;
   return section("basic-math", `<h3>How your credit is calculated</h3>\n${body}`);
 }

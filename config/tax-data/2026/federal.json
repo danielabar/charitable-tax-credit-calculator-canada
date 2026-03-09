@@ -20,6 +20,8 @@
   "donationCredit": {
     "lowRate": 0.14,
     "highRate": 0.29,
+    "topRate": 0.33,
+    "topRateThreshold": 258482,
     "lowRateThreshold": 200
   }
 }
