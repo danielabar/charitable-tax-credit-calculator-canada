@@ -48,8 +48,8 @@ function buildFullPath(routePath) {
  * @param {object} options
  * @param {boolean} options.pushState - whether to push a history entry (false for popstate/initial load)
  */
-async function navigate(routePath, { pushState = true } = {}) {
-  if (routePath === currentRoute) return;
+async function navigate(routePath, { pushState = true, force = false } = {}) {
+  if (routePath === currentRoute && !force) return;
 
   const viewDir = routes[routePath];
   if (!viewDir) {
@@ -108,7 +108,9 @@ function start() {
     const link = event.target.closest("[data-route]");
     if (!link) return;
     event.preventDefault();
-    navigate(link.getAttribute("data-route"));
+    const route = link.getAttribute("data-route");
+    // Logo click forces fresh render even if already on the route
+    navigate(route, { force: link.classList.contains("logo") });
   });
 
   // Initial route

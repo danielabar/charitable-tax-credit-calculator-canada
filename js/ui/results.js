@@ -3,16 +3,10 @@
  * Uses HTML sub-templates from templates/ directory.
  */
 
-import { loadTemplate } from "./template-loader.js";
+import { loadTemplate, fillTemplate } from "./template-loader.js";
 import { formatCurrency, formatPercent } from "../format.js";
 import { buildNarrative } from "./narrative.js";
-
-/**
- * Replace {{placeholders}} in a template string.
- */
-function fillTemplate(html, data) {
-  return html.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] ?? "");
-}
+import { UsabilityState } from "../check-credit-usability.js";
 
 /**
  * Build the big-number headline data based on usability state.
@@ -25,7 +19,7 @@ function buildHeadline(results) {
   const savingsPercent = formatPercent(usability.actualSavings / input.donationAmount);
 
   switch (usability.state) {
-    case "O-1":
+    case UsabilityState.FULLY_USABLE:
       return {
         cardClass: "",
         colorClass: "positive",
@@ -33,7 +27,7 @@ function buildHeadline(results) {
         headlineNumber: `Actually costs you ${outOfPocket}`,
         headlineContext: `The tax credit saves you ${savings}, reducing your out-of-pocket cost by ${savingsPercent}.`,
       };
-    case "O-2":
+    case UsabilityState.PARTLY_WASTED:
       return {
         cardClass: "",
         colorClass: "positive",
@@ -41,7 +35,7 @@ function buildHeadline(results) {
         headlineNumber: `Will save you ${savings} on taxes`,
         headlineContext: `Your credit is ${formatCurrency(credit.totalCredit)}, but you can only use ${savings} of it. The remaining ${formatCurrency(usability.creditWasted)} can't be refunded.`,
       };
-    case "O-3":
+    case UsabilityState.ENTIRELY_WASTED:
       return {
         cardClass: "big-number-card--warning",
         colorClass: "warning",
@@ -54,17 +48,19 @@ function buildHeadline(results) {
 
 /**
  * Build the summary grid HTML based on state.
- * Matches the mockup layout exactly.
  */
-function buildSummaryGrid(results) {
+async function buildSummaryGrid(results) {
   const { input, tax, credit, usability } = results;
+  const [gridTemplate, itemTemplate] = await Promise.all([
+    loadTemplate("templates/summary-grid.html"),
+    loadTemplate("templates/summary-item.html"),
+  ]);
 
   let items;
   let gridClass;
 
   switch (usability.state) {
-    case "O-1":
-      // 3-col: federal credit, provincial credit, total credit
+    case UsabilityState.FULLY_USABLE:
       gridClass = "summary-grid three-col";
       items = [
         { label: "Federal credit", value: formatCurrency(credit.federalCredit), className: "teal" },
@@ -72,8 +68,7 @@ function buildSummaryGrid(results) {
         { label: "Total credit", value: formatCurrency(credit.totalCredit), className: "teal" },
       ];
       break;
-    case "O-2":
-      // 2-col, 4 items: credit calculated, estimated tax, credit usable, credit wasted
+    case UsabilityState.PARTLY_WASTED:
       gridClass = "summary-grid";
       items = [
         { label: "Credit calculated", value: formatCurrency(credit.totalCredit), className: "teal" },
@@ -82,8 +77,7 @@ function buildSummaryGrid(results) {
         { label: "Credit wasted", value: formatCurrency(usability.creditWasted), className: "red", highlight: true },
       ];
       break;
-    case "O-3":
-      // 2-col, 4 items: credit calculated, estimated tax, credit usable, credit wasted
+    case UsabilityState.ENTIRELY_WASTED:
       gridClass = "summary-grid";
       items = [
         { label: "Credit calculated", value: formatCurrency(credit.totalCredit), className: "muted" },
@@ -96,64 +90,62 @@ function buildSummaryGrid(results) {
 
   const itemsHtml = items.map(({ label, value, className, highlight }) => {
     const itemClass = highlight ? "summary-item highlight-bad" : "summary-item";
-    return `<div class="${itemClass}">
-      <div class="label">${label}</div>
-      <div class="value ${className || ""}">${value}</div>
-    </div>`;
+    return fillTemplate(itemTemplate, { itemClass, label, value, className: className || "" });
   }).join("\n");
 
-  return `<div class="${gridClass}">${itemsHtml}</div>`;
+  return fillTemplate(gridTemplate, { gridClass, items: itemsHtml });
 }
 
 /**
  * Build the bar chart HTML based on state.
  */
-function buildBarChart(results) {
+async function buildBarChart(results) {
   const { input, credit, usability } = results;
+
+  if (usability.state === UsabilityState.ENTIRELY_WASTED) {
+    return "";
+  }
+
   const donation = formatCurrency(input.donationAmount);
+  const [chartTemplate, segmentTemplate, legendTemplate] = await Promise.all([
+    loadTemplate("templates/bar-chart.html"),
+    loadTemplate("templates/bar-segment.html"),
+    loadTemplate("templates/legend-item.html"),
+  ]);
 
   switch (usability.state) {
-    case "O-1": {
-      // Cost vs credit breakdown
+    case UsabilityState.FULLY_USABLE: {
       const costPercent = Math.round((usability.outOfPocketCost / input.donationAmount) * 100);
       const creditPercent = 100 - costPercent;
-      return `<div class="bar-chart">
-        <div class="bar-label">How your ${donation} donation breaks down</div>
-        <div class="bar-wrapper">
-          <div class="bar-segment cost" style="width:${costPercent}%">${formatCurrency(usability.outOfPocketCost)} your cost</div>
-          <div class="bar-segment usable" style="width:${creditPercent}%">${formatCurrency(credit.totalCredit)} credit</div>
-        </div>
-        <div class="bar-legend">
-          <span class="legend-cost">Your actual cost</span>
-          <span class="legend-usable">Tax credit (savings)</span>
-        </div>
-      </div>`;
+      const segments = [
+        fillTemplate(segmentTemplate, { segmentClass: "cost", width: String(costPercent), segmentLabel: `${formatCurrency(usability.outOfPocketCost)} your cost` }),
+        fillTemplate(segmentTemplate, { segmentClass: "usable", width: String(creditPercent), segmentLabel: `${formatCurrency(credit.totalCredit)} credit` }),
+      ].join("\n");
+      const legend = [
+        fillTemplate(legendTemplate, { legendClass: "cost", legendLabel: "Your actual cost" }),
+        fillTemplate(legendTemplate, { legendClass: "usable", legendLabel: "Tax credit (savings)" }),
+      ].join("\n");
+      return fillTemplate(chartTemplate, { barLabel: `How your ${donation} donation breaks down`, segments, legend });
     }
-    case "O-2": {
-      // Usable vs wasted credit
+    case UsabilityState.PARTLY_WASTED: {
       const usablePercent = Math.round((usability.creditUsable / credit.totalCredit) * 100);
       const wastedPercent = 100 - usablePercent;
-      return `<div class="bar-chart">
-        <div class="bar-label">Your ${formatCurrency(credit.totalCredit)} credit vs. your ${formatCurrency(usability.estimatedTax)} tax</div>
-        <div class="bar-wrapper">
-          <div class="bar-segment usable" style="width:${usablePercent}%">${formatCurrency(usability.creditUsable)} usable</div>
-          <div class="bar-segment wasted" style="width:${wastedPercent}%">${formatCurrency(usability.creditWasted)} wasted</div>
-        </div>
-        <div class="bar-legend">
-          <span class="legend-usable">Credit you can use</span>
-          <span class="legend-wasted">Credit that disappears</span>
-        </div>
-      </div>`;
+      const segments = [
+        fillTemplate(segmentTemplate, { segmentClass: "usable", width: String(usablePercent), segmentLabel: `${formatCurrency(usability.creditUsable)} usable` }),
+        fillTemplate(segmentTemplate, { segmentClass: "wasted", width: String(wastedPercent), segmentLabel: `${formatCurrency(usability.creditWasted)} wasted` }),
+      ].join("\n");
+      const legend = [
+        fillTemplate(legendTemplate, { legendClass: "usable", legendLabel: "Credit you can use" }),
+        fillTemplate(legendTemplate, { legendClass: "wasted", legendLabel: "Credit that disappears" }),
+      ].join("\n");
+      return fillTemplate(chartTemplate, { barLabel: `Your ${formatCurrency(credit.totalCredit)} credit vs. your ${formatCurrency(usability.estimatedTax)} tax`, segments, legend });
     }
-    case "O-3":
-      // No bar for entirely wasted — the message is clear enough
-      return "";
   }
 }
 
 /**
  * Render results into the results container.
- * @param {object} results - The full results object from runCalculation
+ * @param {import('../calculator.js').CalculationResults} results
  */
 export async function renderResults(results) {
   const container = document.getElementById("results-container");
@@ -164,9 +156,11 @@ export async function renderResults(results) {
 
   const headline = buildHeadline(results);
   const bigNumberHtml = fillTemplate(bigNumberTemplate, headline);
-  const summaryHtml = buildSummaryGrid(results);
-  const barHtml = buildBarChart(results);
-  const narrativeHtml = buildNarrative(results);
+  const [summaryHtml, barHtml, narrativeHtml] = await Promise.all([
+    buildSummaryGrid(results),
+    buildBarChart(results),
+    buildNarrative(results),
+  ]);
 
   container.innerHTML = `
     <div class="results-section">

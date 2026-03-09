@@ -52,7 +52,16 @@ test.describe("Required fields", () => {
       expect(data.incomeTax).toBeTruthy();
       expect(data.incomeTax.brackets).toBeTruthy();
       expect(Array.isArray(data.incomeTax.brackets)).toBe(true);
-      expect(data.incomeTax.basicPersonalAmount).toBeGreaterThan(0);
+      const bpa = data.incomeTax.basicPersonalAmount;
+      if (typeof bpa === "number") {
+        expect(bpa).toBeGreaterThan(0);
+      } else {
+        expect(bpa.maximum).toBeGreaterThan(0);
+        expect(bpa.minimum).toBeGreaterThan(0);
+        expect(bpa.maximum).toBeGreaterThan(bpa.minimum);
+        expect(bpa.phaseoutStart).toBeGreaterThan(0);
+        expect(bpa.phaseoutEnd).toBeGreaterThan(bpa.phaseoutStart);
+      }
       expect(data.donationCredit).toBeTruthy();
       expect(data.donationCredit.lowRate).toBeGreaterThan(0);
       expect(data.donationCredit.highRate).toBeGreaterThan(0);
@@ -89,9 +98,13 @@ test.describe("Required fields", () => {
 });
 
 test.describe("Spot-check specific values", () => {
-  test("federal BPA is 16,452", () => {
+  test("federal BPA maximum is 16,452 with phaseout to 14,829", () => {
     const data = loadJson(join(configDir, "federal.json"));
-    expect(data.incomeTax.basicPersonalAmount).toBe(16452);
+    const bpa = data.incomeTax.basicPersonalAmount;
+    expect(bpa.maximum).toBe(16452);
+    expect(bpa.minimum).toBe(14829);
+    expect(bpa.phaseoutStart).toBe(181440);
+    expect(bpa.phaseoutEnd).toBe(258482);
   });
 
   test("federal lowest rate is 14%", () => {
@@ -130,9 +143,9 @@ test.describe("Spot-check specific values", () => {
     expect(data.surtax).toBeTruthy();
     expect(data.surtax.thresholds).toBeTruthy();
     expect(data.surtax.thresholds.length).toBe(2);
-    expect(data.surtax.thresholds[0].over).toBe(5315);
+    expect(data.surtax.thresholds[0].over).toBe(5818);
     expect(data.surtax.thresholds[0].rate).toBe(0.20);
-    expect(data.surtax.thresholds[1].over).toBe(6802);
+    expect(data.surtax.thresholds[1].over).toBe(7446);
     expect(data.surtax.thresholds[1].rate).toBe(0.36);
   });
 

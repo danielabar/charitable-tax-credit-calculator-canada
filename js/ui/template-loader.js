@@ -18,3 +18,13 @@ export async function loadTemplate(path) {
   cache.set(path, html);
   return html;
 }
+
+/**
+ * Replace {{placeholders}} in a template string.
+ * @param {string} html - Template HTML with {{key}} placeholders
+ * @param {Record<string, string>} data - Key-value pairs to substitute
+ * @returns {string} Filled HTML
+ */
+export function fillTemplate(html, data) {
+  return html.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] ?? "");
+}

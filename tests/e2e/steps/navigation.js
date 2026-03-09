@@ -59,6 +59,11 @@ When("I go forward in the browser", async ({ page }) => {
   );
 });
 
+When("I click the logo", async ({ page }) => {
+  await page.click("a.logo");
+  await page.waitForSelector("#calculator-form");
+});
+
 When("I visit {string} directly", async ({ page }, path) => {
   await page.goto(path);
   // Wait for the 404.html redirect to complete and the SPA to load
@@ -75,6 +80,14 @@ Then("I should see the About page content", async ({ page }) => {
 
 Then("I should see the calculator form", async ({ page }) => {
   await expect(page.locator("#calculator-form")).toBeVisible();
+});
+
+Then("I should see results", async ({ page }) => {
+  await expect(page.locator(".results-section")).toBeVisible();
+});
+
+Then("I should not see results", async ({ page }) => {
+  await expect(page.locator(".results-section")).toHaveCount(0);
 });
 
 Then("the URL should not contain {string}", async ({ page }, text) => {

@@ -10,7 +10,12 @@
       { "upTo": 258482, "rate": 0.29 },
       { "upTo": null, "rate": 0.33 }
     ],
-    "basicPersonalAmount": 16452
+    "basicPersonalAmount": {
+      "maximum": 16452,
+      "minimum": 14829,
+      "phaseoutStart": 181440,
+      "phaseoutEnd": 258482
+    }
   },
   "donationCredit": {
     "lowRate": 0.14,

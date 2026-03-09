@@ -14,26 +14,26 @@ test.describe("calculateOntarioSurtax", () => {
   });
 
   test("at first threshold returns 0", () => {
-    expect(calculateOntarioSurtax(5315, surtaxConfig)).toBe(0);
+    expect(calculateOntarioSurtax(5818, surtaxConfig)).toBe(0);
   });
 
   test("between thresholds", () => {
-    // 20% * (6000 - 5315) = 20% * 685 = 137
-    const result = calculateOntarioSurtax(6000, surtaxConfig);
-    expect(result).toBeCloseTo(137, 2);
+    // 20% * (6500 - 5818) = 20% * 682 = 136.40
+    const result = calculateOntarioSurtax(6500, surtaxConfig);
+    expect(result).toBeCloseTo(136.40, 2);
   });
 
   test("at second threshold", () => {
-    // 20% * (6802 - 5315) = 20% * 1487 = 297.40
-    const result = calculateOntarioSurtax(6802, surtaxConfig);
-    expect(result).toBeCloseTo(297.40, 2);
+    // 20% * (7446 - 5818) = 20% * 1628 = 325.60
+    const result = calculateOntarioSurtax(7446, surtaxConfig);
+    expect(result).toBeCloseTo(325.60, 2);
   });
 
   test("above both thresholds", () => {
-    // 20% * (10000 - 5315) + 36% * (10000 - 6802)
-    // = 20% * 4685 + 36% * 3198
-    // = 937 + 1151.28 = 2088.28
+    // 20% * (10000 - 5818) + 36% * (10000 - 7446)
+    // = 20% * 4182 + 36% * 2554
+    // = 836.40 + 919.44 = 1755.84
     const result = calculateOntarioSurtax(10000, surtaxConfig);
-    expect(result).toBeCloseTo(2088.28, 2);
+    expect(result).toBeCloseTo(1755.84, 2);
   });
 });

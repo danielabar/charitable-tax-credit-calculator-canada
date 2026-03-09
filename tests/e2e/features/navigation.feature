@@ -29,6 +29,24 @@ Feature: Navigation
     When I visit "/about" directly
     Then I should see the About page content
 
+  Scenario: Logo click from About page navigates to calculator
+    Given I am on the About page
+    When I click the logo
+    Then I should see the calculator form
+    And the URL should not contain "/about"
+
+  Scenario: Logo click resets calculator to clean state
+    Given I visit the calculator page
+    When I select "Ontario" as my province
+    And I enter "80000" as my income
+    And I enter "500" as my donation
+    And I click Calculate
+    Then I should see results
+    When I click the logo
+    Then I should see the calculator form
+    And I should not see results
+    And the URL should not contain "province"
+
   Scenario: Calculator state preserved after navigating away and back
     Given I visit the calculator page
     When I select "Ontario" as my province

@@ -19,8 +19,8 @@
   },
   "surtax": {
     "thresholds": [
-      { "over": 5315, "rate": 0.20 },
-      { "over": 6802, "rate": 0.36 }
+      { "over": 5818, "rate": 0.20 },
+      { "over": 7446, "rate": 0.36 }
     ]
   }
 }

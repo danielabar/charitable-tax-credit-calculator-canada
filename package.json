@@ -18,15 +18,17 @@
     "test:unit": "npx playwright test tests/unit/",
     "test:e2e": "npx playwright-bdd && npx playwright test tests/e2e/",
     "test:e2e:headed": "npx playwright-bdd && npx playwright test tests/e2e/ --headed",
-    "test:e2e:chromium": "npx playwright-bdd && npx playwright test tests/e2e/ --project=chromium",
+    "test:e2e:chromium": "npx playwright-bdd && npx playwright test tests/e2e/ --project=e2e-chromium",
     "test": "npx playwright test tests/unit/ && npx playwright-bdd && npx playwright test tests/e2e/",
+    "test:coverage": "npx playwright-bdd --config playwright.coverage.config.js && npx playwright test --config playwright.coverage.config.js",
     "deploy": "gh-pages -d ."
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
-    "playwright-bdd": "^8.0.0",
     "@playwright/test": "^1.50.0",
     "gh-pages": "^6.3.0",
+    "monocart-reporter": "^2.10.0",
+    "playwright-bdd": "^8.0.0",
     "serve": "^14.0.0"
   }
 }
