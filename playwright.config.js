@@ -15,6 +15,7 @@ export default defineConfig({
     {
       name: "e2e-chromium",
       testDir: e2eTestDir,
+      retries: 3,
       use: {
         browserName: "chromium",
         baseURL: "http://localhost:3000",

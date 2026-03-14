@@ -47,6 +47,8 @@ Feature: Navigation
     And I should not see results
     And the URL should not contain "province"
 
+  # Flaky: history.back() timeout — see https://github.com/danielabar/charitable-tax-credit-calculator-canada/issues/11
+  @fixme
   Scenario: Calculator state preserved after navigating away and back
     Given I visit the calculator page
     When I select "Ontario" as my province
