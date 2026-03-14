@@ -1,0 +1,55 @@
+<div class="page">
+  <div class="hero">
+    <h1>Find out what your charitable donation actually costs you</h1>
+    <p>The only calculator that tells you whether you can really use the tax credit — and what to do if you can't.</p>
+  </div>
+
+  <div class="input-card">
+    <h2>Your information</h2>
+
+    <form id="calculator-form" novalidate>
+      <div class="form-group">
+        <label for="province">Province or territory</label>
+        <select id="province" name="province" required>
+          <option value="">Select your province...</option>
+          <option value="AB">Alberta</option>
+          <option value="BC">British Columbia</option>
+          <option value="MB">Manitoba</option>
+          <option value="NB">New Brunswick</option>
+          <option value="NL">Newfoundland and Labrador</option>
+          <option value="NS">Nova Scotia</option>
+          <option value="NT">Northwest Territories</option>
+          <option value="NU">Nunavut</option>
+          <option value="ON">Ontario</option>
+          <option value="PE">Prince Edward Island</option>
+          <option value="SK">Saskatchewan</option>
+          <option value="YT">Yukon</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="income">Annual income</label>
+        <div class="hint">Your salary or wages before deductions</div>
+        <div class="input-prefix">
+          <input type="text" id="income" name="income" inputmode="numeric" placeholder="0" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="donation">Donation amount</label>
+        <div class="hint">Total amount from your charitable donation receipt(s)</div>
+        <div class="input-prefix">
+          <input type="text" id="donation" name="donation" inputmode="numeric" placeholder="0" required>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="btn-calculate">Calculate your credit</button>
+        <button type="button" class="btn-start-over" hidden>Start over</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="results-container" aria-live="polite">
+  </div>
+</div>
