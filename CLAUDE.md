@@ -16,6 +16,7 @@ npm run test:e2e:headed  # E2E with browser visible
 npm run test             # All tests (unit + e2e)
 npm run test:coverage    # All tests (Chromium) + V8 coverage report
 npm run deploy           # Deploy to GitHub Pages via gh-pages
+LABEL=foo npm run screenshots  # Full-page screenshots of every app state → screenshots/foo/
 ```
 
 Run a single unit test file:

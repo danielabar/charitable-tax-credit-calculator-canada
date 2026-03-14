@@ -12,7 +12,8 @@ Feature: Donor experience
     And I enter "500" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Actually costs you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
     And the credit summary should show federal credit, provincial credit, and total credit
@@ -37,7 +38,8 @@ Feature: Donor experience
     And I enter "180" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Actually costs you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
     And the credit summary should show federal credit, provincial credit, and total credit
@@ -61,7 +63,8 @@ Feature: Donor experience
     And I enter "100" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Actually costs you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
     And the credit summary should show federal credit, provincial credit, and total credit
@@ -85,10 +88,11 @@ Feature: Donor experience
     And I enter "500" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Will save you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, credit usable, and credit wasted
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
     # Visual breakdown
     And the visual breakdown should show usable versus wasted credit
     # Narrative
@@ -109,10 +113,11 @@ Feature: Donor experience
     And I enter "180" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Will save you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, credit usable, and credit wasted
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
     # Visual breakdown
     And the visual breakdown should show usable versus wasted credit
     # Narrative
@@ -133,10 +138,11 @@ Feature: Donor experience
     And I enter "100" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Will save you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, credit usable, and credit wasted
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
     # Visual breakdown
     And the visual breakdown should show usable versus wasted credit
     # Narrative
@@ -157,10 +163,10 @@ Feature: Donor experience
     And I enter "500" as my donation
     And I click Calculate
     # Bottom line — warning tone
-    Then the bottom line should say "Won't reduce your taxes"
+    Then the bottom line should say "You get $0 back"
     And the bottom line should show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, credit usable, and credit wasted
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
     # No visual breakdown for entirely wasted
     And there should be no visual breakdown
     # Narrative
@@ -181,10 +187,10 @@ Feature: Donor experience
     And I enter "180" as my donation
     And I click Calculate
     # Bottom line — warning tone
-    Then the bottom line should say "Won't reduce your taxes"
+    Then the bottom line should say "You get $0 back"
     And the bottom line should show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, credit usable, and credit wasted
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
     # No visual breakdown
     And there should be no visual breakdown
     # Narrative
@@ -205,10 +211,10 @@ Feature: Donor experience
     And I enter "100" as my donation
     And I click Calculate
     # Bottom line — warning tone
-    Then the bottom line should say "Won't reduce your taxes"
+    Then the bottom line should say "You get $0 back"
     And the bottom line should show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, credit usable, and credit wasted
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
     # No visual breakdown
     And there should be no visual breakdown
     # Narrative
@@ -229,7 +235,8 @@ Feature: Donor experience
     And I enter "500" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Actually costs you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
     And the credit summary should show federal credit, provincial credit, and total credit
@@ -254,7 +261,8 @@ Feature: Donor experience
     And I enter "100" as my donation
     And I click Calculate
     # Bottom line
-    Then the bottom line should say "Actually costs you"
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
     And the credit summary should show federal credit, provincial credit, and total credit
