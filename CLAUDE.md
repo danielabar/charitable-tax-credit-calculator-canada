@@ -61,6 +61,8 @@ E2E tests (`tests/e2e/`): Gherkin `.feature` files in `tests/e2e/features/` with
 
 Playwright config auto-starts a local server on port 3000 for E2E tests (or if local server already running, re-uses that).
 
+**Known flaky tests**: Some E2E scenarios involving the browser Back button fail intermittently. This is a known issue to be addressed in the future. If a Back button test fails and it's clearly unrelated to your current work, move on — don't loop trying to fix it.
+
 **Coverage**: `npm run test:coverage` runs all tests in Chromium and collects V8 coverage from E2E tests via `monocart-reporter`. Uses a separate config (`playwright.coverage.config.js`) and a coverage fixture (`tests/e2e/coverage-fixture.js`) that auto-starts/stops `page.coverage` per test. View reports:
 ```bash
 open coverage/coverage/index.html                  # Coverage report only
