@@ -1,0 +1,6 @@
+{
+  "narrative": {
+    "thresholdProximityPercent": 0.75,
+    "nudgeAboveThresholdPercent": 0.25
+  }
+}

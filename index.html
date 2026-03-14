@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charitable Tax Credit Calculator — Canada</title>
+  <meta name="description" content="Find out what your charitable donation actually costs you — the only calculator that checks whether you can really use the tax credit.">
+
+  <!-- Open Graph (social sharing previews) -->
+  <meta property="og:title" content="Charitable Tax Credit Calculator — Canada">
+  <meta property="og:description" content="Find out what your charitable donation actually costs you — the only calculator that checks whether you can really use the tax credit.">
+  <meta property="og:image" content="https://danielabar.github.io/charitable-tax-credit-calculator-canada/icons/og-image.png">
+  <meta property="og:url" content="https://danielabar.github.io/charitable-tax-credit-calculator-canada/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_CA">
+
+  <!-- Favicon + icons -->
+  <link rel="icon" href="icons/logo.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- iOS home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Tax Credit Calc">
+
+  <!-- Theme color (Android toolbar + Safari 15+) -->
+  <meta name="theme-color" content="#0d7377">
+
+  <link rel="stylesheet" href="css/index.css">
+  <script>
+    // Restore URL after 404.html SPA redirect (GitHub Pages).
+    // Must run before the router module so the URL is correct when it starts.
+    (function () {
+      var redirect = sessionStorage.getItem("redirect");
+      if (redirect) {
+        sessionStorage.removeItem("redirect");
+        history.replaceState(null, "", redirect);
+      }
+    })();
+  </script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+  <header class="top-nav">
+    <a href="./" data-route="/" class="logo">
+      <img src="icons/logo.svg" alt="" width="28" height="28" class="logo-icon">
+      Charitable Tax Credit Calculator
+    </a>
+    <nav>
+      <a href="./" data-route="/" class="active">Calculator</a>
+      <a href="about" data-route="/about">About</a>
+    </nav>
+  </header>
+
+  <main id="content">
+  </main>
+
+  <footer class="site-footer">
+    Built by <a href="https://danielabaron.me">Daniela Baron</a> in collaboration with <a href="https://openpolicyontario.com">Open Policy Ontario</a>
+  </footer>
+
+</body>
+</html>

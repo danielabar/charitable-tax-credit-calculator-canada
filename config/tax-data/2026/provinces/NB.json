@@ -1,0 +1,19 @@
+{
+  "jurisdiction": "NB",
+  "name": "New Brunswick",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 52333, "rate": 0.094 },
+      { "upTo": 104666, "rate": 0.14 },
+      { "upTo": 193861, "rate": 0.16 },
+      { "upTo": null, "rate": 0.195 }
+    ],
+    "basicPersonalAmount": 13664
+  },
+  "donationCredit": {
+    "lowRate": 0.094,
+    "highRate": 0.1795,
+    "lowRateThreshold": 200
+  }
+}

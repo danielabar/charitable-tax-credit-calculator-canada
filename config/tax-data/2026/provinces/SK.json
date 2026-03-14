@@ -1,0 +1,18 @@
+{
+  "jurisdiction": "SK",
+  "name": "Saskatchewan",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 54532, "rate": 0.105 },
+      { "upTo": 155805, "rate": 0.125 },
+      { "upTo": null, "rate": 0.145 }
+    ],
+    "basicPersonalAmount": 20381
+  },
+  "donationCredit": {
+    "lowRate": 0.105,
+    "highRate": 0.145,
+    "lowRateThreshold": 200
+  }
+}

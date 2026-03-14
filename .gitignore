@@ -7,3 +7,6 @@ playwright/.cache/
 Thumbs.db
 *.log
 .claude/settings.local.json
+scratch/
+coverage/
+.monocart-reporter/

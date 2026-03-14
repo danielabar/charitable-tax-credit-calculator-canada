@@ -1,0 +1,24 @@
+@layer reset, base, components, utilities;
+
+:root {
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Text */
+  --font-stack: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Borders */
+  --radius: 8px;
+  --radius-sm: 6px;
+
+  /* Focus rings */
+  --focus-ring: 0 0 0 3px rgba(13, 115, 119, 0.12);
+
+  /* Layout */
+  --max-width: 680px;
+}

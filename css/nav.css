@@ -1,0 +1,50 @@
+@layer components {
+  .top-nav {
+    border-bottom: 1px solid var(--color-border);
+    padding: 0 var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    background: var(--color-bg);
+  }
+
+  .top-nav .logo {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .top-nav .logo-icon {
+    flex-shrink: 0;
+  }
+
+  .top-nav nav {
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .top-nav nav a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: var(--space-sm) 14px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .top-nav nav a:hover {
+    color: var(--color-text);
+    background: var(--color-bg-alt);
+  }
+
+  .top-nav nav a.active {
+    color: var(--color-primary-dark);
+    background: var(--color-primary-light);
+  }
+}

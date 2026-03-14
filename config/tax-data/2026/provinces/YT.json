@@ -1,0 +1,21 @@
+{
+  "jurisdiction": "YT",
+  "name": "Yukon",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 58523, "rate": 0.064 },
+      { "upTo": 117045, "rate": 0.09 },
+      { "upTo": 181440, "rate": 0.109 },
+      { "upTo": 258482, "rate": 0.1293 },
+      { "upTo": 500000, "rate": 0.128 },
+      { "upTo": null, "rate": 0.15 }
+    ],
+    "basicPersonalAmount": 16452
+  },
+  "donationCredit": {
+    "lowRate": 0.064,
+    "highRate": 0.128,
+    "lowRateThreshold": 200
+  }
+}

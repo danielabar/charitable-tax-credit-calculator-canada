@@ -1,0 +1,26 @@
+{
+  "jurisdiction": "ON",
+  "name": "Ontario",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 53891, "rate": 0.0505 },
+      { "upTo": 107785, "rate": 0.0915 },
+      { "upTo": 150000, "rate": 0.1116 },
+      { "upTo": 220000, "rate": 0.1216 },
+      { "upTo": null, "rate": 0.1316 }
+    ],
+    "basicPersonalAmount": 12989
+  },
+  "donationCredit": {
+    "lowRate": 0.0505,
+    "highRate": 0.1116,
+    "lowRateThreshold": 200
+  },
+  "surtax": {
+    "thresholds": [
+      { "over": 5818, "rate": 0.20 },
+      { "over": 7446, "rate": 0.36 }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "jurisdiction": "MB",
+  "name": "Manitoba",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 47000, "rate": 0.108 },
+      { "upTo": 100000, "rate": 0.1275 },
+      { "upTo": null, "rate": 0.174 }
+    ],
+    "basicPersonalAmount": 15780
+  },
+  "donationCredit": {
+    "lowRate": 0.108,
+    "highRate": 0.174,
+    "lowRateThreshold": 200
+  }
+}

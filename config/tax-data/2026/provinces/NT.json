@@ -1,0 +1,19 @@
+{
+  "jurisdiction": "NT",
+  "name": "Northwest Territories",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 53003, "rate": 0.059 },
+      { "upTo": 106009, "rate": 0.086 },
+      { "upTo": 172346, "rate": 0.122 },
+      { "upTo": null, "rate": 0.1405 }
+    ],
+    "basicPersonalAmount": 18198
+  },
+  "donationCredit": {
+    "lowRate": 0.059,
+    "highRate": 0.1405,
+    "lowRateThreshold": 200
+  }
+}
