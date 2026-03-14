@@ -4,12 +4,12 @@ import { join } from "path";
 import { calculateTotalTax } from "../../js/calculate-total-tax.js";
 
 const federalConfig = JSON.parse(
-  readFileSync(join(process.cwd(), "config/tax-data/2026/federal.json"), "utf-8")
+  readFileSync(join(process.cwd(), "config/tax-data/test/federal.json"), "utf-8")
 );
 
 function loadProvince(code) {
   return JSON.parse(
-    readFileSync(join(process.cwd(), `config/tax-data/2026/provinces/${code}.json`), "utf-8")
+    readFileSync(join(process.cwd(), `config/tax-data/test/provinces/${code}.json`), "utf-8")
   );
 }
 
@@ -26,27 +26,32 @@ test.describe("calculateTotalTax", () => {
   });
 
   test("ON $80K income, no surtax", () => {
+    // federal 9500 + provincial 5000 + surtax 0 = 14500
     const result = calculateTotalTax(80000, federalConfig, onConfig);
-    expect(result.federalTax).toBeCloseTo(10292.73, 0);
-    expect(result.provincialTax).toBeCloseTo(4454.52, 0);
+    expect(result.federalTax).toBe(9500);
+    expect(result.provincialTax).toBe(5000);
     expect(result.surtax).toBe(0);
-    expect(result.totalTax).toBeCloseTo(14747.25, 0);
+    expect(result.totalTax).toBe(14500);
   });
 
-  test("AB $80K income, surtax is 0", () => {
+  test("AB $80K income, no surtax", () => {
+    // federal 9500 + provincial 7500 = 17000
     const result = calculateTotalTax(80000, federalConfig, abConfig);
-    expect(result.federalTax).toBeCloseTo(10292.73, 0);
-    expect(result.provincialTax).toBeCloseTo(4954.48, 0);
+    expect(result.federalTax).toBe(9500);
+    expect(result.provincialTax).toBe(7500);
     expect(result.surtax).toBe(0);
-    expect(result.totalTax).toBeCloseTo(15247.21, 0);
+    expect(result.totalTax).toBe(17000);
   });
 
   test("ON $130K income, surtax kicks in", () => {
-    // Provincial tax ~9505.84, above both surtax thresholds
+    // federal: 50000*0.10 + 50000*0.20 + 30000*0.30 - 1500 = 22500
+    // provincial: 50000*0.05 + 50000*0.10 + 30000*0.15 - 500 = 11500
+    // surtax: 20%*(11500-5000) + 40%*(11500-8000) = 1300 + 1400 = 2700
+    // total = 36700
     const result = calculateTotalTax(130000, federalConfig, onConfig);
-    expect(result.surtax).toBeGreaterThan(0);
-    expect(result.totalTax).toBe(
-      result.federalTax + result.provincialTax + result.surtax
-    );
+    expect(result.federalTax).toBe(22500);
+    expect(result.provincialTax).toBe(11500);
+    expect(result.surtax).toBe(2700);
+    expect(result.totalTax).toBe(36700);
   });
 });

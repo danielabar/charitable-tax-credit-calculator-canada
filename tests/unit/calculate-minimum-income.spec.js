@@ -6,12 +6,12 @@ import { calculateTotalTax } from "../../js/calculate-total-tax.js";
 import { calculateDonationCredit } from "../../js/calculate-donation-credit.js";
 
 const federalConfig = JSON.parse(
-  readFileSync(join(process.cwd(), "config/tax-data/2026/federal.json"), "utf-8")
+  readFileSync(join(process.cwd(), "config/tax-data/test/federal.json"), "utf-8")
 );
 
 function loadProvince(code) {
   return JSON.parse(
-    readFileSync(join(process.cwd(), `config/tax-data/2026/provinces/${code}.json`), "utf-8")
+    readFileSync(join(process.cwd(), `config/tax-data/test/provinces/${code}.json`), "utf-8")
   );
 }
 
@@ -23,19 +23,18 @@ test.describe("calculateMinimumIncome", () => {
     expect(calculateMinimumIncome(0, federalConfig, onConfig)).toBe(0);
   });
 
-  test("small credit ($38 from $200 donation in ON)", () => {
+  test("small credit ($30 from $200 donation in ON)", () => {
     const credit = calculateDonationCredit(200, 80000, federalConfig, onConfig).totalCredit;
     const minIncome = calculateMinimumIncome(credit, federalConfig, onConfig);
-    // Combined BPAs mean tax starts below federal BPA
-    expect(minIncome).toBeGreaterThan(12000);
-    expect(minIncome).toBeLessThan(16000);
+    expect(minIncome).toBeGreaterThan(10000);
+    expect(minIncome).toBeLessThan(14000);
   });
 
-  test("medium credit ($159 from $500 donation in ON)", () => {
+  test("medium credit ($120 from $500 donation in ON)", () => {
     const credit = calculateDonationCredit(500, 80000, federalConfig, onConfig).totalCredit;
     const minIncome = calculateMinimumIncome(credit, federalConfig, onConfig);
-    expect(minIncome).toBeGreaterThan(14000);
-    expect(minIncome).toBeLessThan(18000);
+    expect(minIncome).toBeGreaterThan(11000);
+    expect(minIncome).toBeLessThan(15000);
   });
 
   test("round-trip: ON $50K", () => {

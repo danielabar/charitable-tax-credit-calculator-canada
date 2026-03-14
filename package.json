@@ -21,7 +21,8 @@
     "test:e2e:chromium": "npx playwright-bdd && npx playwright test tests/e2e/ --project=e2e-chromium",
     "test": "npx playwright test tests/unit/ && npx playwright-bdd && npx playwright test tests/e2e/",
     "test:coverage": "npx playwright-bdd --config playwright.coverage.config.js && npx playwright test --config playwright.coverage.config.js",
-    "deploy": "gh-pages -d ."
+    "deploy": "gh-pages -d .",
+    "screenshots": "npx playwright test --config scripts/playwright.screenshots.config.js"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",

@@ -5,7 +5,7 @@ import { calculateProvincialTax } from "../../js/calculate-provincial-tax.js";
 
 function loadProvince(code) {
   return JSON.parse(
-    readFileSync(join(process.cwd(), `config/tax-data/2026/provinces/${code}.json`), "utf-8")
+    readFileSync(join(process.cwd(), `config/tax-data/test/provinces/${code}.json`), "utf-8")
   );
 }
 
@@ -14,75 +14,60 @@ const abConfig = loadProvince("AB");
 const skConfig = loadProvince("SK");
 const nlConfig = loadProvince("NL");
 
-test.describe("Ontario (5 brackets, lowest 5.05%)", () => {
+test.describe("Ontario (3 brackets, 5%/10%/15%)", () => {
   test("zero income returns 0", () => {
     expect(calculateProvincialTax(0, onConfig)).toBe(0);
   });
 
-  test("income below BPA returns 0", () => {
-    // BPA = 12989, BPA credit = 12989 * 0.0505 = 655.9445
-    // $12,000: gross = 12000 * 0.0505 = 606, net = 0
-    expect(calculateProvincialTax(12000, onConfig)).toBe(0);
+  test("income at BPA returns 0", () => {
+    // BPA = 10000, credit = 10000 * 0.05 = 500, gross = 500, net = 0
+    expect(calculateProvincialTax(10000, onConfig)).toBe(0);
   });
 
   test("$80K income", () => {
-    // B1: 53891 * 0.0505 = 2721.4955
-    // B2: (80000 - 53891) * 0.0915 = 26109 * 0.0915 = 2388.9735
-    // gross = 5110.469, net = 5110.469 - 655.9445 = 4454.52
-    const result = calculateProvincialTax(80000, onConfig);
-    expect(result).toBeCloseTo(4454.52, 0);
+    // gross = 50000*0.05 + 30000*0.10 = 2500 + 3000 = 5500
+    // BPA credit = 500, net = 5000
+    expect(calculateProvincialTax(80000, onConfig)).toBe(5000);
   });
 
-  test("$200K income exercises 4 brackets", () => {
-    // B1: 53891 * 0.0505 = 2721.4955
-    // B2: 53894 * 0.0915 = 4931.301
-    // B3: 42215 * 0.1116 = 4711.194
-    // B4: 50000 * 0.1216 = 6080
-    // gross = 18443.99, net = 18443.99 - 655.94 = 17788.05
-    const result = calculateProvincialTax(200000, onConfig);
-    expect(result).toBeCloseTo(17788.05, 0);
+  test("$200K income exercises all 3 brackets", () => {
+    // gross = 50000*0.05 + 50000*0.10 + 100000*0.15 = 2500 + 5000 + 15000 = 22500
+    // BPA credit = 500, net = 22000
+    expect(calculateProvincialTax(200000, onConfig)).toBe(22000);
   });
 });
 
-test.describe("Alberta (6 brackets, high BPA 22769)", () => {
-  test("income below AB BPA returns 0", () => {
-    // BPA = 22769, BPA credit = 22769 * 0.08 = 1821.52
-    // $20,000: gross = 20000 * 0.08 = 1600, net = 0
+test.describe("Alberta (2 brackets, high BPA 20000)", () => {
+  test("income at BPA returns 0", () => {
+    // BPA = 20000, credit = 20000 * 0.10 = 2000, gross = 2000, net = 0
     expect(calculateProvincialTax(20000, abConfig)).toBe(0);
   });
 
   test("$80K income", () => {
-    // B1: 61200 * 0.08 = 4896
-    // B2: 18800 * 0.10 = 1880
-    // gross = 6776, net = 6776 - 1821.52 = 4954.48
-    const result = calculateProvincialTax(80000, abConfig);
-    expect(result).toBeCloseTo(4954.48, 2);
+    // gross = 50000*0.10 + 30000*0.15 = 5000 + 4500 = 9500
+    // BPA credit = 2000, net = 7500
+    expect(calculateProvincialTax(80000, abConfig)).toBe(7500);
   });
 });
 
-test.describe("Saskatchewan (3 brackets, simplest)", () => {
+test.describe("Saskatchewan (3 brackets, 10%/12%/15%)", () => {
   test("$50K income (within first bracket)", () => {
-    // BPA credit = 20381 * 0.105 = 2140.005
-    // gross = 50000 * 0.105 = 5250
-    // net = 5250 - 2140.005 = 3109.995
-    const result = calculateProvincialTax(50000, skConfig);
-    expect(result).toBeCloseTo(3110.00, 0);
+    // gross = 50000*0.10 = 5000, BPA credit = 18000*0.10 = 1800, net = 3200
+    expect(calculateProvincialTax(50000, skConfig)).toBe(3200);
   });
 
   test("$80K income", () => {
-    // B1: 54532 * 0.105 = 5725.86
-    // B2: 25468 * 0.125 = 3183.50
-    // gross = 8909.36, net = 8909.36 - 2140.005 = 6769.355
-    const result = calculateProvincialTax(80000, skConfig);
-    expect(result).toBeCloseTo(6769.36, 0);
+    // gross = 50000*0.10 + 30000*0.12 = 5000 + 3600 = 8600
+    // BPA credit = 1800, net = 6800
+    expect(calculateProvincialTax(80000, skConfig)).toBe(6800);
   });
 });
 
-test.describe("Newfoundland (8 brackets, most complex)", () => {
-  test("$1.2M income exercises all 8 brackets", () => {
-    // BPA credit = 11188 * 0.087 = 973.356
-    // All 8 brackets exercised at $1,200,000
-    const result = calculateProvincialTax(1200000, nlConfig);
-    expect(result).toBeCloseTo(237803.6, 0);
+test.describe("Newfoundland (5 brackets)", () => {
+  test("$500K income exercises all 5 brackets", () => {
+    // B1: 40000*0.08 = 3200, B2: 40000*0.12 = 4800, B3: 70000*0.15 = 10500
+    // B4: 100000*0.18 = 18000, B5: 250000*0.20 = 50000
+    // gross = 86500, BPA credit = 10000*0.08 = 800, net = 85700
+    expect(calculateProvincialTax(500000, nlConfig)).toBe(85700);
   });
 });

@@ -16,6 +16,7 @@ npm run test:e2e:headed  # E2E with browser visible
 npm run test             # All tests (unit + e2e)
 npm run test:coverage    # All tests (Chromium) + V8 coverage report
 npm run deploy           # Deploy to GitHub Pages via gh-pages
+LABEL=foo npm run screenshots  # Full-page screenshots of every app state → screenshots/foo/
 ```
 
 Run a single unit test file:
@@ -50,9 +51,13 @@ npx playwright-bdd && npx playwright test tests/e2e/ -g "feature name"
 
 ## Testing
 
-Unit tests (`tests/unit/`): Pure calculation logic tests using Playwright's test runner with Node.js. Each calculation module has its own spec file that loads JSON config directly.
+Unit tests use **three layers** designed to be stable across tax year changes:
 
-E2E tests (`tests/e2e/`): Gherkin `.feature` files in `tests/e2e/features/` with step definitions in `tests/e2e/steps/`. Uses `playwright-bdd` to compile features before running. The `npx playwright-bdd` step must run before E2E tests execute.
+- **Logic tests** (6 files like `calculate-federal-tax.spec.js`): Load fixture configs from `config/tax-data/test/` with round-number rates. Use exact assertions. Never need updating when real rates change.
+- **Config validation** (`tax-data-validation.spec.js`): Validates real config structure and spot-checks specific rates. This is the only unit test file that needs updating for a new tax year.
+- **Smoke tests** (`smoke-current-year.spec.js`): Runs full pipeline against real config with range-based assertions. Catches integration issues without being fragile.
+
+E2E tests (`tests/e2e/`): Gherkin `.feature` files in `tests/e2e/features/` with step definitions in `tests/e2e/steps/`. Uses `playwright-bdd` to compile features before running. The `npx playwright-bdd` step must run before E2E tests execute. Behavior-based — stable across year changes.
 
 Playwright config auto-starts a local server on port 3000 for E2E tests (or if local server already running, re-uses that).
 

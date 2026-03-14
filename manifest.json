@@ -1,7 +1,7 @@
 {
   "name": "Charitable Tax Credit Calculator — Canada",
   "short_name": "Tax Credit Calc",
-  "description": "Find out what your charitable donation actually costs you — the only calculator that checks whether you can really use the tax credit.",
+  "description": "Find out what you get back from your charitable donation — the only calculator that checks whether you can really use the tax credit.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
