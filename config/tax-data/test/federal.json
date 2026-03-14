@@ -1,0 +1,25 @@
+{
+  "jurisdiction": "federal",
+  "name": "Federal",
+  "year": "test",
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 50000, "rate": 0.10 },
+      { "upTo": 100000, "rate": 0.20 },
+      { "upTo": null, "rate": 0.30 }
+    ],
+    "basicPersonalAmount": {
+      "maximum": 15000,
+      "minimum": 12000,
+      "phaseoutStart": 150000,
+      "phaseoutEnd": 250000
+    }
+  },
+  "donationCredit": {
+    "lowRate": 0.10,
+    "highRate": 0.20,
+    "topRate": 0.30,
+    "topRateThreshold": 250000,
+    "lowRateThreshold": 200
+  }
+}

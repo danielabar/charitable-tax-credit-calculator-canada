@@ -1,0 +1,17 @@
+{
+  "jurisdiction": "AB",
+  "name": "Alberta",
+  "year": "test",
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 50000, "rate": 0.10 },
+      { "upTo": null, "rate": 0.15 }
+    ],
+    "basicPersonalAmount": 20000
+  },
+  "donationCredit": {
+    "lowRate": 0.10,
+    "highRate": 0.15,
+    "lowRateThreshold": 200
+  }
+}
