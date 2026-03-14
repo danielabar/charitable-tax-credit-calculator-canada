@@ -1,0 +1,38 @@
+/*
+ * Color system.
+ * Brand: Honest, trustworthy, clear, straightforward, calm
+ * Visual refs: gov.uk, 538, Wealthsimple editorial
+ * Reference: https://oklch.com/
+ */
+:root {
+  /* LCH color primitives */
+  --lch-teal-dark: 39% 0.06 192;
+  --lch-teal: 48% 0.08 192;
+  --lch-teal-light: 93% 0.02 192;
+  --lch-amber-dark: 52% 0.14 60;
+  --lch-amber-light: 96% 0.03 80;
+  --lch-red-dark: 44% 0.16 25;
+  --lch-red-light: 96% 0.01 25;
+  --lch-ink-dark: 22% 0.02 260;
+  --lch-ink-medium: 48% 0.02 260;
+  --lch-border: 90% 0.01 260;
+  --lch-bg-alt: 97% 0.005 260;
+
+  /* Semantic colors */
+  --color-primary: oklch(var(--lch-teal));
+  --color-primary-dark: oklch(var(--lch-teal-dark));
+  --color-primary-light: oklch(var(--lch-teal-light));
+  --color-accent: oklch(var(--lch-amber-dark));
+  --color-accent-light: oklch(var(--lch-amber-light));
+  --color-wasted: oklch(var(--lch-red-dark));
+  --color-wasted-bg: oklch(var(--lch-red-light));
+
+  /* Text */
+  --color-text: oklch(var(--lch-ink-dark));
+  --color-text-secondary: oklch(var(--lch-ink-medium));
+
+  /* Surfaces */
+  --color-bg: #ffffff;
+  --color-bg-alt: oklch(var(--lch-bg-alt));
+  --color-border: oklch(var(--lch-border));
+}
