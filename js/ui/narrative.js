@@ -54,13 +54,12 @@ export async function buildNarrative(results) {
 async function buildAllSections(results) {
   const sections = [];
 
+  sections.push(await buildTaxSituationSection(results));
   sections.push(await buildBasicMathSection(results));
 
   if (results.nudge) {
     sections.push(await buildThresholdNudgeSection(results));
   }
-
-  sections.push(await buildTaxSituationSection(results));
 
   if (results.usability.state === UsabilityState.PARTLY_WASTED || results.usability.state === UsabilityState.ENTIRELY_WASTED) {
     sections.push(await buildNonRefundableSection(results));
