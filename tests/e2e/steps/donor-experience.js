@@ -41,7 +41,7 @@ Then(
 );
 
 Then(
-  "the credit summary should show credit calculated, estimated tax, credit usable, and credit wasted",
+  "the credit summary should show credit calculated, estimated tax, amount back, and amount lost",
   async ({ page }) => {
     const grid = page.locator(".summary-grid");
     await expect(grid).toBeVisible();
@@ -50,9 +50,9 @@ Then(
     await expect(items).toHaveCount(4);
     await expect(items.nth(0).locator(".label")).toContainText("Credit calculated");
     await expect(items.nth(1).locator(".label")).toContainText("estimated tax");
-    await expect(items.nth(2).locator(".label")).toContainText("Credit you can use");
-    await expect(items.nth(3).locator(".label")).toContainText("Credit wasted");
-    // Credit wasted should be highlighted
+    await expect(items.nth(2).locator(".label")).toContainText("You get back");
+    await expect(items.nth(3).locator(".label")).toContainText("Lost");
+    // Lost amount should be highlighted
     await expect(items.nth(3)).toHaveClass(/highlight-bad/);
   },
 );
