@@ -1,0 +1,20 @@
+{
+  "jurisdiction": "PE",
+  "name": "Prince Edward Island",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 33928, "rate": 0.095 },
+      { "upTo": 65820, "rate": 0.1347 },
+      { "upTo": 106890, "rate": 0.166 },
+      { "upTo": 142250, "rate": 0.1762 },
+      { "upTo": null, "rate": 0.19 }
+    ],
+    "basicPersonalAmount": 15000
+  },
+  "donationCredit": {
+    "lowRate": 0.095,
+    "highRate": 0.19,
+    "lowRateThreshold": 200
+  }
+}

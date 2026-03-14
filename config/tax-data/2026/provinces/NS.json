@@ -1,0 +1,20 @@
+{
+  "jurisdiction": "NS",
+  "name": "Nova Scotia",
+  "year": 2026,
+  "incomeTax": {
+    "brackets": [
+      { "upTo": 30995, "rate": 0.0879 },
+      { "upTo": 61991, "rate": 0.1495 },
+      { "upTo": 97417, "rate": 0.1667 },
+      { "upTo": 157124, "rate": 0.175 },
+      { "upTo": null, "rate": 0.21 }
+    ],
+    "basicPersonalAmount": 11932
+  },
+  "donationCredit": {
+    "lowRate": 0.0879,
+    "highRate": 0.21,
+    "lowRateThreshold": 200
+  }
+}
