@@ -57,6 +57,31 @@ Feature: Donor experience
     # Disclaimer
     And the disclaimer should be shown
 
+  Scenario: Full benefit — donation exactly $200 (nudge shown)
+    When I select "Ontario" as my province
+    And I enter "80000" as my income
+    And I enter "200" as my donation
+    And I click Calculate
+    # Bottom line
+    Then the bottom line should say "You get"
+    And the bottom line should say "back"
+    And the bottom line should not show a warning
+    # Credit summary
+    And the credit summary should show federal credit, provincial credit, and total credit
+    # Visual breakdown
+    And the visual breakdown should show cost versus credit
+    # Narrative
+    And the explanation should show a single rate for donations under $200
+    And the tax situation should confirm the full credit is usable
+    And the results should include the $200 threshold nudge
+    # Sections that should NOT appear
+    And the results should not include the non-refundable credit explanation
+    And the results should not include carry-forward or spouse options
+    And the results should not include the minimum income section
+    And the results should not include the closing encouragement
+    # Disclaimer
+    And the disclaimer should be shown
+
   Scenario: Full benefit — donation well below $200
     When I select "Ontario" as my province
     And I enter "80000" as my income

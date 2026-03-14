@@ -7,6 +7,7 @@ import { calculateTotalTax } from "./calculate-total-tax.js";
 import { calculateDonationCredit } from "./calculate-donation-credit.js";
 import { checkCreditUsability, UsabilityState } from "./check-credit-usability.js";
 import { calculateMinimumIncome } from "./calculate-minimum-income.js";
+import { calculateNudge } from "./calculate-nudge.js";
 
 /**
  * @typedef {object} CalculationResults
@@ -68,26 +69,10 @@ export async function runCalculation(provinceCode, income, donationAmount) {
     minimumIncome = calculateMinimumIncome(credit.totalCredit, federal, province);
   }
 
-  const threshold = federal.donationCredit.lowRateThreshold;
-  const proximityPercent = appSettings.narrative.thresholdProximityPercent;
-  let nudge = null;
-  if (
-    usability.state === UsabilityState.FULLY_USABLE
-    && donationAmount < threshold
-    && donationAmount >= threshold * proximityPercent
-  ) {
-    const nudgeAbovePercent = appSettings.narrative.nudgeAboveThresholdPercent;
-    const nudgeAmount = Math.round(threshold * (1 + nudgeAbovePercent));
-    const nudgeCredit = calculateDonationCredit(nudgeAmount, income, federal, province);
-    const nudgeUsability = checkCreditUsability(nudgeCredit.totalCredit, tax.totalTax, nudgeAmount);
-    if (nudgeUsability.state === UsabilityState.FULLY_USABLE) {
-      nudge = {
-        hypotheticalAmount: nudgeAmount,
-        hypotheticalCredit: nudgeCredit.totalCredit,
-        currentCredit: credit.totalCredit,
-      };
-    }
-  }
+  const nudge = calculateNudge(
+    donationAmount, income, federal, province, appSettings,
+    tax.totalTax, usability.state, credit.totalCredit
+  );
 
   const donationRates = {
     threshold: federal.donationCredit.lowRateThreshold,
