@@ -20,6 +20,9 @@ A free, open-source tool that honestly tells Canadians what they get back from c
 - Calculates the minimum income needed to use the full credit
 - Suggests carry-forward and spouse options when the credit can't be fully used
 
+**Educational content**
+- Learn page showing how the same donation produces different results for different taxpayer types
+
 **Plain-language results**
 - Narrative explanations in real dollar amounts
 - Visual cost-vs-credit breakdown

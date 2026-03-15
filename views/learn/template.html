@@ -1,0 +1,188 @@
+<div class="page learn-page">
+  <h1>How the charitable tax credit works</h1>
+  <p class="page-intro">Not everyone benefits equally from a charitable donation. Your income — and how much tax you owe — determines whether you actually get money back.</p>
+
+  <section id="taxpayer-categories" class="learn-section">
+    <h2>What happens when you donate</h2>
+    <p class="section-intro">The same donation produces very different results depending on your tax situation. Here are four common scenarios.</p>
+
+    <div class="scenario-cards">
+
+      <!-- Non-taxpayer -->
+      <div class="scenario-card card-wasted">
+        <div class="card-header">
+          <div class="card-icon icon-zero">&#x2715;</div>
+          <div>
+            <div class="card-title">Non-taxpayer</div>
+            <div class="card-subtitle">Earns below the tax-free threshold</div>
+          </div>
+        </div>
+        <div class="card-body">
+          Owes $0 in tax. The credit has nothing to reduce — it disappears entirely.
+        </div>
+        <div class="scenario-detail">
+          <div class="detail-item">
+            <span class="detail-label">Income</span>
+            <span class="detail-value">{{nonTaxpayer_income}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Tax owed</span>
+            <span class="detail-value">{{nonTaxpayer_tax}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Credit</span>
+            <span class="detail-value">{{nonTaxpayer_credit}}</span>
+          </div>
+        </div>
+        <div class="card-result">
+          <div class="result-flow">
+            <div class="result-side">
+              <div class="result-label">Donates</div>
+              <div class="result-amount">{{nonTaxpayer_donation}}</div>
+            </div>
+            <div class="result-arrow">&rarr;</div>
+            <div class="result-side">
+              <div class="result-label">Gets back</div>
+              <div class="result-amount zero">{{nonTaxpayer_getsBack}}</div>
+            </div>
+          </div>
+          <div class="result-detail">Credit entirely wasted</div>
+        </div>
+      </div>
+
+      <!-- Partial taxpayer -->
+      <div class="scenario-card card-partial">
+        <div class="card-header">
+          <div class="card-icon icon-partial">&#x25D1;</div>
+          <div>
+            <div class="card-title">Partial taxpayer</div>
+            <div class="card-subtitle">Earns just above the threshold</div>
+          </div>
+        </div>
+        <div class="card-body">
+          Owes a small amount of tax — but less than the credit. Only the portion that offsets tax is usable.
+        </div>
+        <div class="scenario-detail">
+          <div class="detail-item">
+            <span class="detail-label">Income</span>
+            <span class="detail-value">{{partialTaxpayer_income}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Tax owed</span>
+            <span class="detail-value">{{partialTaxpayer_tax}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Credit</span>
+            <span class="detail-value">{{partialTaxpayer_credit}}</span>
+          </div>
+        </div>
+        <div class="card-result">
+          <div class="result-flow">
+            <div class="result-side">
+              <div class="result-label">Donates</div>
+              <div class="result-amount">{{partialTaxpayer_donation}}</div>
+            </div>
+            <div class="result-arrow">&rarr;</div>
+            <div class="result-side">
+              <div class="result-label">Gets back</div>
+              <div class="result-amount partial">{{partialTaxpayer_getsBack}}</div>
+            </div>
+          </div>
+          <div class="result-detail">Only usable portion offsets tax — rest of credit lost</div>
+        </div>
+      </div>
+
+      <!-- Full taxpayer ≤$200 -->
+      <div class="scenario-card">
+        <div class="card-header">
+          <div class="card-icon icon-full">&#x2713;</div>
+          <div>
+            <div class="card-title">Full taxpayer</div>
+            <div class="card-subtitle">Donates $200 or less</div>
+          </div>
+        </div>
+        <div class="card-body">
+          Owes more tax than the credit. The full credit reduces their tax bill.
+        </div>
+        <div class="scenario-detail">
+          <div class="detail-item">
+            <span class="detail-label">Income</span>
+            <span class="detail-value">{{fullTaxpayerLow_income}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Tax owed</span>
+            <span class="detail-value">{{fullTaxpayerLow_tax}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Credit</span>
+            <span class="detail-value">{{fullTaxpayerLow_credit}}</span>
+          </div>
+        </div>
+        <div class="card-result">
+          <div class="result-flow">
+            <div class="result-side">
+              <div class="result-label">Donates</div>
+              <div class="result-amount">{{fullTaxpayerLow_donation}}</div>
+            </div>
+            <div class="result-arrow">&rarr;</div>
+            <div class="result-side">
+              <div class="result-label">Gets back</div>
+              <div class="result-amount positive">{{fullTaxpayerLow_getsBack}}</div>
+            </div>
+          </div>
+          <div class="result-detail">14% federal + 5.05% Ontario</div>
+        </div>
+      </div>
+
+      <!-- Full taxpayer >$200 -->
+      <div class="scenario-card">
+        <div class="card-header">
+          <div class="card-icon icon-full">&#x2713;</div>
+          <div>
+            <div class="card-title">Full taxpayer</div>
+            <div class="card-subtitle">Donates more than $200</div>
+          </div>
+        </div>
+        <div class="card-body">
+          Every dollar above $200 earns credit at the higher rate — more than double the base rate.
+        </div>
+        <div class="scenario-detail">
+          <div class="detail-item">
+            <span class="detail-label">Income</span>
+            <span class="detail-value">{{fullTaxpayerHigh_income}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Tax owed</span>
+            <span class="detail-value">{{fullTaxpayerHigh_tax}}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Credit</span>
+            <span class="detail-value">{{fullTaxpayerHigh_credit}}</span>
+          </div>
+        </div>
+        <div class="card-result">
+          <div class="result-flow">
+            <div class="result-side">
+              <div class="result-label">Donates</div>
+              <div class="result-amount">{{fullTaxpayerHigh_donation}}</div>
+            </div>
+            <div class="result-arrow">&rarr;</div>
+            <div class="result-side">
+              <div class="result-label">Gets back</div>
+              <div class="result-amount positive">{{fullTaxpayerHigh_getsBack}}</div>
+            </div>
+          </div>
+          <div class="result-detail">Lower rate on first $200, higher rate on the rest</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="province-note">Based on Ontario 2026 federal + provincial rates. Your results will vary by province.</p>
+  </section>
+
+  <div class="try-calculator">
+    <p><strong>Want to see your specific situation?</strong> Enter your income and donation amount to get a personalized breakdown.</p>
+    <a href="./" data-route="/" class="cta-link">Try the calculator</a>
+  </div>
+</div>

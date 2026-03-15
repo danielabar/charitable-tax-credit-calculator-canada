@@ -9,6 +9,7 @@ All tax rates, brackets, thresholds, and behavior settings are loaded from JSON 
 | `config/app-settings.json` | UI/behavior settings (narrative thresholds, nudge percentages) |
 | `config/tax-data/{year}/federal.json` | Federal tax brackets, BPA, donation credit rates |
 | `config/tax-data/{year}/provinces/{CODE}.json` | Provincial tax brackets, BPA, donation credit rates, surtax |
+| `config/learn.json` | Learn page scenario inputs (income and donation per taxpayer category) |
 
 Config files are fetched via `js/load-config.js`, which caches them after the first load.
 
@@ -29,6 +30,26 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
 |---|---|---|---|
 | `narrative.thresholdProximityPercent` | number (0–1) | `0.75` | How close a donation must be to the $200 threshold to trigger the nudge hint. At `0.75`, donations of $150+ show the nudge. |
 | `narrative.nudgeAboveThresholdPercent` | number (0–1) | `0.25` | How far above the threshold the hypothetical nudge amount is. At `0.25`, the nudge suggests $250 (200 * 1.25). |
+
+## Learn config reference
+
+`config/learn.json`:
+
+| Key | Type | Description |
+|---|---|---|
+| `creditOutcomeScenarios` | object | Defines the four taxpayer scenarios shown on the Learn page |
+| `creditOutcomeScenarios.<key>.income` | number | Representative income for this scenario |
+| `creditOutcomeScenarios.<key>.donation` | number | Representative donation amount for this scenario |
+
+The four scenario keys are:
+- `nonTaxpayer` — income below both federal and provincial BPA (tax = $0)
+- `partialTaxpayer` — income just above the lowest BPA (tax < credit)
+- `fullTaxpayerLow` — moderate income, donation ≤ $200 (full credit usable)
+- `fullTaxpayerHigh` — moderate income, donation > $200 (shows higher rate tier)
+
+These values are editorial choices — they should be round, relatable numbers
+that clearly illustrate each category. The Learn page computes tax, credit,
+and "gets back" amounts dynamically from these inputs using the Ontario config.
 
 ## Tax data file format
 

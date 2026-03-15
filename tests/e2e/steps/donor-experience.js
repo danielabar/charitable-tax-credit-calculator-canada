@@ -252,6 +252,32 @@ Then(
 );
 
 // ---------------------------------------------------------------------------
+// Learn links
+// ---------------------------------------------------------------------------
+
+Then(
+  "the results should include a learn link in the non-refundable section",
+  async ({ page }) => {
+    const link = page.locator('[data-narrative="non-refundable"] .learn-link');
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("data-route", "/learn");
+  }
+);
+
+Then(
+  "the results should include a learn link in the closing section",
+  async ({ page }) => {
+    const link = page.locator('[data-narrative="closing"] .learn-link');
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("data-route", "/learn");
+  }
+);
+
+Then("the results should not include any learn links", async ({ page }) => {
+  await expect(page.locator(".narrative .learn-link")).toHaveCount(0);
+});
+
+// ---------------------------------------------------------------------------
 // Disclaimer
 // ---------------------------------------------------------------------------
 

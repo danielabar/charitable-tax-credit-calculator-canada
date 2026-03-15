@@ -29,6 +29,7 @@ Feature: Donor experience
     And the results should not include carry-forward or spouse options
     And the results should not include the minimum income section
     And the results should not include the closing encouragement
+    And the results should not include any learn links
     # Disclaimer
     And the disclaimer should be shown
 
@@ -54,6 +55,7 @@ Feature: Donor experience
     And the results should not include carry-forward or spouse options
     And the results should not include the minimum income section
     And the results should not include the closing encouragement
+    And the results should not include any learn links
     # Disclaimer
     And the disclaimer should be shown
 
@@ -79,6 +81,7 @@ Feature: Donor experience
     And the results should not include carry-forward or spouse options
     And the results should not include the minimum income section
     And the results should not include the closing encouragement
+    And the results should not include any learn links
     # Disclaimer
     And the disclaimer should be shown
 
@@ -104,6 +107,7 @@ Feature: Donor experience
     And the results should not include carry-forward or spouse options
     And the results should not include the minimum income section
     And the results should not include the closing encouragement
+    And the results should not include any learn links
     # Disclaimer
     And the disclaimer should be shown
 
@@ -126,6 +130,7 @@ Feature: Donor experience
     And the results should include the non-refundable credit explanation
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
+    And the results should include a learn link in the non-refundable section
     # Sections that should NOT appear
     And the results should not include the $200 threshold nudge
     And the results should not include the closing encouragement
@@ -151,6 +156,7 @@ Feature: Donor experience
     And the results should include the non-refundable credit explanation
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
+    And the results should include a learn link in the non-refundable section
     # Critical: nudge must NOT appear — credit is already partly wasted
     And the results should not include the $200 threshold nudge
     And the results should not include the closing encouragement
@@ -176,6 +182,7 @@ Feature: Donor experience
     And the results should include the non-refundable credit explanation
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
+    And the results should include a learn link in the non-refundable section
     # No nudge — credit wasted AND far from $200
     And the results should not include the $200 threshold nudge
     And the results should not include the closing encouragement
@@ -201,6 +208,8 @@ Feature: Donor experience
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
     And the results should include the closing encouragement
+    And the results should include a learn link in the non-refundable section
+    And the results should include a learn link in the closing section
     # No nudge — all credit is wasted
     And the results should not include the $200 threshold nudge
     # Disclaimer
@@ -225,6 +234,8 @@ Feature: Donor experience
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
     And the results should include the closing encouragement
+    And the results should include a learn link in the non-refundable section
+    And the results should include a learn link in the closing section
     # Critical: nudge must NOT appear — entire credit is wasted
     And the results should not include the $200 threshold nudge
     # Disclaimer
@@ -249,6 +260,8 @@ Feature: Donor experience
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
     And the results should include the closing encouragement
+    And the results should include a learn link in the non-refundable section
+    And the results should include a learn link in the closing section
     # No nudge — credit wasted AND far from $200
     And the results should not include the $200 threshold nudge
     # Disclaimer
@@ -277,6 +290,7 @@ Feature: Donor experience
     And the results should not include carry-forward or spouse options
     And the results should not include the minimum income section
     And the results should not include the closing encouragement
+    And the results should not include any learn links
     # Disclaimer
     And the disclaimer should be shown
 
@@ -303,5 +317,6 @@ Feature: Donor experience
     And the results should not include carry-forward or spouse options
     And the results should not include the minimum income section
     And the results should not include the closing encouragement
+    And the results should not include any learn links
     # Disclaimer
     And the disclaimer should be shown

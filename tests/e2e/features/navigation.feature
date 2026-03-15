@@ -35,6 +35,17 @@ Feature: Navigation
     Then I should see the calculator form
     And the URL should not contain "/about"
 
+  Scenario: Navigate to Learn page
+    Given I visit the calculator page
+    When I click the "Learn" navigation link
+    Then I should see the Learn page content
+    And the URL should contain "/learn"
+
+  Scenario: Navigate from Learn to About
+    Given I am on the Learn page
+    When I click the "About" navigation link
+    Then I should see the About page content
+
   Scenario: Logo click resets calculator to clean state
     Given I visit the calculator page
     When I select "Ontario" as my province

@@ -1,5 +1,5 @@
 /**
- * Minimal SPA router for two routes.
+ * Minimal SPA router for three routes.
  * Uses pushState/popstate, template-loader caching, and view init/destroy lifecycle.
  * Base path is auto-detected — works on localhost, GitHub Pages, or any host.
  */
@@ -9,6 +9,7 @@ import { loadTemplate } from "./ui/template-loader.js";
 
 const routes = {
   "/": "calculator",
+  "/learn": "learn",
   "/about": "about",
 };
 
