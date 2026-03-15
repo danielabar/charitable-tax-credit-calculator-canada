@@ -4,7 +4,7 @@ import { calculateDonationCredit } from "../../js/calculate-donation-credit.js";
 import { checkCreditUsability } from "../../js/check-credit-usability.js";
 import { fillTemplate } from "../../js/ui/template-loader.js";
 
-export async function init() {
+export async function init(contentEl, html) {
   const [learnConfig, federal, province] = await Promise.all([
     loadConfig("config/learn.json"),
     loadFederalConfig(),
@@ -26,8 +26,7 @@ export async function init() {
     data[`${key}_getsBack`] = formatWhole(usability.creditUsable);
   }
 
-  const container = document.querySelector(".learn-page");
-  container.innerHTML = fillTemplate(container.innerHTML, data);
+  contentEl.innerHTML = fillTemplate(html, data);
 }
 
 export function destroy() {}

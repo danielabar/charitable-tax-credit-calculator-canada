@@ -79,15 +79,14 @@ async function navigate(routePath, { pushState = true, force = false } = {}) {
   const contentEl = document.getElementById("content");
   contentEl.innerHTML = "";
 
-  // Load template into #content
+  // Load template and view module
   const html = await loadTemplate(`views/${viewDir}/template.html`);
-  contentEl.innerHTML = html;
-
-  // Import and init view script
   const viewModule = await import(`../views/${viewDir}/script.js`);
   currentView = viewModule;
+
+  // Let the view control when its content enters the DOM
   if (viewModule.init) {
-    await viewModule.init();
+    await viewModule.init(contentEl, html);
   }
 
   // Signal that navigation is complete (used by e2e tests to detect route changes)

@@ -3,7 +3,9 @@ import { runCalculation } from "../../js/calculator.js";
 import { renderResults } from "../../js/ui/results.js";
 import { pushStateToUrl, readStateFromUrl, clearUrl } from "../../js/ui/url-state.js";
 
-export async function init() {
+export async function init(contentEl, html) {
+  contentEl.innerHTML = html;
+
   const form = document.getElementById("calculator-form");
   const resultsContainer = document.getElementById("results-container");
   const startOverBtn = form.querySelector(".btn-start-over");

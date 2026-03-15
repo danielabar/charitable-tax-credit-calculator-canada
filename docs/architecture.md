@@ -39,9 +39,12 @@ When the user navigates:
 
 1. The router calls `destroy()` on the current view (if any)
 2. Clears `<main id="content">`
-3. Fetches and inserts the new view's `template.html`
-4. Dynamically imports the view's `script.js` and calls `init()`
-5. Sets `data-view` attribute on `#content` (used by e2e tests to detect navigation)
+3. Fetches the new view's `template.html` (cached after first load)
+4. Dynamically imports the view's `script.js` and calls `init(contentEl, html)`
+5. The view inserts its content into the DOM (immediately for static views, after async data loading for dynamic views like `/learn`)
+6. Sets `data-view` attribute on `#content` (used by e2e tests to detect navigation)
+
+The view controls when its content enters the DOM. This prevents flash of placeholder text — views that need async data (like `/learn` which loads tax configs) can fill `{{placeholder}}` templates before insertion.
 
 Navigation is triggered by clicking any element with a `data-route` attribute (e.g., `<a data-route="/about">`). The router intercepts clicks and uses `pushState` instead of full page loads.
 
@@ -52,7 +55,10 @@ Navigation is triggered by clicking any element with a `data-route` attribute (e
 ### How to add a new view
 
 1. Create `views/<name>/template.html` with the page HTML
-2. Create `views/<name>/script.js` exporting `init()` and `destroy()`
+2. Create `views/<name>/script.js` exporting `init(contentEl, html)` and `destroy()`
+   - `init()` receives the content element and raw template HTML — it must insert the HTML into `contentEl` itself
+   - For static views: `contentEl.innerHTML = html` at the top
+   - For views with async data: load data, fill the template with `fillTemplate(html, data)`, then set `contentEl.innerHTML`
 3. Add the route to the `routes` object in `js/router.js`
 4. Add a nav link with `data-route="/<name>"` in `index.html`
 
