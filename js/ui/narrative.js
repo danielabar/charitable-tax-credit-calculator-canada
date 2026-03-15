@@ -162,7 +162,8 @@ async function buildNonRefundableSection(results) {
     return section("non-refundable",
       `<h3>Why the credit doesn't help this year</h3>
 ${calloutHtml}
-<p>This is a limitation of how the system is designed, not a reflection of your generosity. Many people are in this situation and most existing calculators don't mention it.</p>`
+<p>This is a limitation of how the system is designed, not a reflection of your generosity. Many people are in this situation and most existing calculators don't mention it.</p>
+<a href="learn" data-route="/learn" class="learn-link">See how this affects different types of taxpayers <span class="arrow">&rarr;</span></a>`
     );
   }
 
@@ -172,7 +173,8 @@ ${calloutHtml}
   return section("non-refundable",
     `<h3>Why part of your credit is lost</h3>
 ${calloutHtml}
-<p>This isn't about you — it's how the system works. The charitable tax credit can only reduce tax you already owe. It can never create a refund on its own.</p>`
+<p>This isn't about you — it's how the system works. The charitable tax credit can only reduce tax you already owe. It can never create a refund on its own.</p>
+<a href="learn" data-route="/learn" class="learn-link">See how this affects different types of taxpayers <span class="arrow">&rarr;</span></a>`
   );
 }
 
@@ -216,6 +218,7 @@ async function buildMinimumIncomeSection(results) {
 
 async function buildClosingSection() {
   return section("closing",
-    `<p style="color: var(--color-text-secondary); font-style: italic;">If you're donating because it matters to you — that's the most important reason of all. The tax credit is just one part of the picture.</p>`
+    `<p style="color: var(--color-text-secondary); font-style: italic;">If you're donating because it matters to you — that's the most important reason of all. The tax credit is just one part of the picture.</p>
+<a href="learn" data-route="/learn" class="learn-link">Learn more about how tax credits work <span class="arrow">&rarr;</span></a>`
   );
 }

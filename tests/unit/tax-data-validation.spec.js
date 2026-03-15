@@ -167,3 +167,31 @@ test.describe("Spot-check specific values", () => {
     expect(data.donationCredit.highRate).toBe(0.1116);
   });
 });
+
+test.describe("learn.json config", () => {
+  const learnConfig = JSON.parse(readFileSync("config/learn.json", "utf-8"));
+
+  test("has creditOutcomeScenarios with all four categories", () => {
+    const s = learnConfig.creditOutcomeScenarios;
+    expect(s).toBeDefined();
+    expect(s.nonTaxpayer).toBeDefined();
+    expect(s.partialTaxpayer).toBeDefined();
+    expect(s.fullTaxpayerLow).toBeDefined();
+    expect(s.fullTaxpayerHigh).toBeDefined();
+  });
+
+  test("each scenario has positive income and donation", () => {
+    for (const scenario of Object.values(learnConfig.creditOutcomeScenarios)) {
+      expect(scenario.income).toBeGreaterThan(0);
+      expect(scenario.donation).toBeGreaterThan(0);
+    }
+  });
+
+  test("non-taxpayer income is below federal BPA", () => {
+    const federal = JSON.parse(
+      readFileSync("config/tax-data/2026/federal.json", "utf-8")
+    );
+    expect(learnConfig.creditOutcomeScenarios.nonTaxpayer.income)
+      .toBeLessThan(federal.incomeTax.basicPersonalAmount.maximum);
+  });
+});

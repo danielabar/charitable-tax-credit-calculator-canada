@@ -33,7 +33,7 @@ npx playwright-bdd && npx playwright test tests/e2e/ -g "feature name"
 
 **No build step** — files are served directly. ES module imports in the browser.
 
-**SPA Router** (`js/router.js`): Custom pushState router with two routes (`/` calculator, `/about`). Views live in `views/<name>/` with `template.html` + `script.js` (init/destroy lifecycle). Templates are lazy-loaded and cached by `js/ui/template-loader.js`. Base path auto-detected for GitHub Pages in `js/base-path.js`.
+**SPA Router** (`js/router.js`): Custom pushState router with three routes (`/` calculator, `/learn`, `/about`). Views live in `views/<name>/` with `template.html` + `script.js` (init/destroy lifecycle). Templates are lazy-loaded and cached by `js/ui/template-loader.js`. The router passes the content element and raw HTML to each view's `init(contentEl, html)` — the view is responsible for inserting its own content into the DOM. This lets views with async data (like `/learn`) fill templates before insertion, preventing flash of placeholder text. Base path auto-detected for GitHub Pages in `js/base-path.js`.
 
 **Calculation Pipeline** (`js/calculator.js`): Orchestrates the full computation — loads configs, calculates total tax (brackets + Ontario surtax), donation credit (tiered rates), credit usability (non-refundable credit limitations), minimum income needed, and nudge hints. Returns a single result object consumed by the UI.
 
@@ -48,6 +48,7 @@ npx playwright-bdd && npx playwright test tests/e2e/ -g "feature name"
 - The `scratch/` directory is gitignored — never commit files from it
 - CSS uses `@layer` cascade with design tokens in `css/global.css`
 - 2-space indentation (see `.editorconfig`)
+- Internal links must be real `<a href="..." data-route="...">` — never `data-route` alone. The router intercepts clicks via `preventDefault()`, but `href` ensures right-click/new tab, status bar preview, and accessibility all work.
 
 ## Testing
 

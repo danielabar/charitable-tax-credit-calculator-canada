@@ -4,64 +4,15 @@ How the app works — project structure, views, components, calculation pipeline
 
 ## Project structure
 
-```
-index.html                  Entry point — app shell (nav, footer, empty <main>)
-js/
-  app.js                    Bootstrap — starts the router on DOMContentLoaded
-  router.js                 SPA router (pushState, view lifecycle)
-  base-path.js              Auto-detects base path for GitHub Pages
-  calculator.js             Orchestrates the full calculation pipeline
-  calculate-bracket-tax.js  Progressive bracket tax (shared by federal/provincial)
-  calculate-federal-tax.js  Federal tax with BPA and phaseout
-  calculate-provincial-tax.js  Provincial tax with BPA
-  calculate-ontario-surtax.js  Ontario surtax on provincial tax
-  calculate-total-tax.js    Combines federal + provincial + surtax
-  calculate-donation-credit.js  Federal + provincial donation credit (tiered)
-  check-credit-usability.js    Non-refundable credit limitation check
-  calculate-minimum-income.js  Reverse-calc: income needed to use full credit
-  load-config.js            Fetch + cache JSON config files
-  format.js                 Currency and percentage formatters
-  ui/
-    form.js                 Form validation and submission handling
-    results.js              Composes result sections from sub-templates
-    narrative.js            Builds conditional narrative text sections
-    template-loader.js      Fetch + cache HTML templates, fill placeholders
-    url-state.js            Sync calculator inputs to/from URL query params
-views/
-  calculator/
-    template.html           Calculator page HTML (form + results container)
-    script.js               Calculator view logic (init/destroy lifecycle)
-  about/
-    template.html           About page HTML
-    script.js               About view logic
-templates/                  Reusable HTML sub-templates for results rendering
-  big-number.html           Headline card
-  summary-grid.html         Credit summary grid wrapper
-  summary-item.html         Individual summary stat
-  bar-chart.html            Visual breakdown wrapper
-  bar-segment.html          Bar chart segment
-  legend-item.html          Bar chart legend entry
-  narrative.html            Narrative wrapper
-  narrative-section.html    Individual narrative section
-  callout.html              Callout box (info, warning, warm variants)
-  disclaimer.html           Disclaimer text
-config/
-  app-settings.json         Narrative thresholds and nudge settings
-  tax-data/2026/
-    federal.json            Federal brackets, BPA, donation credit rates
-    provinces/ON.json       Ontario brackets, BPA, donation credit, surtax
-    provinces/AB.json       (etc. for each province/territory)
-  tax-data/test/
-    federal.json            Fixture config with round numbers (for unit tests)
-    provinces/ON.json       (etc. — stable across year changes)
-css/                        Layered CSS (see "CSS architecture" below)
-tests/
-  unit/                     Pure calculation logic tests (Playwright runner)
-  e2e/
-    features/               Gherkin .feature files
-    steps/                  Step definitions
-    coverage-fixture.js     V8 coverage fixture for e2e tests
-```
+The project follows this top-level layout:
+
+- `index.html` — app shell (nav, footer, empty `<main>`)
+- `js/` — calculation modules (pure functions) and `ui/` subdir (form, results, narrative, template-loader, URL state)
+- `views/` — one directory per page (`calculator/`, `learn/`, `about/`), each with `template.html` + `script.js`
+- `templates/` — reusable HTML sub-templates for results rendering
+- `config/` — JSON configs: `app-settings.json`, `learn.json`, `tax-data/{year}/` (federal + provinces), `tax-data/test/` (fixtures)
+- `css/` — layered CSS files (see "CSS architecture" below)
+- `tests/` — `unit/` (pure calculation logic) and `e2e/` (Gherkin features + step definitions)
 
 ## How views work
 
@@ -79,6 +30,7 @@ The router (`js/router.js`) maps URL paths to view directories:
 ```js
 const routes = {
   "/": "calculator",
+  "/learn": "learn",
   "/about": "about",
 };
 ```
@@ -87,9 +39,12 @@ When the user navigates:
 
 1. The router calls `destroy()` on the current view (if any)
 2. Clears `<main id="content">`
-3. Fetches and inserts the new view's `template.html`
-4. Dynamically imports the view's `script.js` and calls `init()`
-5. Sets `data-view` attribute on `#content` (used by e2e tests to detect navigation)
+3. Fetches the new view's `template.html` (cached after first load)
+4. Dynamically imports the view's `script.js` and calls `init(contentEl, html)`
+5. The view inserts its content into the DOM (immediately for static views, after async data loading for dynamic views like `/learn`)
+6. Sets `data-view` attribute on `#content` (used by e2e tests to detect navigation)
+
+The view controls when its content enters the DOM. This prevents flash of placeholder text — views that need async data (like `/learn` which loads tax configs) can fill `{{placeholder}}` templates before insertion.
 
 Navigation is triggered by clicking any element with a `data-route` attribute (e.g., `<a data-route="/about">`). The router intercepts clicks and uses `pushState` instead of full page loads.
 
@@ -100,7 +55,10 @@ Navigation is triggered by clicking any element with a `data-route` attribute (e
 ### How to add a new view
 
 1. Create `views/<name>/template.html` with the page HTML
-2. Create `views/<name>/script.js` exporting `init()` and `destroy()`
+2. Create `views/<name>/script.js` exporting `init(contentEl, html)` and `destroy()`
+   - `init()` receives the content element and raw template HTML — it must insert the HTML into `contentEl` itself
+   - For static views: `contentEl.innerHTML = html` at the top
+   - For views with async data: load data, fill the template with `fillTemplate(html, data)`, then set `contentEl.innerHTML`
 3. Add the route to the `routes` object in `js/router.js`
 4. Add a nav link with `data-route="/<name>"` in `index.html`
 
@@ -139,6 +97,8 @@ The narrative (`js/ui/narrative.js`) conditionally includes sections based on th
 | Carry-forward / spouse options | No | Yes | Yes |
 | Minimum income needed | No | Yes | Yes |
 | Closing encouragement | No | No | Yes |
+| Learn link (non-refundable) | No | Yes | Yes |
+| Learn link (closing) | No | No | Yes |
 
 ### How to add a new component (template + rendering)
 
@@ -326,6 +286,7 @@ Layers are processed in order — later layers override earlier ones regardless 
 | `nav.css` | `components` | Top navigation bar |
 | `results.css` | `components` | Results section (summary grid, bar chart, big number) |
 | `narrative.css` | `components` | Narrative sections and callout boxes |
+| `learn.css` | `components` | Learn page (scenario cards, result flow, CTA) and narrative learn links |
 | `utilities.css` | `utilities` | Utility/helper classes |
 | `index.css` | — | Imports all CSS files in order |
 

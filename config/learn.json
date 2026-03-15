@@ -1,0 +1,8 @@
+{
+  "creditOutcomeScenarios": {
+    "nonTaxpayer":      { "income": 10000, "donation": 200 },
+    "partialTaxpayer":  { "income": 13500, "donation": 200 },
+    "fullTaxpayerLow":  { "income": 55000, "donation": 200 },
+    "fullTaxpayerHigh": { "income": 55000, "donation": 500 }
+  }
+}

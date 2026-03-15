@@ -39,3 +39,10 @@ export function loadProvinceConfig(provinceCode, year = 2026) {
 export function loadAppSettings() {
   return loadConfig("config/app-settings.json");
 }
+
+/**
+ * Load learn page config (scenario inputs).
+ */
+export function loadLearnConfig() {
+  return loadConfig("config/learn.json");
+}
