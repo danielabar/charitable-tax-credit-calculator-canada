@@ -9,6 +9,7 @@ import { join } from "path";
 import { calculateTotalTax } from "../../js/calculate-total-tax.js";
 import { calculateDonationCredit } from "../../js/calculate-donation-credit.js";
 import { checkCreditUsability } from "../../js/check-credit-usability.js";
+import { calculateDonationForRefund } from "../../js/calculate-donation-for-refund.js";
 
 const federalConfig = JSON.parse(
   readFileSync(join(process.cwd(), "config/tax-data/2026/federal.json"), "utf-8")
@@ -49,5 +50,26 @@ test.describe("smoke — current year (2026)", () => {
   test("zero donation returns zero credit", () => {
     const credit = calculateDonationCredit(0, 80000, federalConfig, onConfig);
     expect(credit.totalCredit).toBe(0);
+  });
+
+  test("reverse lookup: $100 refund requires donation between $300-$500 (ON)", () => {
+    const donation = calculateDonationForRefund(100, federalConfig, onConfig);
+    expect(donation).toBeGreaterThan(300);
+    expect(donation).toBeLessThan(500);
+  });
+
+  test("reverse lookup: $25 refund requires donation under $200 (ON)", () => {
+    const donation = calculateDonationForRefund(25, federalConfig, onConfig);
+    expect(donation).toBeLessThan(200);
+  });
+
+  test("reverse lookup: round-trip — credit from computed donation matches target", () => {
+    const target = 100;
+    const donation = calculateDonationForRefund(target, federalConfig, onConfig);
+    const credit = calculateDonationCredit(donation, 80000, federalConfig, onConfig);
+    // ceil rounding means actual credit should be >= target
+    expect(credit.totalCredit).toBeGreaterThanOrEqual(target);
+    // but not much more (at most ~$1 overshoot from rounding)
+    expect(credit.totalCredit).toBeLessThan(target + 2);
   });
 });

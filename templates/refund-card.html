@@ -1,0 +1,24 @@
+<div class="refund-card">
+  <div class="refund-card-target">
+    <div class="target-label">Get back</div>
+    <div class="target-amount">{{target}}</div>
+  </div>
+  <div class="refund-card-bar">
+    <div class="bar-track">
+      <div class="bar-low" style="width: {{lowPct}}%;">
+        {{lowLabel}}
+      </div>
+      <div class="bar-high" style="width: {{highPct}}%;">
+        {{highLabel}}
+      </div>
+    </div>
+    <div class="bar-refund-marker">
+      <div class="bar-refund-fill" style="width: {{refundPct}}%;"></div>
+      <span class="bar-refund-label">{{refundLabel}}</span>
+    </div>
+  </div>
+  <div class="refund-card-donate">
+    <div class="donate-label">Donate</div>
+    <div class="donate-amount">{{donation}}</div>
+  </div>
+</div>

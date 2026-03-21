@@ -40,6 +40,7 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
 | `creditOutcomeScenarios` | object | Defines the four taxpayer scenarios shown on the Learn page |
 | `creditOutcomeScenarios.<key>.income` | number | Representative income for this scenario |
 | `creditOutcomeScenarios.<key>.donation` | number | Representative donation amount for this scenario |
+| `reverseLookupTargets` | array of numbers | Refund target amounts for the reverse lookup cards |
 
 The four scenario keys are:
 - `nonTaxpayer` — income below both federal and provincial BPA (tax = $0)
@@ -50,6 +51,8 @@ The four scenario keys are:
 These values are editorial choices — they should be round, relatable numbers
 that clearly illustrate each category. The Learn page computes tax, credit,
 and "gets back" amounts dynamically from these inputs using the Ontario config.
+
+`reverseLookupTargets` defines the "get back" amounts shown in the reverse lookup section. Each target triggers a reverse calculation to determine the donation needed. Values should be round, relatable numbers in ascending order. The first target should be achievable with a donation under $200 (to illustrate the low-rate tier).
 
 ## Tax data file format
 

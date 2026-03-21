@@ -194,4 +194,20 @@ test.describe("learn.json config", () => {
     expect(learnConfig.creditOutcomeScenarios.nonTaxpayer.income)
       .toBeLessThan(federal.incomeTax.basicPersonalAmount.maximum);
   });
+
+  test("has reverseLookupTargets as a non-empty array of positive numbers", () => {
+    expect(learnConfig.reverseLookupTargets).toBeDefined();
+    expect(Array.isArray(learnConfig.reverseLookupTargets)).toBe(true);
+    expect(learnConfig.reverseLookupTargets.length).toBeGreaterThan(0);
+    for (const target of learnConfig.reverseLookupTargets) {
+      expect(target).toBeGreaterThan(0);
+    }
+  });
+
+  test("reverseLookupTargets are in ascending order", () => {
+    const targets = learnConfig.reverseLookupTargets;
+    for (let i = 1; i < targets.length; i++) {
+      expect(targets[i]).toBeGreaterThan(targets[i - 1]);
+    }
+  });
 });

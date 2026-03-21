@@ -127,6 +127,10 @@ calculator.js (orchestrator)
     │     └── determines fully-usable / partly-wasted / entirely-wasted
     ├── calculateMinimumIncome() (if credit partly/entirely wasted)
     └── nudge calculation (if near $200 threshold)
+
+calculateDonationForRefund(refund, federal, province)
+    └── inverse of donation credit — donation needed for target refund
+        (used by Learn page reverse lookup cards, not by the main calculator)
     ↓
 CalculationResults object
     ↓

@@ -17,17 +17,20 @@ Feature: Learn page
     When I visit "/learn" directly
     Then I should see the Learn page content
 
-  Scenario: Learn page shows four scenario cards
+  Scenario: Learn page renders all content correctly
     Given I am on the Learn page
-    Then I should see 4 scenario cards
+    Then I should see the taxpayer categories section
+    And I should see 4 scenario cards
     And the non-taxpayer card should show $0 gets back
     And the partial taxpayer card should show a partial amount back
     And the full taxpayer cards should show the full credit back
-
-  Scenario: Learn page shows computed values not placeholders
-    Given I am on the Learn page
-    Then all scenario cards should show dollar amounts
+    And all scenario cards should show dollar amounts
     And no card should contain placeholder text
+    And I should see the reverse lookup section
+    And I should see 5 refund cards
+    And all refund cards should show dollar amounts
+    And no refund card should contain placeholder text
+    And I should see the rate callout explaining the threshold
 
   Scenario: CTA links to calculator
     Given I am on the Learn page
