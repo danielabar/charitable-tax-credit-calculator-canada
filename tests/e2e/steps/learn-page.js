@@ -12,6 +12,12 @@ Then("I should see the Learn page content", async ({ page }) => {
   await expect(heading).toHaveText("How the charitable tax credit works");
 });
 
+Then("I should see the taxpayer categories section", async ({ page }) => {
+  const heading = page.locator("#taxpayer-categories h2");
+  await expect(heading).toBeVisible();
+  await expect(heading).toContainText("What happens when you donate");
+});
+
 Then("I should see {int} scenario cards", async ({ page }, count) => {
   const cards = page.locator(".scenario-card");
   await expect(cards).toHaveCount(count);
@@ -67,4 +73,34 @@ Then("no card should contain placeholder text", async ({ page }) => {
 When("I click the calculator CTA", async ({ page }) => {
   await page.click('.try-calculator [data-route="/"]');
   await page.waitForSelector("#calculator-form");
+});
+
+Then("I should see the reverse lookup section", async ({ page }) => {
+  const heading = page.locator("#reverse-lookup h2");
+  await expect(heading).toBeVisible();
+  await expect(heading).toContainText("How much do I donate");
+});
+
+Then("I should see {int} refund cards", async ({ page }, count) => {
+  const cards = page.locator(".refund-card");
+  await expect(cards).toHaveCount(count);
+});
+
+Then("all refund cards should show dollar amounts", async ({ page }) => {
+  const amounts = page.locator(".refund-card .target-amount, .refund-card .donate-amount");
+  for (const el of await amounts.all()) {
+    await expect(el).toContainText("$");
+  }
+});
+
+Then("no refund card should contain placeholder text", async ({ page }) => {
+  const section = page.locator("#reverse-lookup");
+  const html = await section.innerHTML();
+  expect(html).not.toContain("{{");
+});
+
+Then("I should see the rate callout explaining the threshold", async ({ page }) => {
+  const callout = page.locator(".rate-callout");
+  await expect(callout).toBeVisible();
+  await expect(callout).toContainText("$200");
 });

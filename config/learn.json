@@ -4,5 +4,6 @@
     "partialTaxpayer":  { "income": 13500, "donation": 200 },
     "fullTaxpayerLow":  { "income": 55000, "donation": 200 },
     "fullTaxpayerHigh": { "income": 55000, "donation": 500 }
-  }
+  },
+  "reverseLookupTargets": [25, 50, 100, 200, 500]
 }

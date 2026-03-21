@@ -257,10 +257,150 @@
     transform: translateX(2px);
   }
 
+  /* Refund cards (reverse lookup) */
+  .refund-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .refund-card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 20px var(--space-lg);
+    display: grid;
+    grid-template-columns: 100px 1fr 120px;
+    align-items: center;
+    gap: 20px;
+    transition: border-color 0.15s;
+  }
+
+  .refund-card:hover {
+    border-color: var(--color-primary);
+  }
+
+  .refund-card-target {
+    text-align: center;
+  }
+
+  .refund-card-target .target-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .refund-card-target .target-amount {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    letter-spacing: -0.5px;
+  }
+
+  .refund-card-bar {
+    position: relative;
+  }
+
+  .bar-track {
+    height: 28px;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    display: flex;
+  }
+
+  .bar-low {
+    height: 100%;
+    background: var(--color-primary-light);
+    border-right: 2px solid oklch(85% 0.04 192);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    white-space: nowrap;
+    min-width: 40px;
+  }
+
+  .bar-high {
+    height: 100%;
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .bar-refund-marker {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .bar-refund-fill {
+    height: 4px;
+    background: var(--color-primary-dark);
+    border-radius: 2px;
+  }
+
+  .bar-refund-label {
+    font-size: 11px;
+    color: var(--color-primary-dark);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .refund-card-donate {
+    text-align: right;
+  }
+
+  .refund-card-donate .donate-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .refund-card-donate .donate-amount {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  /* Rate callout */
+  .rate-callout {
+    background: var(--color-primary-light);
+    border: 1px dashed oklch(80% 0.04 192);
+    border-radius: var(--radius-sm);
+    padding: 10px var(--space-md);
+    font-size: 13px;
+    color: var(--color-primary-dark);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .rate-callout-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
   /* Responsive */
   @media (max-width: 640px) {
     .learn-page h1 { font-size: 24px; }
     .scenario-cards { grid-template-columns: 1fr; }
     .try-calculator p { max-width: none; }
+    .refund-card { grid-template-columns: 80px 1fr 100px; gap: 12px; padding: var(--space-md); }
+    .refund-card-target .target-amount { font-size: 22px; }
+    .refund-card-donate .donate-amount { font-size: 18px; }
   }
 }

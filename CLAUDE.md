@@ -54,7 +54,7 @@ npx playwright-bdd && npx playwright test tests/e2e/ -g "feature name"
 
 Unit tests use **three layers** designed to be stable across tax year changes:
 
-- **Logic tests** (6 files like `calculate-federal-tax.spec.js`): Load fixture configs from `config/tax-data/test/` with round-number rates. Use exact assertions. Never need updating when real rates change.
+- **Logic tests** (7 files like `calculate-federal-tax.spec.js`): Load fixture configs from `config/tax-data/test/` with round-number rates. Use exact assertions. Never need updating when real rates change.
 - **Config validation** (`tax-data-validation.spec.js`): Validates real config structure and spot-checks specific rates. This is the only unit test file that needs updating for a new tax year.
 - **Smoke tests** (`smoke-current-year.spec.js`): Runs full pipeline against real config with range-based assertions. Catches integration issues without being fragile.
 

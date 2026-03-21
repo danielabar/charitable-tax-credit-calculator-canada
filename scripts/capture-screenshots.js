@@ -105,3 +105,14 @@ for (const scenario of scenarios) {
     });
   });
 }
+
+// --- Non-calculator pages ---
+
+test("13-learn-page", async ({ page }) => {
+  await page.goto("/learn");
+  await page.waitForSelector(".learn-page");
+  await page.screenshot({
+    path: join(outputDir, "13-learn-page.png"),
+    fullPage: true,
+  });
+});
