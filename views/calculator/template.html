@@ -4,13 +4,71 @@
     <p>The only calculator that tells you whether you can really use the tax credit — and what to do if you can't.</p>
   </div>
 
-  <div class="input-card">
-    <h2>Your information</h2>
+  <div class="tab-card">
+  <div class="mode-toggle" role="tablist">
+    <button class="active" data-mode="forward" role="tab" aria-selected="true" aria-controls="forward-view">What do I get back?</button>
+    <button data-mode="reverse" role="tab" aria-selected="false" aria-controls="reverse-view">How much should I donate?</button>
+  </div>
 
-    <form id="calculator-form" novalidate>
+  <!-- Forward mode: existing calculator (unchanged) -->
+  <div id="forward-view" class="tab-panel-card" role="tabpanel">
+    <div class="input-card">
+      <h2>Your information</h2>
+
+      <form id="calculator-form" novalidate>
+        <div class="form-group">
+          <label for="province">Province or territory</label>
+          <select id="province" name="province" required>
+            <option value="">Select your province...</option>
+            <option value="AB">Alberta</option>
+            <option value="BC">British Columbia</option>
+            <option value="MB">Manitoba</option>
+            <option value="NB">New Brunswick</option>
+            <option value="NL">Newfoundland and Labrador</option>
+            <option value="NS">Nova Scotia</option>
+            <option value="NT">Northwest Territories</option>
+            <option value="NU">Nunavut</option>
+            <option value="ON">Ontario</option>
+            <option value="PE">Prince Edward Island</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="YT">Yukon</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="income">Annual income</label>
+          <div class="hint">Your salary or wages before deductions</div>
+          <div class="input-prefix">
+            <input type="text" id="income" name="income" inputmode="numeric" placeholder="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="donation">Donation amount</label>
+          <div class="hint">Total amount from your charitable donation receipt(s)</div>
+          <div class="input-prefix">
+            <input type="text" id="donation" name="donation" inputmode="numeric" placeholder="0" required>
+          </div>
+        </div>
+
+        <div class="form-buttons">
+          <button type="submit" class="btn-calculate">Calculate your credit</button>
+          <button type="button" class="btn-start-over" hidden>Start over</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="results-container" aria-live="polite">
+    </div>
+  </div>
+
+  <!-- Reverse mode: slider widget -->
+  <div id="reverse-view" class="tab-panel-card" hidden role="tabpanel">
+    <div class="input-card">
+      <h2>Your information</h2>
       <div class="form-group">
-        <label for="province">Province or territory</label>
-        <select id="province" name="province" required>
+        <label for="rev-province">Province or territory</label>
+        <select id="rev-province" required>
           <option value="">Select your province...</option>
           <option value="AB">Alberta</option>
           <option value="BC">British Columbia</option>
@@ -26,30 +84,63 @@
           <option value="YT">Yukon</option>
         </select>
       </div>
-
       <div class="form-group">
-        <label for="income">Annual income</label>
+        <label for="rev-income">Annual income</label>
         <div class="hint">Your salary or wages before deductions</div>
         <div class="input-prefix">
-          <input type="text" id="income" name="income" inputmode="numeric" placeholder="0" required>
+          <input type="text" id="rev-income" inputmode="numeric" placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="slider-widget">
+      <div class="slider-question">
+        I want to get back
+        <span class="slider-target-amount" id="target-display">$100</span>
+      </div>
+
+      <div class="slider-container">
+        <input type="range" class="slider-input" id="refund-slider"
+               min="10" max="500" value="100" step="1">
+        <div class="slider-labels">
+          <span id="slider-label-min">$10</span>
+          <span id="slider-label-mid">$250</span>
+          <span id="slider-label-max">$500</span>
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="donation">Donation amount</label>
-        <div class="hint">Total amount from your charitable donation receipt(s)</div>
-        <div class="input-prefix">
-          <input type="text" id="donation" name="donation" inputmode="numeric" placeholder="0" required>
+      <div id="slider-warning" aria-live="polite"></div>
+
+      <div class="slider-result" id="slider-result">
+        <div class="slider-result-box">
+          <div class="srb-label">You donate</div>
+          <div class="srb-amount donate-val" id="donate-display">—</div>
+        </div>
+        <div class="slider-result-arrow">&rarr;</div>
+        <div class="slider-result-box">
+          <div class="srb-label">You get back</div>
+          <div class="srb-amount refund-val" id="refund-display">—</div>
         </div>
       </div>
 
-      <div class="form-buttons">
-        <button type="submit" class="btn-calculate">Calculate your credit</button>
-        <button type="button" class="btn-start-over" hidden>Start over</button>
+      <div class="breakdown" id="slider-breakdown">
+        <div class="breakdown-title">How your donation breaks down</div>
+        <div class="breakdown-bar">
+          <div class="seg-low" id="seg-low"></div>
+          <div class="seg-high" id="seg-high"></div>
+        </div>
+        <div class="breakdown-legend">
+          <div class="legend-item">
+            <div class="legend-swatch swatch-low"></div>
+            <span id="legend-low"></span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch swatch-high"></div>
+            <span id="legend-high"></span>
+          </div>
+        </div>
       </div>
-    </form>
+    </div>
   </div>
-
-  <div id="results-container" aria-live="polite">
   </div>
 </div>

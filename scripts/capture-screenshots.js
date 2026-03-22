@@ -86,6 +86,27 @@ const scenarios = [
   },
 ];
 
+const reverseScenarios = [
+  {
+    name: "14-reverse-mode-full-benefit",
+    province: "Ontario",
+    income: "80000",
+    refund: 100,
+  },
+  {
+    name: "15-reverse-mode-partial",
+    province: "Ontario",
+    income: "16000",
+    refund: 200,
+  },
+  {
+    name: "16-reverse-mode-not-possible",
+    province: "Ontario",
+    income: "10000",
+    refund: 100,
+  },
+];
+
 for (const scenario of scenarios) {
   test(scenario.name, async ({ page }) => {
     await page.goto("/");
@@ -98,6 +119,37 @@ for (const scenario of scenarios) {
       await page.click(".btn-calculate");
       await page.waitForSelector(".results-section");
     }
+
+    await page.screenshot({
+      path: join(outputDir, `${scenario.name}.png`),
+      fullPage: true,
+    });
+  });
+}
+
+for (const scenario of reverseScenarios) {
+  test(scenario.name, async ({ page }) => {
+    await page.goto("/");
+    await page.waitForSelector("#calculator-form");
+
+    // Switch to reverse mode
+    await page.click('.mode-toggle button[data-mode="reverse"]');
+    await page.waitForSelector("#reverse-view:not([hidden])");
+
+    // Fill inputs
+    await page.selectOption("#rev-province", { label: scenario.province });
+    await page.fill("#rev-income", scenario.income);
+    await page.locator("#refund-slider").fill(String(scenario.refund));
+    await page.locator("#refund-slider").dispatchEvent("input");
+
+    // Wait for calculation to complete
+    await page.waitForFunction(
+      () => document.getElementById("donate-display").textContent.includes("$"),
+      { timeout: 5000 },
+    );
+
+    // Wait for breakdown bar width transitions (0.3s ease) to finish
+    await page.waitForTimeout(400);
 
     await page.screenshot({
       path: join(outputDir, `${scenario.name}.png`),

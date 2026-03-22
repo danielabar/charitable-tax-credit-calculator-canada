@@ -2,5 +2,11 @@
   "narrative": {
     "thresholdProximityPercent": 0.75,
     "nudgeAboveThresholdPercent": 0.25
+  },
+  "reverseSlider": {
+    "min": 10,
+    "max": 500,
+    "defaultValue": 100,
+    "step": 1
   }
 }

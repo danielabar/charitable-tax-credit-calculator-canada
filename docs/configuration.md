@@ -22,6 +22,12 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
   "narrative": {
     "thresholdProximityPercent": 0.75,
     "nudgeAboveThresholdPercent": 0.25
+  },
+  "reverseSlider": {
+    "min": 10,
+    "max": 500,
+    "defaultValue": 100,
+    "step": 1
   }
 }
 ```
@@ -30,6 +36,10 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
 |---|---|---|---|
 | `narrative.thresholdProximityPercent` | number (0–1) | `0.75` | How close a donation must be to the $200 threshold to trigger the nudge hint. At `0.75`, donations of $150+ show the nudge. |
 | `narrative.nudgeAboveThresholdPercent` | number (0–1) | `0.25` | How far above the threshold the hypothetical nudge amount is. At `0.25`, the nudge suggests $250 (200 * 1.25). |
+| `reverseSlider.min` | number | `10` | Minimum refund amount on the reverse mode slider. |
+| `reverseSlider.max` | number | `500` | Maximum refund amount on the reverse mode slider. |
+| `reverseSlider.defaultValue` | number | `100` | Default slider position when reverse mode is first opened. |
+| `reverseSlider.step` | number | `1` | Step increment for the slider (1 = dollar-by-dollar). |
 
 ## Learn config reference
 

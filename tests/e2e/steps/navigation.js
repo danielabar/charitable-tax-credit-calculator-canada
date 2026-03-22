@@ -93,3 +93,52 @@ Then("I should not see results", async ({ page }) => {
 Then("the URL should not contain {string}", async ({ page }, text) => {
   expect(page.url()).not.toContain(text);
 });
+
+// --- Mode switching (forward ↔ reverse within the calculator route) ---
+
+When("I switch to reverse mode", async ({ page }) => {
+  await page.click('.mode-toggle button[data-mode="reverse"]');
+});
+
+When("I switch to forward mode", async ({ page }) => {
+  await page.click('.mode-toggle button[data-mode="forward"]');
+});
+
+Then("I should see the reverse calculator", async ({ page }) => {
+  await expect(page.locator("#reverse-view")).toBeVisible();
+  await expect(page.locator("#forward-view")).toBeHidden();
+});
+
+Then("I should see the forward calculator", async ({ page }) => {
+  await expect(page.locator("#forward-view")).toBeVisible();
+  await expect(page.locator("#reverse-view")).toBeHidden();
+});
+
+/**
+ * Navigate Back within the same SPA route (e.g. mode switch on "/").
+ *
+ * The standard "I go back in the browser" step waits for data-view to change,
+ * which works for cross-route navigation (/ → /about → back to /). But mode
+ * switches stay on the same route ("/") — data-view remains "calculator".
+ *
+ * This step waits for popstate to fire (URL changes), then uses networkidle
+ * to wait for the async popstate handler to finish rendering (it may call
+ * runCalculation or updateSlider which fetch config files).
+ */
+When("I press Back on the same page", async ({ page }) => {
+  const currentUrl = page.url();
+  await page.evaluate(() => {
+    return new Promise((resolve) => {
+      window.addEventListener("popstate", () => resolve(), { once: true });
+      history.back();
+    });
+  });
+  // Wait for URL to actually change before checking render
+  await page.waitForFunction(
+    (prevUrl) => window.location.href !== prevUrl,
+    currentUrl,
+    { timeout: 5000 },
+  );
+  // Wait for async popstate handler to finish (config fetches, rendering)
+  await page.waitForLoadState("networkidle");
+});

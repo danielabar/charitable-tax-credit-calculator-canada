@@ -8,7 +8,7 @@
  * Strips $, commas, and whitespace.
  * Returns NaN for empty or invalid input.
  */
-function parseCurrency(value) {
+export function parseCurrency(value) {
   const cleaned = value.replace(/[$,\s]/g, "");
   if (cleaned === "") return NaN;
   return Number(cleaned);

@@ -72,4 +72,21 @@ test.describe("smoke — current year (2026)", () => {
     // but not much more (at most ~$1 overshoot from rounding)
     expect(credit.totalCredit).toBeLessThan(target + 2);
   });
+
+  test("reverse pipeline: $100 refund at $80K ON is fully usable", () => {
+    const donation = calculateDonationForRefund(100, federalConfig, onConfig);
+    const tax = calculateTotalTax(80000, federalConfig, onConfig);
+    const credit = calculateDonationCredit(donation, 80000, federalConfig, onConfig);
+    const usability = checkCreditUsability(credit.totalCredit, tax.totalTax, donation);
+    expect(usability.state).toBe("fully-usable");
+    expect(credit.totalCredit).toBeGreaterThanOrEqual(100);
+  });
+
+  test("reverse pipeline: $100 refund at $13K ON is partly or entirely wasted", () => {
+    const donation = calculateDonationForRefund(100, federalConfig, onConfig);
+    const tax = calculateTotalTax(13000, federalConfig, onConfig);
+    const credit = calculateDonationCredit(donation, 13000, federalConfig, onConfig);
+    const usability = checkCreditUsability(credit.totalCredit, tax.totalTax, donation);
+    expect(usability.state).toMatch(/partly-wasted|entirely-wasted/);
+  });
 });

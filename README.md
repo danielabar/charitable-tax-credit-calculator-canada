@@ -15,6 +15,11 @@ A free, open-source tool that honestly tells Canadians what they get back from c
 - Tiered federal + provincial donation credit rates (first $200 / over $200)
 - 33% top-bracket federal credit rate for high-income donors
 
+**Reverse calculator mode**
+- "How much should I donate to get $Y back?" — interactive slider to explore refund targets
+- Shows the donation needed, with a breakdown of low-rate vs high-rate portions
+- Warns when income is too low to use the full credit (partial or entirely wasted)
+
 **Honesty about limitations**
 - Shows when the non-refundable credit exceeds your tax payable (partially or fully wasted)
 - Calculates the minimum income needed to use the full credit
@@ -22,6 +27,7 @@ A free, open-source tool that honestly tells Canadians what they get back from c
 
 **Educational content**
 - Learn page showing how the same donation produces different results for different taxpayer types
+- Reverse lookup cards showing how much to donate for specific refund amounts
 
 **Plain-language results**
 - Narrative explanations in real dollar amounts
