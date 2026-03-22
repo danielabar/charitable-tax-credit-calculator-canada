@@ -3,8 +3,8 @@
   .big-number-card {
     background: var(--color-bg-alt);
     border-radius: var(--radius);
-    padding: 36px var(--space-xl);
-    margin-bottom: var(--space-xl);
+    padding: 24px var(--space-xl);
+    margin-bottom: var(--space-lg);
     text-align: center;
   }
 
@@ -45,7 +45,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-lg);
   }
 
   .summary-grid.three-col {
@@ -55,7 +55,7 @@
   .summary-item {
     background: var(--color-bg-alt);
     border-radius: var(--radius);
-    padding: 20px;
+    padding: var(--space-md);
   }
 
   .summary-item .label {
@@ -89,7 +89,7 @@
 
   /* Credit vs tax bar */
   .bar-chart {
-    margin-bottom: 36px;
+    margin-bottom: var(--space-lg);
   }
 
   .bar-chart .bar-label {
@@ -168,8 +168,8 @@
   .disclaimer {
     background: var(--color-bg-alt);
     border-radius: var(--radius);
-    padding: var(--space-lg);
-    margin-top: var(--space-xl);
+    padding: 20px;
+    margin-top: var(--space-lg);
     font-size: 13px;
     color: var(--color-text-secondary);
     line-height: 1.7;

@@ -6,12 +6,12 @@
   .narrative h2 {
     font-size: 22px;
     font-weight: 700;
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
     letter-spacing: -0.3px;
   }
 
   .narrative-section {
-    padding: 20px 0;
+    padding: 14px 0;
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -33,7 +33,7 @@
   }
 
   .narrative-section p + p {
-    margin-top: 10px;
+    margin-top: 8px;
   }
 
   /* Highlighted amounts */
@@ -55,8 +55,8 @@
   /* Callout boxes */
   .callout {
     border-radius: var(--radius);
-    padding: 20px var(--space-lg);
-    margin: var(--space-md) 0;
+    padding: 16px 20px;
+    margin: 12px 0;
     font-size: 15px;
     line-height: 1.6;
   }
