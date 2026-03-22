@@ -1,0 +1,254 @@
+@layer components {
+  /* Slider widget (reverse calculator mode) */
+  .slider-widget {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-xl);
+    margin: var(--space-lg) 0 0;
+    background: #fff;
+  }
+
+  .slider-question {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+  }
+
+  .slider-target-amount {
+    color: var(--color-primary-dark);
+    font-size: 36px;
+    display: block;
+    margin-top: 4px;
+    letter-spacing: -1px;
+    font-weight: 700;
+  }
+
+  /* Range input */
+  .slider-container {
+    position: relative;
+    padding: 0 8px;
+    margin-bottom: var(--space-xl);
+  }
+
+  .slider-input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--color-primary-light) 0%, var(--color-primary) 100%);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-primary-dark);
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: grab;
+  }
+
+  .slider-input::-webkit-slider-thumb:active {
+    cursor: grabbing;
+  }
+
+  .slider-input::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-primary-dark);
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: grab;
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-sm);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  /* Donate → Refund result display */
+  .slider-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 28px;
+  }
+
+  .slider-result-box {
+    text-align: center;
+  }
+
+  .slider-result-box .srb-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .slider-result-box .srb-amount {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .slider-result-box .srb-amount.donate-val {
+    color: var(--color-text);
+  }
+
+  .slider-result-box .srb-amount.refund-val {
+    color: var(--color-primary-dark);
+  }
+
+  .slider-result-arrow {
+    font-size: 24px;
+    color: var(--color-text-secondary);
+    margin-top: 16px;
+  }
+
+  /* Dimmed state (entirely wasted) */
+  .slider-result.dimmed,
+  .breakdown.dimmed {
+    opacity: 0.35;
+  }
+
+  /* Donation breakdown bar */
+  .breakdown {
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+  }
+
+  .breakdown-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+  }
+
+  .breakdown-bar {
+    display: flex;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .breakdown-bar .seg-low {
+    background: #b5d8d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    border-right: 2px solid #fff;
+    transition: width 0.3s ease;
+  }
+
+  .breakdown-bar .seg-high {
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    transition: width 0.3s ease;
+  }
+
+  .breakdown-legend {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  .legend-swatch.swatch-low {
+    background: #b5d8d8;
+  }
+
+  .legend-swatch.swatch-high {
+    background: var(--color-primary);
+  }
+
+  /* Warning banners */
+  .slider-warning {
+    background: var(--color-wasted-bg);
+    border-left: 3px solid var(--color-wasted);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md) var(--space-lg);
+    margin-bottom: 28px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
+  .slider-warning strong {
+    font-weight: 700;
+    color: var(--color-wasted);
+  }
+
+  .slider-partial-warning {
+    background: var(--color-accent-light);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md) var(--space-lg);
+    margin-bottom: 28px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
+  .slider-partial-warning strong {
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .slider-warning .learn-link,
+  .slider-partial-warning .learn-link {
+    display: flex;
+    width: fit-content;
+  }
+
+  @media (max-width: 640px) {
+    .slider-widget {
+      padding: var(--space-lg) var(--space-md);
+    }
+
+    .slider-result {
+      gap: 20px;
+    }
+
+    .slider-result-box .srb-amount {
+      font-size: 26px;
+    }
+  }
+}

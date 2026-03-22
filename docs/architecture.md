@@ -100,6 +100,8 @@ The narrative (`js/ui/narrative.js`) conditionally includes sections based on th
 | Learn link (non-refundable) | No | Yes | Yes |
 | Learn link (closing) | No | No | Yes |
 
+**Reverse mode** has its own narrative module (`js/ui/reverse-narrative.js`) that builds warning banners for the slider widget. It handles three states: fully usable (no banner), partly wasted (amber banner), and entirely wasted (red banner). Each banner includes a Learn page link.
+
 ### How to add a new component (template + rendering)
 
 1. Create `templates/<name>.html` with `{{placeholder}}` markers
@@ -130,7 +132,7 @@ calculator.js (orchestrator)
 
 calculateDonationForRefund(refund, federal, province)
     └── inverse of donation credit — donation needed for target refund
-        (used by Learn page reverse lookup cards, not by the main calculator)
+        (used by Learn page reverse lookup cards and reverse calculator mode)
     ↓
 CalculationResults object
     ↓
@@ -138,6 +140,29 @@ UI rendering (results.js + narrative.js)
     ↓
 DOM
 ```
+
+### Reverse calculation pipeline
+
+The calculator has a second mode — "How much should I donate to get $Y back?" — driven by `runReverseCalculation()` in `calculator.js`:
+
+```
+User input (province, income, desiredRefund)
+    ↓
+calculator.js → runReverseCalculation()
+    ├── calculateDonationForRefund(refund, federal, province) → donationNeeded
+    ├── calculateTotalTax(income, federal, province) → tax
+    ├── calculateDonationCredit(donationNeeded, income, federal, province) → credit
+    ├── checkCreditUsability(credit, tax, donationNeeded) → usability
+    └── calculateMinimumIncome() (if not fully usable)
+    ↓
+ ReverseCalculationResults object
+    ↓
+UI rendering (reverse-narrative.js → warning banners in slider widget)
+    ↓
+DOM
+```
+
+The reverse pipeline reuses the same pure calculation functions as the forward pipeline, just composed in a different order. Warning banners for the slider are built by `js/ui/reverse-narrative.js` (separate from `narrative.js` which handles forward mode).
 
 ### The results object
 
@@ -291,6 +316,7 @@ Layers are processed in order — later layers override earlier ones regardless 
 | `results.css` | `components` | Results section (summary grid, bar chart, big number) |
 | `narrative.css` | `components` | Narrative sections and callout boxes |
 | `learn.css` | `components` | Learn page (scenario cards, result flow, CTA) and narrative learn links |
+| `slider.css` | `components` | Reverse mode slider widget (range input, result boxes, breakdown bar) |
 | `utilities.css` | `utilities` | Utility/helper classes |
 | `index.css` | — | Imports all CSS files in order |
 
@@ -325,8 +351,10 @@ Spacing: `--space-xs` (4px) through `--space-2xl` (48px)
 
 ### "I want to add a new narrative section"
 
-1. Write the section builder function in `js/ui/narrative.js` (following the existing pattern)
-2. Add conditional logic in `buildAllSections()` to include it
+Forward mode: edit `js/ui/narrative.js`. Reverse mode: edit `js/ui/reverse-narrative.js`. Each file handles one calculator mode.
+
+1. Write the section builder function in the appropriate narrative module (following the existing pattern)
+2. Add conditional logic in `buildAllSections()` (forward) or `buildReverseWarning()` (reverse) to include it
 3. If it needs a new template, create it in `templates/` and use `loadTemplate()`/`fillTemplate()`
 4. Add e2e test steps to verify it appears/doesn't appear in the right scenarios
 

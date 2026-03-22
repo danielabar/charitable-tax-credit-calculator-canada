@@ -1,5 +1,9 @@
 /**
- * Build the "Your story in numbers" narrative HTML.
+ * Build the "Your story in numbers" narrative for FORWARD calculator mode.
+ *
+ * This module handles the forward question: "I donated $X — what do I get back?"
+ * For the reverse question ("I want $Y back — how much do I donate?"), see reverse-narrative.js.
+ *
  * Sections are conditionally included based on usability state.
  * Uses HTML sub-templates from templates/ directory.
  */

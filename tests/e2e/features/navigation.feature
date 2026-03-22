@@ -58,6 +58,57 @@ Feature: Navigation
     And I should not see results
     And the URL should not contain "province"
 
+  # --- Mode switching and intra-route navigation ---
+
+  Scenario: Switching to reverse mode updates URL
+    Given I visit the calculator page
+    When I switch to reverse mode
+    Then I should see the reverse calculator
+    And the URL should contain "mode=reverse"
+
+  Scenario: Switching back to forward mode clears URL
+    Given I visit the calculator page
+    When I switch to reverse mode
+    And I switch to forward mode
+    Then I should see the forward calculator
+    And the URL should not contain "mode=reverse"
+    And the URL should not contain query parameters
+
+  Scenario: Back button restores forward mode after switching to reverse
+    Given I visit the calculator page
+    When I select "Ontario" as my province
+    And I enter "80000" as my income
+    And I enter "500" as my donation
+    And I click Calculate
+    Then I should see results
+    When I switch to reverse mode
+    Then the URL should contain "mode=reverse"
+    And I should not see results
+    When I press Back on the same page
+    Then I should see the forward calculator
+    And I should see results
+    And the URL should contain "donation=500"
+
+  Scenario: Back button restores reverse mode after switching to forward
+    When I visit the calculator with "?province=ON&income=80000&mode=reverse&refund=100"
+    Then I should see the reverse calculator
+    When I switch to forward mode
+    Then I should see the forward calculator
+    When I press Back on the same page
+    Then I should see the reverse calculator
+    And the URL should contain "mode=reverse"
+    And the URL should contain "refund=100"
+
+  Scenario: Deep link to bare reverse mode
+    When I visit the calculator with "?mode=reverse"
+    Then I should see the reverse calculator
+
+  Scenario: Deep link to full reverse state
+    When I visit the calculator with "?province=ON&income=80000&mode=reverse&refund=100"
+    Then I should see the reverse calculator
+    And the URL should contain "province=ON"
+    And the URL should contain "refund=100"
+
   # Flaky: history.back() timeout — see https://github.com/danielabar/charitable-tax-credit-calculator-canada/issues/11
   @fixme
   Scenario: Calculator state preserved after navigating away and back

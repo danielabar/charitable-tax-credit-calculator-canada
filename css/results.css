@@ -210,6 +210,71 @@
     color: var(--color-text);
   }
 
+  /* Tab card wrapper */
+  .tab-card {
+    margin-top: var(--space-lg);
+  }
+
+  /* Mode toggle (tabs) */
+  .mode-toggle {
+    display: flex;
+    position: relative;
+  }
+
+  .mode-toggle button {
+    flex: 1;
+    padding: 13px var(--space-md);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-stack);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-alt);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .mode-toggle button:first-child {
+    border-radius: var(--radius) 0 0 0;
+    border-right: none;
+  }
+
+  .mode-toggle button:last-child {
+    border-radius: 0 var(--radius) 0 0;
+    border-left: none;
+  }
+
+  /* Divider line between tabs */
+  .mode-toggle::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 50%;
+    width: 1px;
+    background: var(--color-border);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .mode-toggle button:hover:not(.active) {
+    color: var(--color-text);
+  }
+
+  .mode-toggle button.active {
+    background: var(--color-bg);
+    color: var(--color-primary-dark);
+    border-bottom-color: transparent;
+    z-index: 2;
+  }
+
+  /* Input card merges with tabs above */
+  .tab-panel-card > .input-card:first-child {
+    margin-top: 0;
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+
   @media (max-width: 640px) {
     .big-number-card .headline-number {
       font-size: 36px;
@@ -221,6 +286,11 @@
 
     .summary-grid.three-col {
       grid-template-columns: 1fr;
+    }
+
+    .mode-toggle button {
+      font-size: 13px;
+      padding: 10px var(--space-sm);
     }
   }
 }

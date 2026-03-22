@@ -35,11 +35,11 @@ npx playwright-bdd && npx playwright test tests/e2e/ -g "feature name"
 
 **SPA Router** (`js/router.js`): Custom pushState router with three routes (`/` calculator, `/learn`, `/about`). Views live in `views/<name>/` with `template.html` + `script.js` (init/destroy lifecycle). Templates are lazy-loaded and cached by `js/ui/template-loader.js`. The router passes the content element and raw HTML to each view's `init(contentEl, html)` — the view is responsible for inserting its own content into the DOM. This lets views with async data (like `/learn`) fill templates before insertion, preventing flash of placeholder text. Base path auto-detected for GitHub Pages in `js/base-path.js`.
 
-**Calculation Pipeline** (`js/calculator.js`): Orchestrates the full computation — loads configs, calculates total tax (brackets + Ontario surtax), donation credit (tiered rates), credit usability (non-refundable credit limitations), minimum income needed, and nudge hints. Returns a single result object consumed by the UI.
+**Calculation Pipeline** (`js/calculator.js`): Orchestrates the full computation — loads configs, calculates total tax (brackets + Ontario surtax), donation credit (tiered rates), credit usability (non-refundable credit limitations), minimum income needed, and nudge hints. Returns a single result object consumed by the UI. The calculator has two modes: forward (`runCalculation` — "I donated $X, what do I get back?") and reverse (`runReverseCalculation` — "I want $Y back, how much should I donate?"). Both reuse the same pure calculation functions.
 
-**Tax Data** (`config/tax-data/2026/`): Federal and provincial rates/brackets in JSON. Rates are never hardcoded in JS — always loaded from config. `config/app-settings.json` holds narrative thresholds and nudge percentages.
+**Tax Data** (`config/tax-data/2026/`): Federal and provincial rates/brackets in JSON. Rates are never hardcoded in JS — always loaded from config. `config/app-settings.json` holds narrative thresholds, nudge percentages, and reverse slider range settings.
 
-**UI Layer** (`js/ui/`): Form handling, results rendering, narrative builder, and URL state sync (query params for shareable links).
+**UI Layer** (`js/ui/`): Form handling, results rendering, narrative builder (`narrative.js` for forward mode, `reverse-narrative.js` for reverse mode warning banners), and URL state sync (query params for shareable links). Forward-mode URLs use `?province=ON&income=60000&donation=500`. Reverse-mode URLs add `mode=reverse` and use `refund` instead of `donation`: `?mode=reverse&province=ON&income=60000&refund=100`.
 
 ## Key Conventions
 

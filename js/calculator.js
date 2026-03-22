@@ -1,5 +1,7 @@
 /**
  * Full calculation pipeline — orchestrates all modules.
+ * Provides both forward ("I donated X, what do I get back?") and
+ * reverse ("I want Y back, how much do I donate?") pipelines.
  */
 
 import { loadFederalConfig, loadProvinceConfig, loadAppSettings } from "./load-config.js";
@@ -8,6 +10,7 @@ import { calculateDonationCredit } from "./calculate-donation-credit.js";
 import { checkCreditUsability, UsabilityState } from "./check-credit-usability.js";
 import { calculateMinimumIncome } from "./calculate-minimum-income.js";
 import { calculateNudge } from "./calculate-nudge.js";
+import { calculateDonationForRefund } from "./calculate-donation-for-refund.js";
 
 /**
  * @typedef {object} CalculationResults
@@ -97,5 +100,77 @@ export async function runCalculation(provinceCode, income, donationAmount) {
     nudge,
     donationRates,
     appSettings,
+  };
+}
+
+/**
+ * @typedef {object} ReverseCalculationResults
+ * @property {'reverse'} mode
+ * @property {object} input
+ * @property {string} input.provinceCode
+ * @property {string} input.provinceName
+ * @property {number} input.income
+ * @property {number} input.desiredRefund
+ * @property {number} donationNeeded - The central answer: how much to donate
+ * @property {object} tax
+ * @property {object} credit
+ * @property {object} usability
+ * @property {number|null} minimumIncome
+ * @property {object} donationRates
+ */
+
+/**
+ * Run the reverse calculation pipeline.
+ * Given a desired refund, compute the donation needed and check usability.
+ * @param {string} provinceCode
+ * @param {number} income
+ * @param {number} desiredRefund
+ * @returns {Promise<ReverseCalculationResults>}
+ */
+export async function runReverseCalculation(provinceCode, income, desiredRefund) {
+  const [federal, province] = await Promise.all([
+    loadFederalConfig(),
+    loadProvinceConfig(provinceCode),
+  ]);
+
+  // 1. How much to donate for the desired refund (assumes full taxpayer)
+  const donationNeeded = calculateDonationForRefund(desiredRefund, federal, province);
+
+  // 2. What tax does this person owe?
+  const tax = calculateTotalTax(income, federal, province);
+
+  // 3. What credit does this donation actually generate?
+  const credit = calculateDonationCredit(donationNeeded, income, federal, province);
+
+  // 4. Can they use the full credit?
+  const usability = checkCreditUsability(credit.totalCredit, tax.totalTax, donationNeeded);
+
+  // 5. If not fully usable, what income would they need?
+  let minimumIncome = null;
+  if (usability.state !== UsabilityState.FULLY_USABLE) {
+    minimumIncome = calculateMinimumIncome(credit.totalCredit, federal, province);
+  }
+
+  const donationRates = {
+    threshold: federal.donationCredit.lowRateThreshold,
+    federal: {
+      lowRate: federal.donationCredit.lowRate,
+      highRate: federal.donationCredit.highRate,
+    },
+    provincial: {
+      lowRate: province.donationCredit.lowRate,
+      highRate: province.donationCredit.highRate,
+    },
+  };
+
+  return {
+    mode: 'reverse',
+    input: { provinceCode, provinceName: province.name, income, desiredRefund },
+    donationNeeded,
+    tax,
+    credit,
+    usability,
+    minimumIncome,
+    donationRates,
   };
 }

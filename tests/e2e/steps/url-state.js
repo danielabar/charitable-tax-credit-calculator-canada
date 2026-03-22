@@ -4,7 +4,10 @@ When(
   "I visit the calculator with {string}",
   async ({ page }, queryString) => {
     await page.goto(`/${queryString}`);
-    await page.waitForSelector("#calculator-form");
+    // Wait for the calculator view to finish initializing, regardless of which
+    // mode (forward/reverse) is active. Can't use #calculator-form because it's
+    // hidden when the URL specifies mode=reverse.
+    await page.waitForSelector('#content[data-view="calculator"]');
   },
 );
 
