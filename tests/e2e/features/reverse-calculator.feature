@@ -17,6 +17,7 @@ Feature: Reverse calculator mode
     And the refund display should show "$100"
     And there should be no slider warning
     And the donation breakdown should be visible
+    And the disclaimer should be shown
 
   # --- Slider: partly wasted ---
 
@@ -27,6 +28,7 @@ Feature: Reverse calculator mode
     And I set the refund slider to 200
     Then a partial credit warning should be visible
     And the warning should mention the income needed
+    And the disclaimer should be shown
 
   # --- Slider: entirely wasted ---
 
@@ -38,6 +40,7 @@ Feature: Reverse calculator mode
     Then a not-possible warning should be visible
     And the refund display should show "$0"
     And the warning should mention the income needed
+    And the disclaimer should be shown
 
   # --- Optimistic mode (no income entered) ---
 
@@ -48,6 +51,7 @@ Feature: Reverse calculator mode
     Then the donate display should show a dollar amount
     And the refund display should show "$100"
     And there should be no slider warning
+    And the disclaimer should be shown
 
   # --- Forward mode still works after visiting reverse ---
 
@@ -79,3 +83,4 @@ Feature: Reverse calculator mode
     And the reverse income should contain "80000"
     And the refund slider should be at 100
     And the donate display should show a dollar amount
+    And the disclaimer should be shown

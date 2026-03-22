@@ -7,6 +7,7 @@ import { calculateDonationForRefund } from "../../js/calculate-donation-for-refu
 import { loadFederalConfig, loadProvinceConfig } from "../../js/load-config.js";
 import { formatCurrency } from "../../js/format.js";
 import { buildReverseWarning } from "../../js/ui/reverse-narrative.js";
+import { loadTemplate } from "../../js/ui/template-loader.js";
 
 let debounceTimer = null;
 // Guard against popstate firing after this view is destroyed. Both the router
@@ -73,6 +74,8 @@ export async function init(contentEl, html) {
     reverseView.hidden = mode !== "reverse";
     resultsContainer.innerHTML = "";
     startOverBtn.hidden = true;
+    const rd = document.getElementById("reverse-disclaimer");
+    if (rd) rd.hidden = true;
   }
 
   /**
@@ -124,6 +127,10 @@ export async function init(contentEl, html) {
   });
 
   // --- Reverse mode (slider) ---
+  const disclaimerHtml = await loadTemplate("templates/disclaimer.html");
+  const reverseDisclaimer = document.getElementById("reverse-disclaimer");
+  reverseDisclaimer.innerHTML = disclaimerHtml;
+
   const revProvince = document.getElementById("rev-province");
   const revIncome = document.getElementById("rev-income");
   const targetDisplay = document.getElementById("target-display");
@@ -157,6 +164,7 @@ export async function init(contentEl, html) {
       segHigh.style.width = "0%";
       legendLow.textContent = "";
       legendHigh.textContent = "";
+      reverseDisclaimer.hidden = true;
       return;
     }
 
@@ -168,6 +176,7 @@ export async function init(contentEl, html) {
       ]);
       const donationNeeded = calculateDonationForRefund(refund, federal, prov);
       updateSliderUI(refund, donationNeeded, null, federal, prov);
+      reverseDisclaimer.hidden = false;
       return;
     }
 
@@ -177,6 +186,7 @@ export async function init(contentEl, html) {
       loadProvinceConfig(province),
     ]);
     updateSliderUI(refund, results.donationNeeded, results, federal, prov);
+    reverseDisclaimer.hidden = false;
     pushStateToUrl(province, income, refund, "reverse");
   }
 
