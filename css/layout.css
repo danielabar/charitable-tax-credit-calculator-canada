@@ -51,13 +51,23 @@
     padding: 28px 0 40px;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
+    .page {
+      padding-inline: var(--space-md);
+    }
+
     .hero h1 {
       font-size: 24px;
     }
 
     .input-card {
-      padding: var(--space-lg);
+      padding: var(--space-lg) var(--space-md);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero h1 {
+      font-size: 22px;
     }
   }
 }

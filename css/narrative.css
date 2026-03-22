@@ -80,4 +80,9 @@
     border-left: 3px solid var(--color-accent);
   }
 
+  @media (max-width: 768px) {
+    .narrative h2 {
+      font-size: 20px;
+    }
+  }
 }

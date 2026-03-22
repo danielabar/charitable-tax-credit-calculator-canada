@@ -110,6 +110,7 @@ export async function init(contentEl, html) {
   async function calculate(province, income, donation) {
     const results = await runCalculation(province, income, donation);
     await renderResults(results);
+    document.querySelector('.results-section').scrollIntoView({ behavior: 'smooth' });
     pushStateToUrl(province, income, donation);
     startOverBtn.hidden = false;
   }

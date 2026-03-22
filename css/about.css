@@ -1,7 +1,7 @@
 @layer components {
   /* About page */
   .about-page {
-    padding: var(--space-2xl) 0 80px;
+    padding-block: var(--space-2xl) 80px;
   }
 
   .about-page h1 {
@@ -108,7 +108,9 @@
     margin-top: var(--space-xs);
   }
 
-  @media (max-width: 640px) {
-    .credits-grid { grid-template-columns: 1fr; }
+  @media (max-width: 768px) {
+    .credits-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
   }
 }

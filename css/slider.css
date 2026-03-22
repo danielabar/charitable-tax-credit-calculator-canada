@@ -238,7 +238,7 @@
     width: fit-content;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .slider-widget {
       padding: var(--space-lg) var(--space-md);
     }
@@ -249,6 +249,22 @@
 
     .slider-result-box .srb-amount {
       font-size: 26px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slider-result {
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slider-result-arrow {
+      transform: rotate(90deg);
+    }
+
+    .slider-result-box .srb-amount {
+      font-size: 28px;
     }
   }
 }
