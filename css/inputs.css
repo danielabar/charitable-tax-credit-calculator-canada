@@ -1,6 +1,6 @@
 @layer components {
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-md);
   }
 
   .form-group label {

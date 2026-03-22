@@ -12,7 +12,7 @@
   }
 
   .hero {
-    padding: var(--space-2xl) 0 12px;
+    padding: var(--space-xl) 0 8px;
   }
 
   .hero h1 {
@@ -34,7 +34,7 @@
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
-    padding: var(--space-xl);
+    padding: var(--space-lg);
     margin: var(--space-lg) 0 0;
   }
 
@@ -44,11 +44,11 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--color-text-secondary);
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
   }
 
   .results-section {
-    padding: 40px 0 60px;
+    padding: 28px 0 40px;
   }
 
   @media (max-width: 640px) {
