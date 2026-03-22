@@ -1,0 +1,114 @@
+@layer components {
+  /* About page */
+  .about-page {
+    padding: var(--space-2xl) 0 80px;
+  }
+
+  .about-page h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.5px;
+  }
+
+  .about-page h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: var(--space-xl) 0 12px;
+  }
+
+  .about-page p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: 12px;
+  }
+
+  .about-page ul {
+    margin: var(--space-sm) 0 var(--space-md) 20px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .about-page a {
+    color: var(--color-primary);
+  }
+
+  /* Credits cards */
+  .credits-intro {
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+  }
+
+  .credits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  .credit-card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-sm);
+  }
+
+  .credit-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-xs);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .credit-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .credit-name {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .credit-name a {
+    color: var(--color-primary-dark);
+    text-decoration: none;
+  }
+
+  .credit-name a:hover {
+    text-decoration: underline;
+  }
+
+  .credit-role {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+  }
+
+  .credit-bio {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-top: var(--space-xs);
+  }
+
+  @media (max-width: 640px) {
+    .credits-grid { grid-template-columns: 1fr; }
+  }
+}

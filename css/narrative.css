@@ -80,38 +80,4 @@
     border-left: 3px solid var(--color-accent);
   }
 
-  /* About page */
-  .about-page {
-    padding: var(--space-2xl) 0 80px;
-  }
-
-  .about-page h1 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: var(--space-lg);
-    letter-spacing: -0.5px;
-  }
-
-  .about-page h2 {
-    font-size: 18px;
-    font-weight: 600;
-    margin: var(--space-xl) 0 12px;
-  }
-
-  .about-page p {
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--color-text);
-    margin-bottom: 12px;
-  }
-
-  .about-page ul {
-    margin: var(--space-sm) 0 var(--space-md) 20px;
-    font-size: 15px;
-    line-height: 1.7;
-  }
-
-  .about-page a {
-    color: var(--color-primary);
-  }
 }
