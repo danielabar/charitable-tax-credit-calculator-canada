@@ -282,7 +282,7 @@ Then("the results should not include any learn links", async ({ page }) => {
 // ---------------------------------------------------------------------------
 
 Then("the disclaimer should be shown", async ({ page }) => {
-  const disclaimer = page.locator(".disclaimer");
+  const disclaimer = page.locator(".disclaimer:visible");
   await expect(disclaimer).toBeVisible();
   await expect(disclaimer).toContainText("This is an estimate, not tax advice");
 });
