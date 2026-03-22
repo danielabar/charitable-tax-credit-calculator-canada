@@ -1,6 +1,6 @@
 @layer components {
   /* Learn page structure */
-  .learn-page { padding: var(--space-2xl) 0 80px; }
+  .learn-page { padding-block: var(--space-2xl) 80px; }
 
   .learn-page h1 {
     font-size: 28px;
@@ -395,12 +395,39 @@
   }
 
   /* Responsive */
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .learn-page h1 { font-size: 24px; }
     .scenario-cards { grid-template-columns: 1fr; }
     .try-calculator p { max-width: none; }
-    .refund-card { grid-template-columns: 80px 1fr 100px; gap: 12px; padding: var(--space-md); }
+
+    .refund-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 12px;
+      padding: var(--space-md);
+    }
+
+    .refund-card-target {
+      grid-column: 1;
+      grid-row: 1;
+      text-align: left;
+    }
+
+    .refund-card-donate {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: right;
+    }
+
+    .refund-card-bar {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
     .refund-card-target .target-amount { font-size: 22px; }
     .refund-card-donate .donate-amount { font-size: 18px; }
+
+    .result-side .result-amount { font-size: 20px; }
   }
 }

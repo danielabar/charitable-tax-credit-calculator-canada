@@ -118,6 +118,15 @@
     font-weight: 600;
     color: #fff;
     transition: width 0.3s;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .bar-text {
+    padding: 0 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .bar-segment.cost {
@@ -275,22 +284,33 @@
     border-radius: 0 0 var(--radius) var(--radius);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .big-number-card .headline-number {
       font-size: 36px;
     }
 
     .summary-grid {
-      grid-template-columns: 1fr;
+      gap: 8px;
     }
 
-    .summary-grid.three-col {
-      grid-template-columns: 1fr;
+    .summary-item {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .summary-item .value {
+      font-size: 18px;
     }
 
     .mode-toggle button {
       font-size: 13px;
       padding: 10px var(--space-sm);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .mode-toggle button {
+      font-size: 12px;
     }
   }
 }

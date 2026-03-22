@@ -47,4 +47,37 @@
     color: var(--color-primary-dark);
     background: var(--color-primary-light);
   }
+
+  @media (max-width: 768px) {
+    .top-nav {
+      gap: 12px;
+    }
+
+    .top-nav .logo-text {
+      display: none;
+    }
+
+    .top-nav nav {
+      flex: 1;
+      background: var(--color-bg-alt);
+      border-radius: var(--radius);
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .top-nav nav a {
+      flex: 1;
+      justify-content: center;
+      min-height: 44px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .top-nav nav a.active {
+      background: var(--color-bg);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+  }
 }
