@@ -161,10 +161,10 @@ async function buildNonRefundableSection(results) {
 
   if (usability.state === UsabilityState.ENTIRELY_WASTED) {
     const calloutHtml = await callout("warning",
-      `The charitable tax credit is <strong>non-refundable</strong>. It can reduce the tax you owe, but it can't go below zero. Since your estimated tax is already $0, the entire <span class="hl-red">${$(credit.totalCredit)}</span> credit has nothing to reduce. It disappears.`
+      `The charitable tax credit is <strong>non-refundable</strong>. It can reduce the tax you owe, but it can't go below zero. Since your estimated tax is already $0, the entire <span class="hl-red">${$(credit.totalCredit)}</span> credit has nothing to reduce. It goes unused.`
     );
     return section("non-refundable",
-      `<h3>Why the credit doesn't help this year</h3>
+      `<h3>Why the credit can't be used this year</h3>
 ${calloutHtml}
 <p>This is a limitation of how the system is designed, not a reflection of your generosity. Many people are in this situation and most existing calculators don't mention it.</p>
 <a href="learn" data-route="/learn" class="learn-link">See how this affects different types of taxpayers <span class="arrow">&rarr;</span></a>`
@@ -172,10 +172,10 @@ ${calloutHtml}
   }
 
   const calloutHtml = await callout("warning",
-    `Your donation credit of <span class="hl-red">${$(credit.totalCredit)}</span> is larger than your estimated tax of <span class="hl">${$(tax.totalTax)}</span>. The credit can reduce your tax to $0, saving you ${$(usability.creditUsable)}. But the remaining <span class="hl-red">${$(usability.creditWasted)}</span> of credit disappears — it can't be refunded to you. This is what "non-refundable" means.`
+    `Your donation credit of <span class="hl-red">${$(credit.totalCredit)}</span> is larger than your estimated tax of <span class="hl">${$(tax.totalTax)}</span>. The credit can reduce your tax to $0, saving you ${$(usability.creditUsable)}. But the remaining <span class="hl-red">${$(usability.creditWasted)}</span> of credit goes unused — it can't be refunded to you. This is what "non-refundable" means.`
   );
   return section("non-refundable",
-    `<h3>Why part of your credit is lost</h3>
+    `<h3>Why part of your credit goes unused</h3>
 ${calloutHtml}
 <p>This isn't about you — it's how the system works. The charitable tax credit can only reduce tax you already owe. It can never create a refund on its own.</p>
 <a href="learn" data-route="/learn" class="learn-link">See how this affects different types of taxpayers <span class="arrow">&rarr;</span></a>`
@@ -208,7 +208,7 @@ async function buildCarryForwardSection(results) {
     ),
   ]);
   return section("carry-forward",
-    `<h3>What you can do about it</h3>\n${carryCallout}\n${spouseCallout}`
+    `<h3>Your options</h3>\n${carryCallout}\n${spouseCallout}`
   );
 }
 

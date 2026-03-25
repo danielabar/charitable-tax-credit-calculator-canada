@@ -19,7 +19,7 @@ Feature: Reverse calculator mode
     And the donation breakdown should be visible
     And the disclaimer should be shown
 
-  # --- Slider: partly wasted ---
+  # --- Slider: partly unused ---
 
   Scenario: Slider shows partial warning for low-income taxpayer
     When I switch to reverse mode
@@ -30,7 +30,7 @@ Feature: Reverse calculator mode
     And the warning should mention the income needed
     And the disclaimer should be shown
 
-  # --- Slider: entirely wasted ---
+  # --- Slider: entirely unused ---
 
   Scenario: Slider shows not-possible warning for non-taxpayer
     When I switch to reverse mode
