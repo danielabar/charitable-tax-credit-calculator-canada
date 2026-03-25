@@ -111,7 +111,7 @@ Feature: Donor experience
     # Disclaimer
     And the disclaimer should be shown
 
-  Scenario: Credit partly wasted — donation above $200
+  Scenario: Credit partly unused — donation above $200
     When I select "Ontario" as my province
     And I enter "13000" as my income
     And I enter "500" as my donation
@@ -121,9 +121,9 @@ Feature: Donor experience
     And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount unused
     # Visual breakdown
-    And the visual breakdown should show usable versus wasted credit
+    And the visual breakdown should show usable versus unused credit
     # Narrative
     And the explanation should show tiered rates for donations above $200
     And the tax situation should say income is mostly sheltered by the basic personal amount
@@ -137,7 +137,7 @@ Feature: Donor experience
     # Disclaimer
     And the disclaimer should be shown
 
-  Scenario: Credit partly wasted — donation near $200 (nudge suppressed)
+  Scenario: Credit partly unused — donation near $200 (nudge suppressed)
     When I select "Ontario" as my province
     And I enter "13000" as my income
     And I enter "180" as my donation
@@ -147,9 +147,9 @@ Feature: Donor experience
     And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount unused
     # Visual breakdown
-    And the visual breakdown should show usable versus wasted credit
+    And the visual breakdown should show usable versus unused credit
     # Narrative
     And the explanation should show a single rate for donations under $200
     And the tax situation should say income is mostly sheltered by the basic personal amount
@@ -157,13 +157,13 @@ Feature: Donor experience
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
     And the results should include a learn link in the non-refundable section
-    # Critical: nudge must NOT appear — credit is already partly wasted
+    # Critical: nudge must NOT appear — credit is already partly unused
     And the results should not include the $200 threshold nudge
     And the results should not include the closing encouragement
     # Disclaimer
     And the disclaimer should be shown
 
-  Scenario: Credit partly wasted — donation well below $200
+  Scenario: Credit partly unused — donation well below $200
     When I select "Ontario" as my province
     And I enter "13000" as my income
     And I enter "100" as my donation
@@ -173,9 +173,9 @@ Feature: Donor experience
     And the bottom line should say "back"
     And the bottom line should not show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount unused
     # Visual breakdown
-    And the visual breakdown should show usable versus wasted credit
+    And the visual breakdown should show usable versus unused credit
     # Narrative
     And the explanation should show a single rate for donations under $200
     And the tax situation should say income is mostly sheltered by the basic personal amount
@@ -183,13 +183,13 @@ Feature: Donor experience
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
     And the results should include a learn link in the non-refundable section
-    # No nudge — credit wasted AND far from $200
+    # No nudge — credit unused AND far from $200
     And the results should not include the $200 threshold nudge
     And the results should not include the closing encouragement
     # Disclaimer
     And the disclaimer should be shown
 
-  Scenario: Credit entirely wasted — donation above $200
+  Scenario: Credit entirely unused — donation above $200
     When I select "Ontario" as my province
     And I enter "10000" as my income
     And I enter "500" as my donation
@@ -198,8 +198,8 @@ Feature: Donor experience
     Then the bottom line should say "You get $0 back"
     And the bottom line should show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
-    # No visual breakdown for entirely wasted
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount unused
+    # No visual breakdown for entirely unused
     And there should be no visual breakdown
     # Narrative
     And the explanation should show tiered rates for donations above $200
@@ -210,12 +210,12 @@ Feature: Donor experience
     And the results should include the closing encouragement
     And the results should include a learn link in the non-refundable section
     And the results should include a learn link in the closing section
-    # No nudge — all credit is wasted
+    # No nudge — all credit is unused
     And the results should not include the $200 threshold nudge
     # Disclaimer
     And the disclaimer should be shown
 
-  Scenario: Credit entirely wasted — donation near $200 (nudge suppressed)
+  Scenario: Credit entirely unused — donation near $200 (nudge suppressed)
     When I select "Ontario" as my province
     And I enter "10000" as my income
     And I enter "180" as my donation
@@ -224,7 +224,7 @@ Feature: Donor experience
     Then the bottom line should say "You get $0 back"
     And the bottom line should show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount unused
     # No visual breakdown
     And there should be no visual breakdown
     # Narrative
@@ -236,12 +236,12 @@ Feature: Donor experience
     And the results should include the closing encouragement
     And the results should include a learn link in the non-refundable section
     And the results should include a learn link in the closing section
-    # Critical: nudge must NOT appear — entire credit is wasted
+    # Critical: nudge must NOT appear — entire credit is unused
     And the results should not include the $200 threshold nudge
     # Disclaimer
     And the disclaimer should be shown
 
-  Scenario: Credit entirely wasted — donation well below $200
+  Scenario: Credit entirely unused — donation well below $200
     When I select "Ontario" as my province
     And I enter "10000" as my income
     And I enter "100" as my donation
@@ -250,7 +250,7 @@ Feature: Donor experience
     Then the bottom line should say "You get $0 back"
     And the bottom line should show a warning
     # Credit summary
-    And the credit summary should show credit calculated, estimated tax, amount back, and amount lost
+    And the credit summary should show credit calculated, estimated tax, amount back, and amount unused
     # No visual breakdown
     And there should be no visual breakdown
     # Narrative
@@ -262,7 +262,7 @@ Feature: Donor experience
     And the results should include the closing encouragement
     And the results should include a learn link in the non-refundable section
     And the results should include a learn link in the closing section
-    # No nudge — credit wasted AND far from $200
+    # No nudge — credit unused AND far from $200
     And the results should not include the $200 threshold nudge
     # Disclaimer
     And the disclaimer should be shown
