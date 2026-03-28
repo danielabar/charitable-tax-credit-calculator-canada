@@ -28,7 +28,7 @@ function buildHeadline(results) {
         headlineContext: `Donate ${donation} and ${savings} goes right back in your pocket — a ${savingsPercent} return.`,
       };
     case UsabilityState.PARTLY_WASTED: {
-      const total = formatCurrency(credit.totalCredit);
+      const total = formatCurrency(credit.effectiveTotalCredit);
       const taxOwed = formatCurrency(tax.totalTax);
       const wasted = formatCurrency(usability.creditWasted);
       return {
@@ -65,17 +65,27 @@ async function buildSummaryGrid(results) {
 
   switch (usability.state) {
     case UsabilityState.FULLY_USABLE:
-      gridClass = "summary-grid three-col";
-      items = [
-        { label: "Federal credit", value: formatCurrency(credit.federalCredit), className: "teal" },
-        { label: `${input.provinceName} credit`, value: formatCurrency(credit.provincialCredit), className: "teal" },
-        { label: "Total credit", value: formatCurrency(credit.totalCredit), className: "teal" },
-      ];
+      if (credit.surtaxSavings > 0) {
+        gridClass = "summary-grid";
+        items = [
+          { label: "Federal credit", value: formatCurrency(credit.federalCredit), className: "teal" },
+          { label: `${input.provinceName} credit`, value: formatCurrency(credit.provincialCredit), className: "teal" },
+          { label: `${input.provinceName} surtax relief`, value: formatCurrency(credit.surtaxSavings), className: "teal" },
+          { label: "Total savings", value: formatCurrency(credit.effectiveTotalCredit), className: "teal" },
+        ];
+      } else {
+        gridClass = "summary-grid three-col";
+        items = [
+          { label: "Federal credit", value: formatCurrency(credit.federalCredit), className: "teal" },
+          { label: `${input.provinceName} credit`, value: formatCurrency(credit.provincialCredit), className: "teal" },
+          { label: "Total credit", value: formatCurrency(credit.totalCredit), className: "teal" },
+        ];
+      }
       break;
     case UsabilityState.PARTLY_WASTED:
       gridClass = "summary-grid";
       items = [
-        { label: "Credit calculated", value: formatCurrency(credit.totalCredit), className: "teal" },
+        { label: "Credit calculated", value: formatCurrency(credit.effectiveTotalCredit), className: "teal" },
         { label: "Your estimated tax", value: formatCurrency(tax.totalTax), className: "muted" },
         { label: "You get back", value: formatCurrency(usability.creditUsable), className: "teal" },
         { label: "Unused", value: formatCurrency(usability.creditWasted), className: "red", highlight: true },
@@ -84,10 +94,10 @@ async function buildSummaryGrid(results) {
     case UsabilityState.ENTIRELY_WASTED:
       gridClass = "summary-grid";
       items = [
-        { label: "Credit calculated", value: formatCurrency(credit.totalCredit), className: "muted" },
+        { label: "Credit calculated", value: formatCurrency(credit.effectiveTotalCredit), className: "muted" },
         { label: "Your estimated tax", value: formatCurrency(tax.totalTax), className: "muted" },
         { label: "You get back", value: "$0", className: "muted" },
-        { label: "Unused", value: formatCurrency(credit.totalCredit), className: "red", highlight: true },
+        { label: "Unused", value: formatCurrency(credit.effectiveTotalCredit), className: "red", highlight: true },
       ];
       break;
   }
@@ -123,7 +133,7 @@ async function buildBarChart(results) {
       const creditPercent = 100 - costPercent;
       const segments = [
         fillTemplate(segmentTemplate, { segmentClass: "cost", width: String(costPercent), segmentLabel: `${formatCurrency(usability.outOfPocketCost)} your cost` }),
-        fillTemplate(segmentTemplate, { segmentClass: "usable", width: String(creditPercent), segmentLabel: `${formatCurrency(credit.totalCredit)} back to you` }),
+        fillTemplate(segmentTemplate, { segmentClass: "usable", width: String(creditPercent), segmentLabel: `${formatCurrency(credit.effectiveTotalCredit)} back to you` }),
       ].join("\n");
       const legend = [
         fillTemplate(legendTemplate, { legendClass: "cost", legendLabel: "Your actual cost" }),
@@ -132,7 +142,7 @@ async function buildBarChart(results) {
       return fillTemplate(chartTemplate, { barLabel: `How your ${donation} donation breaks down`, segments, legend });
     }
     case UsabilityState.PARTLY_WASTED: {
-      const usablePercent = Math.round((usability.creditUsable / credit.totalCredit) * 100);
+      const usablePercent = Math.round((usability.creditUsable / credit.effectiveTotalCredit) * 100);
       const wastedPercent = 100 - usablePercent;
       const segments = [
         fillTemplate(segmentTemplate, { segmentClass: "usable", width: String(usablePercent), segmentLabel: `${formatCurrency(usability.creditUsable)} back to you` }),
@@ -142,7 +152,7 @@ async function buildBarChart(results) {
         fillTemplate(legendTemplate, { legendClass: "usable", legendLabel: "Back to you" }),
         fillTemplate(legendTemplate, { legendClass: "wasted", legendLabel: "Unused (exceeds tax)" }),
       ].join("\n");
-      return fillTemplate(chartTemplate, { barLabel: `Your ${formatCurrency(credit.totalCredit)} credit vs. your ${formatCurrency(usability.estimatedTax)} tax`, segments, legend });
+      return fillTemplate(chartTemplate, { barLabel: `Your ${formatCurrency(credit.effectiveTotalCredit)} credit vs. your ${formatCurrency(usability.estimatedTax)} tax`, segments, legend });
     }
   }
 }

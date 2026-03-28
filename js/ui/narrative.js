@@ -85,7 +85,10 @@ async function buildBasicMathSection(results) {
   const provRate = donationRates.provincial;
 
   if (donationAmount <= threshold) {
-    const body = `<p>You donated <span class="hl">${$(donationAmount)}</span>. The federal credit is ${fmtRate(federal.lowRate)}, which equals <span class="hl">${$(credit.federalCredit)}</span>. The ${input.provinceName} credit is ${fmtRate(provRate.lowRate)}, which equals <span class="hl">${$(credit.provincialCredit)}</span>. Your combined credit is <span class="hl-teal">${$(credit.totalCredit)}</span>.</p>`;
+    let body = `<p>You donated <span class="hl">${$(donationAmount)}</span>. The federal credit is ${fmtRate(federal.lowRate)}, which equals <span class="hl">${$(credit.federalCredit)}</span>. The ${input.provinceName} credit is ${fmtRate(provRate.lowRate)}, which equals <span class="hl">${$(credit.provincialCredit)}</span>. Your combined credit is <span class="hl-teal">${$(credit.totalCredit)}</span>.</p>`;
+    if (credit.surtaxSavings > 0) {
+      body += `\n<p>Because your ${input.provinceName} tax is high enough to trigger the Ontario surtax, your donation credit also reduces the surtax — saving you an additional <span class="hl">${$(credit.surtaxSavings)}</span>. Your total effective savings are <span class="hl-teal">${$(credit.effectiveTotalCredit)}</span>.</p>`;
+    }
     return section("basic-math", `<h3>How your credit is calculated</h3>\n${body}`);
   }
 
@@ -112,8 +115,11 @@ async function buildBasicMathSection(results) {
     federalBreakdown = `<p>You donated <span class="hl">${$(donationAmount)}</span>. The federal credit rate on the first $${threshold} is ${fmtRate(federal.lowRate)}, which equals <span class="hl">${$(fedLowCredit)}</span>. On the remaining <span class="hl">${$(highPortion)}</span>, the rate is ${fmtRate(federal.highRate)}, which equals <span class="hl">${$(fedHighCredit)}</span>. Your total federal credit is <span class="hl">${$(credit.federalCredit)}</span>.</p>`;
   }
 
-  const body = `${federalBreakdown}
-<p>In ${input.provinceName}, the provincial credit adds <span class="hl">${$(credit.provincialCredit)}</span> — that's ${fmtRate(provRate.lowRate)} on the first $${threshold} plus ${fmtRate(provRate.highRate)} on the rest. Your combined credit is <span class="hl-teal">${$(credit.totalCredit)}</span>.</p>`;
+  let provincialLine = `<p>In ${input.provinceName}, the provincial credit adds <span class="hl">${$(credit.provincialCredit)}</span> — that's ${fmtRate(provRate.lowRate)} on the first $${threshold} plus ${fmtRate(provRate.highRate)} on the rest. Your combined credit is <span class="hl-teal">${$(credit.totalCredit)}</span>.</p>`;
+  if (credit.surtaxSavings > 0) {
+    provincialLine += `\n<p>Because your ${input.provinceName} tax is high enough to trigger the Ontario surtax, your donation credit also reduces the surtax — saving you an additional <span class="hl">${$(credit.surtaxSavings)}</span>. Your total effective savings are <span class="hl-teal">${$(credit.effectiveTotalCredit)}</span>.</p>`;
+  }
+  const body = `${federalBreakdown}\n${provincialLine}`;
   return section("basic-math", `<h3>How your credit is calculated</h3>\n${body}`);
 }
 
@@ -151,7 +157,7 @@ async function buildTaxSituationSection(results) {
 
   return section("tax-situation",
     `<h3>Your tax situation</h3>
-<p>Based on your income of <span class="hl">${$(input.income)}</span> in ${input.provinceName}, we estimate your total income tax (before this credit) is approximately <span class="hl">${$(tax.totalTax)}</span>. Your donation credit of <span class="hl-teal">${$(credit.totalCredit)}</span> is well within your tax payable, so you can use the full credit.</p>
+<p>Based on your income of <span class="hl">${$(input.income)}</span> in ${input.provinceName}, we estimate your total income tax (before this credit) is approximately <span class="hl">${$(tax.totalTax)}</span>. Your donation credit of <span class="hl-teal">${$(credit.effectiveTotalCredit)}</span> is well within your tax payable, so you can use the full credit.</p>
 <p style="font-size:13px; color:var(--color-text-secondary); margin-top: 8px;">This estimate uses only the basic personal amount. Your actual tax may be lower if you have other credits.</p>`
   );
 }
@@ -161,7 +167,7 @@ async function buildNonRefundableSection(results) {
 
   if (usability.state === UsabilityState.ENTIRELY_WASTED) {
     const calloutHtml = await callout("warning",
-      `The charitable tax credit is <strong>non-refundable</strong>. It can reduce the tax you owe, but it can't go below zero. Since your estimated tax is already $0, the entire <span class="hl-red">${$(credit.totalCredit)}</span> credit has nothing to reduce. It goes unused.`
+      `The charitable tax credit is <strong>non-refundable</strong>. It can reduce the tax you owe, but it can't go below zero. Since your estimated tax is already $0, the entire <span class="hl-red">${$(credit.effectiveTotalCredit)}</span> credit has nothing to reduce. It goes unused.`
     );
     return section("non-refundable",
       `<h3>Why the credit can't be used this year</h3>
@@ -172,7 +178,7 @@ ${calloutHtml}
   }
 
   const calloutHtml = await callout("warning",
-    `Your donation credit of <span class="hl-red">${$(credit.totalCredit)}</span> is larger than your estimated tax of <span class="hl">${$(tax.totalTax)}</span>. The credit can reduce your tax to $0, saving you ${$(usability.creditUsable)}. But the remaining <span class="hl-red">${$(usability.creditWasted)}</span> of credit goes unused — it can't be refunded to you. This is what "non-refundable" means.`
+    `Your donation credit of <span class="hl-red">${$(credit.effectiveTotalCredit)}</span> is larger than your estimated tax of <span class="hl">${$(tax.totalTax)}</span>. The credit can reduce your tax to $0, saving you ${$(usability.creditUsable)}. But the remaining <span class="hl-red">${$(usability.creditWasted)}</span> of credit goes unused — it can't be refunded to you. This is what "non-refundable" means.`
   );
   return section("non-refundable",
     `<h3>Why part of your credit goes unused</h3>
@@ -216,7 +222,7 @@ async function buildMinimumIncomeSection(results) {
   const { credit, minimumIncome, input } = results;
   return section("minimum-income",
     `<h3>Income needed to use the full credit</h3>
-<p>To fully use a credit of <span class="hl-teal">${$(credit.totalCredit)}</span>, you'd need to earn approximately <span class="hl">${$(minimumIncome)}</span> per year in ${input.provinceName}. At that income, your estimated tax would be roughly ${$(credit.totalCredit)} — just enough to absorb the entire credit.</p>`
+<p>To fully use a credit of <span class="hl-teal">${$(credit.effectiveTotalCredit)}</span>, you'd need to earn approximately <span class="hl">${$(minimumIncome)}</span> per year in ${input.provinceName}. At that income, your estimated tax would be roughly ${$(credit.effectiveTotalCredit)} — just enough to absorb the entire credit.</p>`
   );
 }
 

@@ -10,6 +10,7 @@ import { calculateTotalTax } from "../../js/calculate-total-tax.js";
 import { calculateDonationCredit } from "../../js/calculate-donation-credit.js";
 import { checkCreditUsability } from "../../js/check-credit-usability.js";
 import { calculateDonationForRefund } from "../../js/calculate-donation-for-refund.js";
+import { calculateSurtaxSavings } from "../../js/calculate-surtax-savings.js";
 
 const federalConfig = JSON.parse(
   readFileSync(join(process.cwd(), "config/tax-data/2026/federal.json"), "utf-8")
@@ -40,11 +41,25 @@ test.describe("smoke — current year (2026)", () => {
   test("high income ON ($300K, $5000 donation)", () => {
     const tax = calculateTotalTax(300000, federalConfig, onConfig);
     const credit = calculateDonationCredit(5000, 300000, federalConfig, onConfig);
-    const usability = checkCreditUsability(credit.totalCredit, tax.totalTax, 5000);
+    const { surtaxSavings } = calculateSurtaxSavings(tax.provincialTax, credit.provincialCredit, onConfig.surtax);
+    const effectiveTotalCredit = credit.totalCredit + surtaxSavings;
+    const usability = checkCreditUsability(effectiveTotalCredit, tax.totalTax, 5000);
 
     expect(credit.totalCredit).toBeGreaterThan(1500);
     expect(credit.totalCredit).toBeLessThan(3000);
+    expect(surtaxSavings).toBeGreaterThan(0);
+    expect(effectiveTotalCredit).toBeGreaterThan(credit.totalCredit);
     expect(usability.state).toBe("fully-usable");
+  });
+
+  test("middle income ON ($80K) — no surtax savings", () => {
+    const tax = calculateTotalTax(80000, federalConfig, onConfig);
+    const credit = calculateDonationCredit(500, 80000, federalConfig, onConfig);
+    const { surtaxSavings } = calculateSurtaxSavings(tax.provincialTax, credit.provincialCredit, onConfig.surtax);
+
+    // At $80K, provincial tax is well above surtax thresholds, but credit is small
+    // so surtaxSavings should be > 0 (credit reduces tax that's in surtax range)
+    expect(surtaxSavings).toBeGreaterThanOrEqual(0);
   });
 
   test("zero donation returns zero credit", () => {

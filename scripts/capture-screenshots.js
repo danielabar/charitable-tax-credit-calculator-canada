@@ -82,6 +82,12 @@ const scenarios = [
     donation: "500",
   },
   {
+    name: "11b-surtax-relief",
+    province: "Ontario",
+    income: "300000",
+    donation: "5000",
+  },
+  {
     name: "12-top-bracket-below-200",
     province: "Ontario",
     income: "300000",
