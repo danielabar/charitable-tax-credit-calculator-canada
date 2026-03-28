@@ -84,3 +84,25 @@ Feature: Reverse calculator mode
     And the refund slider should be at 100
     And the donate display should show a dollar amount
     And the disclaimer should be shown
+
+  # --- Surtax footnote (Ontario only) ---
+
+  Scenario: Ontario shows surtax footnote with link to forward mode
+    When I switch to reverse mode
+    And I select "Ontario" as my reverse province
+    And I enter "300000" as my reverse income
+    And I set the refund slider to 500
+    Then the surtax footnote should be visible
+    And the refund display should show an asterisk
+    When I click the surtax forward link
+    Then I should see the forward calculator
+    And the province dropdown should show "Ontario"
+    And the income field should contain "300000"
+    And I should see results
+
+  Scenario: Alberta does not show surtax footnote
+    When I switch to reverse mode
+    And I select "Alberta" as my reverse province
+    And I enter "300000" as my reverse income
+    And I set the refund slider to 500
+    Then the surtax footnote should not be visible

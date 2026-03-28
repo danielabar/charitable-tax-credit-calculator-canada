@@ -252,6 +252,39 @@
     }
   }
 
+  /* Surtax footnote (reverse mode, Ontario) */
+  .surtax-footnote {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    padding: 0 4px;
+    margin-top: var(--space-md);
+  }
+
+  .surtax-footnote::before {
+    content: "*";
+    color: var(--color-primary);
+    font-weight: 700;
+    margin-right: 2px;
+  }
+
+  .surtax-footnote a {
+    color: var(--color-primary-dark);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .surtax-footnote a:hover {
+    text-decoration: underline;
+  }
+
+  .surtax-asterisk {
+    font-size: 18px;
+    color: var(--color-primary);
+    vertical-align: super;
+    line-height: 0;
+  }
+
   @media (max-width: 480px) {
     .slider-result {
       flex-direction: column;
