@@ -42,6 +42,19 @@
       }
     })();
   </script>
+
+  <script>
+    // GoatCounter: only track on production (GitHub Pages).
+    // Skips localhost, Netlify PR previews, and test runs.
+    window.goatcounter = { no_onload: true };
+    if (window.location.host === 'danielabar.github.io') {
+      var s = document.createElement('script');
+      s.async = true;
+      s.dataset.goatcounter = 'https://charitable-tax-credit-calculator-canada.goatcounter.com/count';
+      s.src = '//gc.zgo.at/count.js';
+      document.head.appendChild(s);
+    }
+  </script>
   <script type="module" src="js/app.js"></script>
 </head>
 <body>
