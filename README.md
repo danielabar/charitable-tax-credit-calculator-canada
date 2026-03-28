@@ -37,6 +37,7 @@ A free, open-source tool that honestly tells Canadians what they get back from c
 **Privacy and sharing**
 - All calculations happen client-side — no data leaves the browser
 - Shareable URLs encode inputs so results can be linked
+- Anonymous usage analytics via [GoatCounter](https://www.goatcounter.com/) — no cookies, no personal data
 
 **Configurable**
 - All tax rates, brackets, and thresholds loaded from JSON config files — no hardcoded values
