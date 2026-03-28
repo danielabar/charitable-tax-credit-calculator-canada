@@ -82,6 +82,12 @@ const scenarios = [
     donation: "500",
   },
   {
+    name: "11b-surtax-relief",
+    province: "Ontario",
+    income: "300000",
+    donation: "5000",
+  },
+  {
     name: "12-top-bracket-below-200",
     province: "Ontario",
     income: "300000",
@@ -107,6 +113,12 @@ const reverseScenarios = [
     province: "Ontario",
     income: "10000",
     refund: 100,
+  },
+  {
+    name: "16b-reverse-mode-surtax-note",
+    province: "Ontario",
+    income: "300000",
+    refund: 500,
   },
 ];
 

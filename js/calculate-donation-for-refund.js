@@ -2,6 +2,9 @@
  * Given a desired refund amount, compute the donation needed.
  * Inverse of the donation credit calculation (federal + provincial combined).
  *
+ * TODO (#28): Does not account for Ontario surtax savings — for surtax-range
+ * donors, the donation needed is actually less than what this returns (conservative).
+ *
  * @param {number} desiredRefund - The amount the donor wants back
  * @param {object} federalConfig - Federal config (donationCredit rates)
  * @param {object} provinceConfig - Provincial config (donationCredit rates)

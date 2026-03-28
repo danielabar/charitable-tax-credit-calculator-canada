@@ -119,7 +119,7 @@
         <div class="slider-result-arrow">&rarr;</div>
         <div class="slider-result-box">
           <div class="srb-label">You get back</div>
-          <div class="srb-amount refund-val" id="refund-display">—</div>
+          <div class="srb-amount refund-val" id="refund-display"><span id="refund-text">—</span><span class="surtax-asterisk" id="surtax-asterisk" hidden>*</span></div>
         </div>
       </div>
 
@@ -140,6 +140,15 @@
           </div>
         </div>
       </div>
+
+      <!-- No data-route: this link is handled by script.js as an intra-view mode
+           switch (reverse → forward with prefilled values). Using data-route would
+           trigger the SPA router, which destroys and re-inits the entire view,
+           causing a flash. See script.js surtaxForwardLink click handler. -->
+      <p class="surtax-footnote" id="surtax-footnote" hidden>
+        Ontario's surtax means you may actually need to donate slightly less than shown.
+        Try <a href="/" id="surtax-forward-link">What do I get back?</a> for a precise calculation.
+      </p>
     </div>
 
     <div id="reverse-disclaimer" hidden></div>

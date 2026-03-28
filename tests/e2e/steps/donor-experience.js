@@ -41,6 +41,21 @@ Then(
 );
 
 Then(
+  "the credit summary should show federal credit, provincial credit, surtax relief, and total savings",
+  async ({ page }) => {
+    const grid = page.locator(".summary-grid");
+    await expect(grid).toBeVisible();
+    await expect(grid).not.toHaveClass(/three-col/);
+    const items = grid.locator(".summary-item");
+    await expect(items).toHaveCount(4);
+    await expect(items.nth(0).locator(".label")).toContainText("Federal credit");
+    await expect(items.nth(1).locator(".label")).toContainText("credit");
+    await expect(items.nth(2).locator(".label")).toContainText("surtax relief");
+    await expect(items.nth(3).locator(".label")).toContainText("Total savings");
+  },
+);
+
+Then(
   "the credit summary should show credit calculated, estimated tax, amount back, and amount unused",
   async ({ page }) => {
     const grid = page.locator(".summary-grid");

@@ -1,4 +1,5 @@
 import { calculateDonationCredit } from "./calculate-donation-credit.js";
+import { calculateSurtaxSavings } from "./calculate-surtax-savings.js";
 import { checkCreditUsability, UsabilityState } from "./check-credit-usability.js";
 
 /**
@@ -12,11 +13,12 @@ import { checkCreditUsability, UsabilityState } from "./check-credit-usability.j
  * @param {object} province - Province config
  * @param {object} appSettings - App settings (narrative thresholds)
  * @param {number} totalTax - Pre-calculated total tax
+ * @param {number} provincialTax - Pre-calculated provincial tax (for surtax savings)
  * @param {string} usabilityState - Current credit usability state
- * @param {number} currentTotalCredit - Pre-calculated total credit for current donation
+ * @param {number} currentEffectiveCredit - Pre-calculated effective total credit for current donation
  * @returns {object|null} Nudge hint or null
  */
-export function calculateNudge(donationAmount, income, federal, province, appSettings, totalTax, usabilityState, currentTotalCredit) {
+export function calculateNudge(donationAmount, income, federal, province, appSettings, totalTax, provincialTax, usabilityState, currentEffectiveCredit) {
   const threshold = federal.donationCredit.lowRateThreshold;
   const proximityPercent = appSettings.narrative.thresholdProximityPercent;
 
@@ -31,7 +33,14 @@ export function calculateNudge(donationAmount, income, federal, province, appSet
   const nudgeAbovePercent = appSettings.narrative.nudgeAboveThresholdPercent;
   const nudgeAmount = Math.round(threshold * (1 + nudgeAbovePercent));
   const nudgeCredit = calculateDonationCredit(nudgeAmount, income, federal, province);
-  const nudgeUsability = checkCreditUsability(nudgeCredit.totalCredit, totalTax, nudgeAmount);
+
+  let nudgeSurtaxSavings = 0;
+  if (province.surtax) {
+    nudgeSurtaxSavings = calculateSurtaxSavings(provincialTax, nudgeCredit.provincialCredit, province.surtax).surtaxSavings;
+  }
+  const nudgeEffectiveCredit = nudgeCredit.totalCredit + nudgeSurtaxSavings;
+
+  const nudgeUsability = checkCreditUsability(nudgeEffectiveCredit, totalTax, nudgeAmount);
 
   if (nudgeUsability.state !== UsabilityState.FULLY_USABLE) {
     return null;
@@ -39,7 +48,7 @@ export function calculateNudge(donationAmount, income, federal, province, appSet
 
   return {
     hypotheticalAmount: nudgeAmount,
-    hypotheticalCredit: nudgeCredit.totalCredit,
-    currentCredit: currentTotalCredit,
+    hypotheticalCredit: nudgeEffectiveCredit,
+    currentCredit: currentEffectiveCredit,
   };
 }

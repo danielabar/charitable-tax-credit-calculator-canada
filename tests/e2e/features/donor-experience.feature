@@ -276,8 +276,8 @@ Feature: Donor experience
     Then the bottom line should say "You get"
     And the bottom line should say "back"
     And the bottom line should not show a warning
-    # Credit summary
-    And the credit summary should show federal credit, provincial credit, and total credit
+    # Credit summary — surtax relief shown for high-income Ontario
+    And the credit summary should show federal credit, provincial credit, surtax relief, and total savings
     # Visual breakdown
     And the visual breakdown should show cost versus credit
     # Narrative — should mention the 33% top bracket bonus
@@ -303,8 +303,8 @@ Feature: Donor experience
     Then the bottom line should say "You get"
     And the bottom line should say "back"
     And the bottom line should not show a warning
-    # Credit summary
-    And the credit summary should show federal credit, provincial credit, and total credit
+    # Credit summary — surtax relief shown for high-income Ontario
+    And the credit summary should show federal credit, provincial credit, surtax relief, and total savings
     # Visual breakdown
     And the visual breakdown should show cost versus credit
     # Narrative — should NOT mention 33% (donation is below $200, only lowRate applies)

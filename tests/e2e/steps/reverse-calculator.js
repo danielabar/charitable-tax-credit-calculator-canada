@@ -84,3 +84,25 @@ Then(
     await expect(page.locator("#rev-income")).toHaveValue(expected);
   },
 );
+
+// --- Surtax footnote ---
+
+Then("the surtax footnote should be visible", async ({ page }) => {
+  await expect(page.locator("#surtax-footnote")).toBeVisible();
+});
+
+Then("the surtax footnote should not be visible", async ({ page }) => {
+  await expect(page.locator("#surtax-footnote")).toBeHidden();
+});
+
+Then("the refund display should show an asterisk", async ({ page }) => {
+  await expect(page.locator("#surtax-asterisk")).toBeVisible();
+});
+
+When("I click the surtax forward link", async ({ page }) => {
+  await page.click("#surtax-forward-link");
+  // Wait for forward mode results to render
+  await page.waitForSelector("#results-container .results-section", {
+    timeout: 5000,
+  });
+});

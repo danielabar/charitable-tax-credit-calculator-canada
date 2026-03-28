@@ -11,6 +11,7 @@ import { checkCreditUsability, UsabilityState } from "./check-credit-usability.j
 import { calculateMinimumIncome } from "./calculate-minimum-income.js";
 import { calculateNudge } from "./calculate-nudge.js";
 import { calculateDonationForRefund } from "./calculate-donation-for-refund.js";
+import { calculateSurtaxSavings } from "./calculate-surtax-savings.js";
 
 /**
  * @typedef {object} CalculationResults
@@ -65,16 +66,24 @@ export async function runCalculation(provinceCode, income, donationAmount) {
 
   const tax = calculateTotalTax(income, federal, province);
   const credit = calculateDonationCredit(donationAmount, income, federal, province);
-  const usability = checkCreditUsability(credit.totalCredit, tax.totalTax, donationAmount);
+
+  let surtaxSavings = 0;
+  if (province.surtax) {
+    surtaxSavings = calculateSurtaxSavings(tax.provincialTax, credit.provincialCredit, province.surtax).surtaxSavings;
+  }
+  credit.surtaxSavings = surtaxSavings;
+  credit.effectiveTotalCredit = credit.totalCredit + surtaxSavings;
+
+  const usability = checkCreditUsability(credit.effectiveTotalCredit, tax.totalTax, donationAmount);
 
   let minimumIncome = null;
   if (usability.state === UsabilityState.PARTLY_WASTED || usability.state === UsabilityState.ENTIRELY_WASTED) {
-    minimumIncome = calculateMinimumIncome(credit.totalCredit, federal, province);
+    minimumIncome = calculateMinimumIncome(credit.effectiveTotalCredit, federal, province);
   }
 
   const nudge = calculateNudge(
     donationAmount, income, federal, province, appSettings,
-    tax.totalTax, usability.state, credit.totalCredit
+    tax.totalTax, tax.provincialTax, usability.state, credit.effectiveTotalCredit
   );
 
   const donationRates = {
@@ -142,8 +151,15 @@ export async function runReverseCalculation(provinceCode, income, desiredRefund)
   // 3. What credit does this donation actually generate?
   const credit = calculateDonationCredit(donationNeeded, income, federal, province);
 
+  let surtaxSavings = 0;
+  if (province.surtax) {
+    surtaxSavings = calculateSurtaxSavings(tax.provincialTax, credit.provincialCredit, province.surtax).surtaxSavings;
+  }
+  credit.surtaxSavings = surtaxSavings;
+  credit.effectiveTotalCredit = credit.totalCredit + surtaxSavings;
+
   // 4. Can they use the full credit?
-  const usability = checkCreditUsability(credit.totalCredit, tax.totalTax, donationNeeded);
+  const usability = checkCreditUsability(credit.effectiveTotalCredit, tax.totalTax, donationNeeded);
 
   // 5. If not fully usable, what income would they need?
   let minimumIncome = null;

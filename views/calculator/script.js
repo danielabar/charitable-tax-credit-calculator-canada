@@ -18,6 +18,11 @@ let debounceTimer = null;
 let destroyed = false;
 // Stored reference so destroy() can remove the listener that init() registers.
 let popstateHandler = null;
+// Stash the raw donationNeeded number from the most recent reverse calculation.
+// The forward-link click handler needs this to prefill the forward form's donation
+// field. We store it here rather than parsing it back from donateDisplay.textContent,
+// which contains formatted currency ("$1,351.00") that would be fragile to parse.
+let lastDonationNeeded = 0;
 
 function debounce(fn, ms) {
   return (...args) => {
@@ -137,6 +142,10 @@ export async function init(contentEl, html) {
   const targetDisplay = document.getElementById("target-display");
   const donateDisplay = document.getElementById("donate-display");
   const refundDisplay = document.getElementById("refund-display");
+  // Separate text span inside refundDisplay — setting textContent on refundDisplay
+  // directly would destroy the surtax asterisk span. This inner span holds just the
+  // currency text so the asterisk sibling is preserved.
+  const refundText = document.getElementById("refund-text");
   const sliderResult = document.getElementById("slider-result");
   const sliderBreakdown = document.getElementById("slider-breakdown");
   const warningContainer = document.getElementById("slider-warning");
@@ -144,6 +153,13 @@ export async function init(contentEl, html) {
   const segHigh = document.getElementById("seg-high");
   const legendLow = document.getElementById("legend-low");
   const legendHigh = document.getElementById("legend-high");
+
+  // Surtax footnote elements — shown only for provinces with a surtax (currently
+  // Ontario). The footnote explains that the reverse calculator doesn't account for
+  // surtax savings, and links to the forward calculator for a precise result.
+  const surtaxFootnote = document.getElementById("surtax-footnote");
+  const surtaxAsterisk = document.getElementById("surtax-asterisk");
+  const surtaxForwardLink = document.getElementById("surtax-forward-link");
 
   async function updateSlider() {
     const province = revProvince.value;
@@ -157,7 +173,7 @@ export async function init(contentEl, html) {
     if (!province) {
       // No province selected — show placeholder state
       donateDisplay.textContent = "—";
-      refundDisplay.textContent = "—";
+      refundText.textContent = "—";
       warningContainer.innerHTML = "";
       sliderResult.classList.remove("dimmed");
       sliderBreakdown.classList.remove("dimmed");
@@ -166,6 +182,10 @@ export async function init(contentEl, html) {
       legendLow.textContent = "";
       legendHigh.textContent = "";
       reverseDisclaimer.hidden = true;
+      // No province selected — hide surtax footnote (we don't know if the
+      // province has a surtax yet).
+      surtaxFootnote.hidden = true;
+      surtaxAsterisk.hidden = true;
       return;
     }
 
@@ -210,7 +230,7 @@ export async function init(contentEl, html) {
 
     if (!results) {
       // Optimistic mode — no income, assume full taxpayer
-      refundDisplay.textContent = formatCurrency(refund);
+      refundText.textContent = formatCurrency(refund);
       refundDisplay.className = "srb-amount refund-val";
       warningContainer.innerHTML = "";
       sliderResult.classList.remove("dimmed");
@@ -222,13 +242,13 @@ export async function init(contentEl, html) {
     const { usability } = results;
 
     if (usability.state === "fully-usable") {
-      refundDisplay.textContent = formatCurrency(refund);
+      refundText.textContent = formatCurrency(refund);
       refundDisplay.className = "srb-amount refund-val";
       warningContainer.innerHTML = "";
       sliderResult.classList.remove("dimmed");
       sliderBreakdown.classList.remove("dimmed");
     } else if (usability.state === "entirely-wasted") {
-      refundDisplay.textContent = "$0";
+      refundText.textContent = "$0";
       refundDisplay.className = "srb-amount refund-val";
       refundDisplay.style.color = "var(--color-wasted)";
       warningContainer.innerHTML = buildReverseWarning(results);
@@ -236,18 +256,80 @@ export async function init(contentEl, html) {
       sliderBreakdown.classList.add("dimmed");
     } else {
       // partly-wasted
-      refundDisplay.textContent = formatCurrency(usability.creditUsable);
+      refundText.textContent = formatCurrency(usability.creditUsable);
       refundDisplay.className = "srb-amount refund-val";
       refundDisplay.style.color = "var(--color-accent)";
       warningContainer.innerHTML = buildReverseWarning(results);
       sliderResult.classList.remove("dimmed");
       sliderBreakdown.classList.remove("dimmed");
     }
+
+    // Stash raw donation amount for the forward-link click handler (see
+    // lastDonationNeeded declaration comment at module top).
+    lastDonationNeeded = donationNeeded;
+
+    // Surtax footnote — only provinces with a surtax config (currently Ontario).
+    // The reverse calculator uses simple rate algebra to invert the credit, which
+    // doesn't account for the surtax amplification effect. This means the "You
+    // donate" amount is slightly higher than necessary for surtax-range donors.
+    // The footnote explains this and links to the forward calculator, which does
+    // include surtax savings, for a precise result.
+    const hasSurtax = Boolean(prov.surtax);
+    surtaxFootnote.hidden = !hasSurtax;
+    surtaxAsterisk.hidden = !hasSurtax;
+
+    if (hasSurtax) {
+      // Build a forward-mode URL with the reverse calculator's current values.
+      // The donation param is the calculated donationNeeded (what the user would
+      // need to donate), so the forward calculator shows the precise credit
+      // including surtax savings for that donation amount.
+      const province = revProvince.value;
+      const income = parseCurrency(revIncome.value);
+      const params = new URLSearchParams({ province, income: income || '', donation: donationNeeded });
+      surtaxForwardLink.href = `?${params}`;
+    }
   }
 
   slider.addEventListener("input", updateSlider);
   revIncome.addEventListener("input", debounce(updateSlider, 300));
   revProvince.addEventListener("change", updateSlider);
+
+  /**
+   * Handle click on the surtax footnote's "What do I get back?" link.
+   *
+   * This performs an intra-view mode switch: reverse → forward, with the
+   * forward form prefilled using the reverse calculator's current values
+   * (province, income, and the calculated donation amount). The forward
+   * calculator includes surtax savings, so the user sees a precise result.
+   *
+   * Why not use data-route / the SPA router?
+   * The router's navigate() calls destroy() on the current view and re-inits
+   * from scratch, which would flash the page and lose state. Instead, we
+   * stay in the same view instance and call setModeUI() + calculate() —
+   * the same smooth transition as clicking the "What do I get back?" tab
+   * toggle button.
+   *
+   * URL and browser history:
+   * calculate() calls pushStateToUrl() internally, so the URL updates to
+   * forward-mode params (e.g., ?province=ON&income=300000&donation=1351).
+   * The existing onPopState handler knows how to restore both forward and
+   * reverse states, so the browser Back button returns to the reverse view
+   * with the user's previous province/income/slider position intact.
+   */
+  surtaxForwardLink.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const province = revProvince.value;
+    const income = parseCurrency(revIncome.value);
+    const donation = lastDonationNeeded;
+
+    setModeUI("forward");
+
+    form.querySelector("#province").value = province;
+    form.querySelector("#income").value = income;
+    form.querySelector("#donation").value = donation;
+
+    await calculate(province, income, donation);
+  });
 
   // --- URL hydration ---
   // Restore calculator state from URL query params on initial load.
