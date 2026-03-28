@@ -114,6 +114,12 @@ const reverseScenarios = [
     income: "10000",
     refund: 100,
   },
+  {
+    name: "16b-reverse-mode-surtax-note",
+    province: "Ontario",
+    income: "300000",
+    refund: 500,
+  },
 ];
 
 for (const vp of viewports) {
