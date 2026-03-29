@@ -8,6 +8,7 @@ import { loadFederalConfig, loadProvinceConfig } from "../../js/load-config.js";
 import { formatCurrency } from "../../js/format.js";
 import { buildReverseWarning } from "../../js/ui/reverse-narrative.js";
 import { loadTemplate } from "../../js/ui/template-loader.js";
+import { trackPageView, trackPageViewDebounced, cancelPendingTracking } from "../../js/analytics.js";
 
 let debounceTimer = null;
 // Guard against popstate firing after this view is destroyed. Both the router
@@ -112,11 +113,12 @@ export async function init(contentEl, html) {
   }));
 
   // --- Forward mode (existing logic, unchanged) ---
-  async function calculate(province, income, donation) {
+  async function calculate(province, income, donation, { track = true } = {}) {
     const results = await runCalculation(province, income, donation);
     await renderResults(results);
     document.querySelector('.results-section').scrollIntoView({ behavior: 'smooth' });
     pushStateToUrl(province, income, donation);
+    if (track) trackPageView('/' + location.search);
     startOverBtn.hidden = false;
   }
 
@@ -209,6 +211,7 @@ export async function init(contentEl, html) {
     updateSliderUI(refund, results.donationNeeded, results, federal, prov);
     reverseDisclaimer.hidden = false;
     pushStateToUrl(province, income, refund, "reverse");
+    trackPageViewDebounced('/' + location.search);
   }
 
   function updateSliderUI(refund, donationNeeded, results, federal, prov) {
@@ -346,7 +349,7 @@ export async function init(contentEl, html) {
     form.querySelector("#province").value = state.province;
     form.querySelector("#income").value = state.income;
     form.querySelector("#donation").value = state.donation;
-    await calculate(state.province, state.income, state.donation);
+    await calculate(state.province, state.income, state.donation, { track: false });
   } else {
     // No full state parseable — check for bare mode param.
     // Handles deep links like "?mode=reverse" (reverse mode, empty form).
@@ -389,7 +392,7 @@ export async function init(contentEl, html) {
       form.querySelector("#province").value = popState.province;
       form.querySelector("#income").value = popState.income;
       form.querySelector("#donation").value = popState.donation;
-      await calculate(popState.province, popState.income, popState.donation);
+      await calculate(popState.province, popState.income, popState.donation, { track: false });
     } else {
       // No full state parseable — check for bare mode param.
       // Handles history entries like "?mode=reverse" (reverse toggled, form empty)
@@ -417,6 +420,7 @@ export async function init(contentEl, html) {
 export function destroy() {
   destroyed = true;
   clearTimeout(debounceTimer);
+  cancelPendingTracking();
   if (popstateHandler) {
     window.removeEventListener("popstate", popstateHandler);
     popstateHandler = null;
