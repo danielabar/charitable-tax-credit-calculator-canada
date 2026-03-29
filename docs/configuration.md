@@ -28,6 +28,10 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
     "max": 500,
     "defaultValue": 100,
     "step": 1
+  },
+  "inputLimits": {
+    "income": { "min": 0, "max": 500000 },
+    "donation": { "min": 1, "max": 250000 }
   }
 }
 ```
@@ -40,6 +44,10 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
 | `reverseSlider.max` | number | `500` | Maximum refund amount on the reverse mode slider. |
 | `reverseSlider.defaultValue` | number | `100` | Default slider position when reverse mode is first opened. |
 | `reverseSlider.step` | number | `1` | Step increment for the slider (1 = dollar-by-dollar). |
+| `inputLimits.income.min` | number | `0` | Minimum allowed income value |
+| `inputLimits.income.max` | number | `500000` | Maximum allowed income value |
+| `inputLimits.donation.min` | number | `1` | Minimum allowed donation value |
+| `inputLimits.donation.max` | number | `250000` | Maximum allowed donation value |
 
 ## Learn config reference
 

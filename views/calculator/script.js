@@ -1,4 +1,4 @@
-import { setupForm, clearAllErrors, parseCurrency } from "../../js/ui/form.js";
+import { setupForm, clearAllErrors, parseCurrency, showError, clearError, formatLimit } from "../../js/ui/form.js";
 import { runCalculation, runReverseCalculation } from "../../js/calculator.js";
 import { renderResults } from "../../js/ui/results.js";
 import { pushStateToUrl, pushModeToUrl, readStateFromUrl, clearUrl } from "../../js/ui/url-state.js";
@@ -124,7 +124,7 @@ export async function init(contentEl, html) {
 
   setupForm(form, async (data) => {
     await calculate(data.province, data.income, data.donation);
-  });
+  }, appSettings.inputLimits);
 
   startOverBtn.addEventListener("click", () => {
     form.reset();
@@ -191,8 +191,10 @@ export async function init(contentEl, html) {
       return;
     }
 
-    if (incomeStr.trim() === "" || isNaN(income)) {
-      // Province selected but no income — optimistic mode (assume full taxpayer)
+    clearError(revIncome);
+
+    // Blank → optimistic mode (intentional UX: "I don't know my income")
+    if (incomeStr.trim() === "") {
       const [federal, prov] = await Promise.all([
         loadFederalConfig(),
         loadProvinceConfig(province),
@@ -200,6 +202,18 @@ export async function init(contentEl, html) {
       const donationNeeded = calculateDonationForRefund(refund, federal, prov);
       updateSliderUI(refund, donationNeeded, null, federal, prov);
       reverseDisclaimer.hidden = false;
+      return;
+    }
+
+    // Non-blank but invalid (negative, NaN, garbage text)
+    if (isNaN(income) || income < 0) {
+      showError(revIncome, "Please enter a valid income amount.");
+      return;
+    }
+
+    // Over max
+    if (income > appSettings.inputLimits.income.max) {
+      showError(revIncome, `Please enter an income amount under ${formatLimit(appSettings.inputLimits.income.max)}.`);
       return;
     }
 

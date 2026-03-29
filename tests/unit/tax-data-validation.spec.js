@@ -168,6 +168,30 @@ test.describe("Spot-check specific values", () => {
   });
 });
 
+test.describe("app-settings.json inputLimits", () => {
+  const appSettings = JSON.parse(readFileSync("config/app-settings.json", "utf-8"));
+
+  test("inputLimits section exists", () => {
+    expect(appSettings.inputLimits).toBeDefined();
+  });
+
+  test("inputLimits.income.min is 0", () => {
+    expect(appSettings.inputLimits.income.min).toBe(0);
+  });
+
+  test("inputLimits.income.max is a positive number", () => {
+    expect(appSettings.inputLimits.income.max).toBeGreaterThan(0);
+  });
+
+  test("inputLimits.donation.min is 1", () => {
+    expect(appSettings.inputLimits.donation.min).toBe(1);
+  });
+
+  test("inputLimits.donation.max is a positive number", () => {
+    expect(appSettings.inputLimits.donation.max).toBeGreaterThan(0);
+  });
+});
+
 test.describe("learn.json config", () => {
   const learnConfig = JSON.parse(readFileSync("config/learn.json", "utf-8"));
 
