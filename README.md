@@ -66,6 +66,7 @@ npm test                 # All tests (unit + e2e)
 
 - [Architecture](docs/architecture.md) — how the app works, project structure, how to add features
 - [Configuration](docs/configuration.md) — config file format, how to update tax data, how to add a province
+- [Analytics](docs/analytics.md) — GoatCounter setup, what gets tracked, how to switch providers
 - [Playwright debugging](docs/playwright-debugging.md) — how to debug e2e tests
 
 ## License

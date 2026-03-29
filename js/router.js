@@ -6,6 +6,7 @@
 
 import { basePath } from "./base-path.js";
 import { loadTemplate } from "./ui/template-loader.js";
+import { trackPageView } from "./analytics.js";
 
 const routes = {
   "/": "calculator",
@@ -92,10 +93,7 @@ async function navigate(routePath, { pushState = true, force = false } = {}) {
   // Signal that navigation is complete (used by e2e tests to detect route changes)
   contentEl.setAttribute("data-view", viewDir);
 
-  // Track SPA page view in GoatCounter (clean path without base path prefix)
-  window.goatcounter?.count?.({
-    path: currentRoute + location.search,
-  });
+  trackPageView(currentRoute + location.search);
 }
 
 /**
