@@ -95,6 +95,25 @@ const scenarios = [
   },
 ];
 
+const errorScenarios = [
+  {
+    name: "13a-error-income-over-max",
+    province: "Ontario",
+    income: "600000",
+    donation: "500",
+  },
+  {
+    name: "13b-error-donation-over-max",
+    province: "Ontario",
+    income: "80000",
+    donation: "300000",
+  },
+  {
+    name: "13c-error-empty-fields",
+    // No inputs — click Calculate with empty fields to trigger all required errors
+  },
+];
+
 const reverseScenarios = [
   {
     name: "14-reverse-mode-full-benefit",
@@ -120,6 +139,12 @@ const reverseScenarios = [
     income: "300000",
     refund: 500,
   },
+  {
+    name: "16c-reverse-mode-income-over-max",
+    province: "Ontario",
+    income: "600000",
+    refund: 100,
+  },
 ];
 
 for (const vp of viewports) {
@@ -139,6 +164,29 @@ for (const vp of viewports) {
         await page.click(".btn-calculate");
         await page.waitForSelector(".results-section");
       }
+
+      await page.screenshot({
+        path: join(vpDir, `${scenario.name}.png`),
+        fullPage: true,
+      });
+    });
+  }
+
+  for (const scenario of errorScenarios) {
+    test(`${vp.name}-${scenario.name}`, async ({ page }) => {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.goto("/");
+      await page.waitForSelector("#calculator-form");
+
+      if (scenario.province) {
+        await page.selectOption("#province", { label: scenario.province });
+        await page.fill("#income", scenario.income);
+        await page.fill("#donation", scenario.donation);
+      }
+
+      await page.click(".btn-calculate");
+      // Wait for validation errors to appear
+      await page.waitForSelector(".validation-error");
 
       await page.screenshot({
         path: join(vpDir, `${scenario.name}.png`),

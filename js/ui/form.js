@@ -17,7 +17,7 @@ export function parseCurrency(value) {
 /**
  * Show an inline validation error on a form group.
  */
-function showError(field, message) {
+export function showError(field, message) {
   const group = field.closest(".form-group");
   clearError(field);
   group.classList.add("has-error");
@@ -31,7 +31,7 @@ function showError(field, message) {
 /**
  * Clear the validation error on a form group.
  */
-function clearError(field) {
+export function clearError(field) {
   const group = field.closest(".form-group");
   group.classList.remove("has-error");
   const existing = group.querySelector(".validation-error");
@@ -51,10 +51,17 @@ export function clearAllErrors(form) {
 }
 
 /**
+ * Format a limit value as a dollar string (e.g. 500000 → "$500,000").
+ */
+export function formatLimit(value) {
+  return `$${value.toLocaleString()}`;
+}
+
+/**
  * Validate and read form values.
  * Returns { valid, data } where data is { province, income, donation }.
  */
-function validate(form) {
+function validate(form, limits) {
   const province = form.querySelector("#province");
   const income = form.querySelector("#income");
   const donation = form.querySelector("#donation");
@@ -71,11 +78,17 @@ function validate(form) {
   if (isNaN(incomeVal) || incomeVal < 0) {
     showError(income, "Please enter a valid income amount.");
     valid = false;
+  } else if (limits && incomeVal > limits.income.max) {
+    showError(income, `Please enter an income amount under ${formatLimit(limits.income.max)}.`);
+    valid = false;
   }
 
   const donationVal = parseCurrency(donation.value);
   if (isNaN(donationVal) || donationVal <= 0) {
     showError(donation, "Please enter a valid donation amount.");
+    valid = false;
+  } else if (limits && donationVal > limits.donation.max) {
+    showError(donation, `Please enter a donation amount under ${formatLimit(limits.donation.max)}.`);
     valid = false;
   }
 
@@ -92,10 +105,10 @@ function validate(form) {
  * @param {HTMLFormElement} form
  * @param {function} onSubmit — called with { province, income, donation } on valid submit
  */
-export function setupForm(form, onSubmit) {
+export function setupForm(form, onSubmit, limits) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const { valid, data } = validate(form);
+    const { valid, data } = validate(form, limits);
     if (valid) {
       onSubmit(data);
     }
