@@ -118,7 +118,7 @@ export async function init(contentEl, html) {
     await renderResults(results);
     document.querySelector('.results-section').scrollIntoView({ behavior: 'smooth' });
     pushStateToUrl(province, income, donation);
-    if (track) trackPageView('/' + location.search);
+    if (track) trackPageView('/');
     startOverBtn.hidden = false;
   }
 
@@ -225,7 +225,7 @@ export async function init(contentEl, html) {
     updateSliderUI(refund, results.donationNeeded, results, federal, prov);
     reverseDisclaimer.hidden = false;
     pushStateToUrl(province, income, refund, "reverse");
-    trackPageViewDebounced('/' + location.search);
+    trackPageViewDebounced('/?mode=reverse');
   }
 
   function updateSliderUI(refund, donationNeeded, results, federal, prov) {

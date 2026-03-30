@@ -14,7 +14,7 @@ let debounceTimer = null;
 
 /**
  * Track a page view immediately.
- * @param {string} path — clean path, e.g. '/learn' or '/?province=ON&income=60000'
+ * @param {string} path — clean path without user data, e.g. '/learn' or '/?mode=reverse'
  */
 export function trackPageView(path) {
   window.goatcounter?.count?.({ path });

@@ -93,7 +93,7 @@ async function navigate(routePath, { pushState = true, force = false } = {}) {
   // Signal that navigation is complete (used by e2e tests to detect route changes)
   contentEl.setAttribute("data-view", viewDir);
 
-  trackPageView(currentRoute + location.search);
+  trackPageView(currentRoute);
 }
 
 /**
