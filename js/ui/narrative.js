@@ -65,6 +65,10 @@ async function buildAllSections(results) {
     sections.push(await buildThresholdNudgeSection(results));
   }
 
+  if (results.claimLimit?.exceedsLimit) {
+    sections.push(await buildClaimLimitSection());
+  }
+
   if (results.usability.state === UsabilityState.PARTLY_WASTED || results.usability.state === UsabilityState.ENTIRELY_WASTED) {
     sections.push(await buildNonRefundableSection(results));
     sections.push(await buildCarryForwardSection(results));
@@ -136,6 +140,19 @@ ${calloutHtml}
 <p>This doesn't mean you should donate more than you want to. But if you're planning to give more later this year, it's worth knowing that each dollar above $${threshold} works harder for you.</p>`;
 
   return section("threshold-nudge", content);
+}
+
+async function buildClaimLimitSection() {
+  const calloutHtml = await callout("warm",
+    `<strong>Your donation may exceed the annual claiming limit.</strong> The CRA limits the charitable donation amount you can claim to 75% of your net income per tax year. Any amount over the limit can be carried forward and claimed over the next 5 years.`
+  );
+
+  return section("claim-limit",
+    `<h3>CRA annual claiming limit</h3>
+${calloutHtml}
+<p>The credit shown above is calculated on your full donation. In practice, you may need to spread the claim across multiple tax years.</p>
+<p style="font-size:13px; color:var(--color-text-secondary); margin-top: 8px;">The CRA limit is based on your net income (line 23600), which is your income after deductions like RRSP contributions. This may be lower than the income you entered above. Use CRA's Schedule 9 when filing for the exact calculation.</p>`
+  );
 }
 
 async function buildTaxSituationSection(results) {

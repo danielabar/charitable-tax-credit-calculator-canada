@@ -12,6 +12,7 @@ import { calculateMinimumIncome } from "./calculate-minimum-income.js";
 import { calculateNudge } from "./calculate-nudge.js";
 import { calculateDonationForRefund } from "./calculate-donation-for-refund.js";
 import { calculateSurtaxSavings } from "./calculate-surtax-savings.js";
+import { checkDonationClaimLimit } from "./check-donation-claim-limit.js";
 
 /**
  * @typedef {object} CalculationResults
@@ -43,6 +44,7 @@ import { calculateSurtaxSavings } from "./calculate-surtax-savings.js";
  * @property {number} nudge.hypotheticalAmount
  * @property {number} nudge.hypotheticalCredit
  * @property {number} nudge.currentCredit
+ * @property {{ exceedsLimit: boolean }} claimLimit
  * @property {object} donationRates
  * @property {number} donationRates.threshold
  * @property {{lowRate: number, highRate: number, topRate: number, topRateThreshold: number}} donationRates.federal
@@ -86,6 +88,8 @@ export async function runCalculation(provinceCode, income, donationAmount) {
     tax.totalTax, tax.provincialTax, usability.state, credit.effectiveTotalCredit
   );
 
+  const claimLimit = checkDonationClaimLimit(donationAmount, income, appSettings.donationClaimLimitPercent);
+
   const donationRates = {
     threshold: federal.donationCredit.lowRateThreshold,
     federal: {
@@ -107,6 +111,7 @@ export async function runCalculation(provinceCode, income, donationAmount) {
     usability,
     minimumIncome,
     nudge,
+    claimLimit,
     donationRates,
     appSettings,
   };

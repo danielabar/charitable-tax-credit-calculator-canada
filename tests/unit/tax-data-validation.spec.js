@@ -192,6 +192,20 @@ test.describe("app-settings.json inputLimits", () => {
   });
 });
 
+test.describe("app-settings.json donationClaimLimitPercent", () => {
+  const appSettings = JSON.parse(readFileSync("config/app-settings.json", "utf-8"));
+
+  test("donationClaimLimitPercent exists", () => {
+    expect(appSettings.donationClaimLimitPercent).toBeDefined();
+  });
+
+  test("donationClaimLimitPercent is a number between 0 and 1 (exclusive)", () => {
+    expect(typeof appSettings.donationClaimLimitPercent).toBe("number");
+    expect(appSettings.donationClaimLimitPercent).toBeGreaterThan(0);
+    expect(appSettings.donationClaimLimitPercent).toBeLessThan(1);
+  });
+});
+
 test.describe("learn.json config", () => {
   const learnConfig = JSON.parse(readFileSync("config/learn.json", "utf-8"));
 
