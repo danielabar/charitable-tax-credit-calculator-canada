@@ -21,6 +21,11 @@ Feature: CRA 75% donation claiming limit warning
     And the warning should mention "75% of your net income"
     And the warning should mention "carried forward"
     And the warning should mention "Schedule 9"
+    And the non-refundable section should mention "spreading your claim"
+    And the non-refundable section should mention "If you were to claim the full"
+    And the carry-forward section should not mention "Carry it forward"
+    And the carry-forward section should mention "Let your spouse claim it"
+    And I should not see the minimum income section
 
   Scenario: Forward mode — donation exactly at 75% shows no warning
     When I select "Ontario" as my province
