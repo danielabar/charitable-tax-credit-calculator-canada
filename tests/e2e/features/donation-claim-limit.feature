@@ -26,6 +26,8 @@ Feature: CRA 75% donation claiming limit warning
     And the carry-forward section should not mention "Carry it forward"
     And the carry-forward section should mention "Let your spouse claim it"
     And I should not see the minimum income section
+    # Tax situation narrative must use neutral language, not low-income framing (#39)
+    And the tax situation should say the donation credit exceeds tax payable
 
   Scenario: Forward mode — donation exactly at 75% shows no warning
     When I select "Ontario" as my province
