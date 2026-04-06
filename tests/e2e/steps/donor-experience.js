@@ -152,11 +152,11 @@ Then(
 );
 
 Then(
-  "the tax situation should say income is mostly sheltered by the basic personal amount",
+  "the tax situation should say the donation credit exceeds tax payable",
   async ({ page }) => {
     const section = page.locator('[data-narrative="tax-situation"]');
     await expect(section).toBeVisible();
-    await expect(section).toContainText("sheltered by the basic personal amount");
+    await expect(section).toContainText("donation credit exceeds your tax payable");
   },
 );
 

@@ -126,7 +126,7 @@ Feature: Donor experience
     And the visual breakdown should show usable versus unused credit
     # Narrative
     And the explanation should show tiered rates for donations above $200
-    And the tax situation should say income is mostly sheltered by the basic personal amount
+    And the tax situation should say the donation credit exceeds tax payable
     And the results should include the non-refundable credit explanation
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
@@ -152,7 +152,7 @@ Feature: Donor experience
     And the visual breakdown should show usable versus unused credit
     # Narrative
     And the explanation should show a single rate for donations under $200
-    And the tax situation should say income is mostly sheltered by the basic personal amount
+    And the tax situation should say the donation credit exceeds tax payable
     And the results should include the non-refundable credit explanation
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section
@@ -178,7 +178,7 @@ Feature: Donor experience
     And the visual breakdown should show usable versus unused credit
     # Narrative
     And the explanation should show a single rate for donations under $200
-    And the tax situation should say income is mostly sheltered by the basic personal amount
+    And the tax situation should say the donation credit exceeds tax payable
     And the results should include the non-refundable credit explanation
     And the results should include carry-forward and spouse options
     And the results should include the minimum income section

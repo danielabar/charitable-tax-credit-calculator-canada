@@ -174,7 +174,7 @@ async function buildTaxSituationSection(results) {
   if (usability.state === UsabilityState.PARTLY_WASTED) {
     return section("tax-situation",
       `<h3>Your tax situation</h3>
-<p>Based on your income of <span class="hl">${$(input.income)}</span> in ${input.provinceName}, we estimate your total income tax is approximately <span class="hl">${$(tax.totalTax)}</span>. Most of your income is sheltered by the basic personal amount, which means you owe very little tax.</p>`
+<p>Based on your income of <span class="hl">${$(input.income)}</span> in ${input.provinceName}, we estimate your total income tax is approximately <span class="hl">${$(tax.totalTax)}</span>. Your donation credit exceeds your tax payable, so part of the credit will go unused.</p>`
     );
   }
 
