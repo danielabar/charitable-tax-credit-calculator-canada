@@ -210,7 +210,7 @@ ${calloutHtml}
     return section("non-refundable",
       `<h3>Why spreading your claim also helps with the credit</h3>
 ${calloutHtml}
-<p>By spreading the claim across multiple years, each year's credit is smaller and more likely to fit within that year's tax — so less goes to waste.</p>
+<p>By spreading the claim across multiple years, each year's credit is smaller and more likely to fit within that year's tax — so less credit goes unused.</p>
 <a href="learn" data-route="/learn" class="learn-link">See how this affects different types of taxpayers <span class="arrow">&rarr;</span></a>`
     );
   }
