@@ -32,7 +32,8 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
   "inputLimits": {
     "income": { "min": 0, "max": 500000 },
     "donation": { "min": 1, "max": 250000 }
-  }
+  },
+  "donationClaimLimitPercent": 0.75
 }
 ```
 
@@ -48,6 +49,7 @@ Config files are fetched via `js/load-config.js`, which caches them after the fi
 | `inputLimits.income.max` | number | `500000` | Maximum allowed income value |
 | `inputLimits.donation.min` | number | `1` | Minimum allowed donation value |
 | `inputLimits.donation.max` | number | `250000` | Maximum allowed donation value |
+| `donationClaimLimitPercent` | number (0–1) | `0.75` | CRA annual claiming limit as percentage of net income. Triggers an informational warning when the donation exceeds this percentage of the user's entered income. Based on ITA Section 118.1. |
 
 ## Learn config reference
 

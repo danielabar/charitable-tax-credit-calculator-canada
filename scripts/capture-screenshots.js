@@ -88,6 +88,18 @@ const scenarios = [
     donation: "5000",
   },
   {
+    name: "18-claim-limit-warning",
+    province: "Ontario",
+    income: "150000",
+    donation: "120000",
+  },
+  {
+    name: "19-claim-limit-plus-unused-credit",
+    province: "Ontario",
+    income: "100000",
+    donation: "95000",
+  },
+  {
     name: "12-top-bracket-below-200",
     province: "Ontario",
     income: "300000",

@@ -65,10 +65,20 @@ async function buildAllSections(results) {
     sections.push(await buildThresholdNudgeSection(results));
   }
 
+  if (results.claimLimit?.exceedsLimit) {
+    sections.push(await buildClaimLimitSection());
+  }
+
   if (results.usability.state === UsabilityState.PARTLY_WASTED || results.usability.state === UsabilityState.ENTIRELY_WASTED) {
     sections.push(await buildNonRefundableSection(results));
     sections.push(await buildCarryForwardSection(results));
-    sections.push(await buildMinimumIncomeSection(results));
+
+    // Skip minimum income when the 75% claim limit also fires — telling the
+    // user "earn $X to use it all in one year" is misleading when they need
+    // to spread the claim across years anyway.
+    if (!results.claimLimit?.exceedsLimit) {
+      sections.push(await buildMinimumIncomeSection(results));
+    }
   }
 
   if (results.usability.state === UsabilityState.ENTIRELY_WASTED) {
@@ -138,6 +148,19 @@ ${calloutHtml}
   return section("threshold-nudge", content);
 }
 
+async function buildClaimLimitSection() {
+  const calloutHtml = await callout("warm",
+    `<strong>Your donation may exceed the annual claiming limit.</strong> The CRA limits the charitable donation amount you can claim to 75% of your net income per tax year. Any amount over the limit can be carried forward and claimed over the next 5 years.`
+  );
+
+  return section("claim-limit",
+    `<h3>CRA annual claiming limit</h3>
+${calloutHtml}
+<p>The credit shown above is calculated on your full donation. In practice, you may need to spread the claim across multiple tax years.</p>
+<p style="font-size:13px; color:var(--color-text-secondary); margin-top: 8px;">The CRA limit is based on your net income (line 23600), which is your income after deductions like RRSP contributions. This may be lower than the income you entered above. Use CRA's Schedule 9 when filing for the exact calculation.</p>`
+  );
+}
+
 async function buildTaxSituationSection(results) {
   const { input, tax, credit, usability } = results;
 
@@ -163,7 +186,7 @@ async function buildTaxSituationSection(results) {
 }
 
 async function buildNonRefundableSection(results) {
-  const { credit, tax, usability } = results;
+  const { credit, tax, usability, input, claimLimit } = results;
 
   if (usability.state === UsabilityState.ENTIRELY_WASTED) {
     const calloutHtml = await callout("warning",
@@ -173,6 +196,21 @@ async function buildNonRefundableSection(results) {
       `<h3>Why the credit can't be used this year</h3>
 ${calloutHtml}
 <p>This is a limitation of how the system is designed, not a reflection of your generosity. Many people are in this situation and most existing calculators don't mention it.</p>
+<a href="learn" data-route="/learn" class="learn-link">See how this affects different types of taxpayers <span class="arrow">&rarr;</span></a>`
+    );
+  }
+
+  // When the 75% claim limit also fires, reframe the non-refundable section
+  // to connect with the "spread your claim" advice instead of presenting
+  // a separate alarming warning.
+  if (claimLimit?.exceedsLimit) {
+    const calloutHtml = await callout("info",
+      `The charitable donation credit is <strong>non-refundable</strong> — it can reduce tax you owe, but it can never create a refund on its own. If you were to claim the full <span class="hl">${$(input.donationAmount)}</span> donation in a single year, the credit of <span class="hl">${$(credit.effectiveTotalCredit)}</span> would exceed your estimated tax of <span class="hl">${$(tax.totalTax)}</span> — and <span class="hl-red">${$(usability.creditWasted)}</span> of credit would go unused.`
+    );
+    return section("non-refundable",
+      `<h3>Why spreading your claim also helps with the credit</h3>
+${calloutHtml}
+<p>By spreading the claim across multiple years, each year's credit is smaller and more likely to fit within that year's tax — so less credit goes unused.</p>
 <a href="learn" data-route="/learn" class="learn-link">See how this affects different types of taxpayers <span class="arrow">&rarr;</span></a>`
     );
   }
@@ -201,6 +239,18 @@ async function buildCarryForwardSection(results) {
     ]);
     return section("carry-forward",
       `<h3>What you can do</h3>\n${carryCallout}\n${spouseCallout}`
+    );
+  }
+
+  // When the 75% claim limit also fires, carry-forward advice has already
+  // been covered by the claim limit section — only show the spouse option.
+  if (results.claimLimit?.exceedsLimit) {
+    const spouseCallout = await callout("info",
+      `<strong>Let your spouse claim it.</strong> If your spouse or common-law partner has a higher income, they may be able to use more of the credit in a single year. Either spouse can claim any donation, regardless of who made it.`,
+      "spouse-option"
+    );
+    return section("carry-forward",
+      `<h3>Another option</h3>\n${spouseCallout}`
     );
   }
 
