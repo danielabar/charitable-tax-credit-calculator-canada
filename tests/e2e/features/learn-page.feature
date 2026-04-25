@@ -19,7 +19,11 @@ Feature: Learn page
 
   Scenario: Learn page renders all content correctly
     Given I am on the Learn page
-    Then I should see the taxpayer categories section
+    Then I should see the "What income should I enter?" section
+    And the income section should list working, retired, self-employed, mixed, and investments
+    And the income section should mention the line 26000 taxable income reference
+    And the income section should appear before the taxpayer categories section
+    And I should see the taxpayer categories section
     And I should see 4 scenario cards
     And the non-taxpayer card should show $0 gets back
     And the partial taxpayer card should show a partial amount back

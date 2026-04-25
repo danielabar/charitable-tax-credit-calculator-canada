@@ -104,3 +104,43 @@ Then("I should see the rate callout explaining the threshold", async ({ page }) 
   await expect(callout).toBeVisible();
   await expect(callout).toContainText("$200");
 });
+
+Then('I should see the "What income should I enter?" section', async ({ page }) => {
+  const section = page.locator("#what-income-to-enter");
+  await expect(section).toBeVisible();
+  await expect(section.locator("h2")).toHaveText("What income should I enter?");
+});
+
+Then(
+  "the income section should list working, retired, self-employed, mixed, and investments",
+  async ({ page }) => {
+    const section = page.locator("#what-income-to-enter");
+    const text = (await section.textContent()).toLowerCase();
+    for (const keyword of ["working", "retired", "self-employed", "mixed", "investments"]) {
+      expect(text).toContain(keyword);
+    }
+  }
+);
+
+Then(
+  "the income section should mention the line 26000 taxable income reference",
+  async ({ page }) => {
+    const section = page.locator("#what-income-to-enter");
+    await expect(section).toContainText("line 26000");
+    await expect(section).toContainText("taxable income");
+  }
+);
+
+Then(
+  "the income section should appear before the taxpayer categories section",
+  async ({ page }) => {
+    const result = await page.evaluate(() => {
+      const incomeSection = document.querySelector("#what-income-to-enter");
+      const taxpayerSection = document.querySelector("#taxpayer-categories");
+      if (!incomeSection || !taxpayerSection) return null;
+      // DOCUMENT_POSITION_FOLLOWING (4) means taxpayer comes after income.
+      return incomeSection.compareDocumentPosition(taxpayerSection) & 4;
+    });
+    expect(result).toBeTruthy();
+  }
+);

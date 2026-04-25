@@ -109,6 +109,15 @@ Feature: Navigation
     And the URL should contain "province=ON"
     And the URL should contain "refund=100"
 
+  Scenario: Learn-more link from income explainer jumps to the matching Learn section
+    Given I visit the calculator page
+    When I expand the "What should I enter?" income explainer
+    And I click the "Learn more" link in the income explainer
+    Then I should see the Learn page content
+    And the URL should contain "/learn"
+    And the URL should contain "#what-income-to-enter"
+    And the "What income should I enter?" section should be in view
+
   # Flaky: history.back() timeout — see https://github.com/danielabar/charitable-tax-credit-calculator-canada/issues/11
   @fixme
   Scenario: Calculator state preserved after navigating away and back

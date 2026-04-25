@@ -37,7 +37,20 @@
 
         <div class="form-group">
           <label for="income">Annual income</label>
-          <div class="hint">Your salary or wages before deductions</div>
+          <div class="hint">Your total income before tax (all sources)</div>
+          <details class="income-explainer">
+            <summary>What should I enter?</summary>
+            <div class="income-explainer-body">
+              <p>Enter your total yearly income before tax — from whatever sources you have. An approximate number is fine.</p>
+              <ul>
+                <li><strong>Working:</strong> your salary or wages (T4 box 14).</li>
+                <li><strong>Retired:</strong> CPP, OAS, employer pension, and any RRIF withdrawals — added together.</li>
+                <li><strong>Self-employed:</strong> your net business income for the year.</li>
+                <li><strong>Investments:</strong> interest, dividends, and capital gains.</li>
+              </ul>
+              <a class="learn-more" href="learn#what-income-to-enter" data-route="/learn">Learn more <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </details>
           <div class="input-prefix">
             <input type="text" id="income" name="income" inputmode="numeric" placeholder="0" required>
           </div>
@@ -86,7 +99,20 @@
       </div>
       <div class="form-group">
         <label for="rev-income">Annual income</label>
-        <div class="hint">Your salary or wages before deductions</div>
+        <div class="hint">Your total income before tax (all sources)</div>
+        <details class="income-explainer">
+          <summary>What should I enter?</summary>
+          <div class="income-explainer-body">
+            <p>Enter your total yearly income before tax — from whatever sources you have. An approximate number is fine.</p>
+            <ul>
+              <li><strong>Working:</strong> your salary or wages (T4 box 14).</li>
+              <li><strong>Retired:</strong> CPP, OAS, employer pension, and any RRIF withdrawals — added together.</li>
+              <li><strong>Self-employed:</strong> your net business income for the year.</li>
+              <li><strong>Investments:</strong> interest, dividends, and capital gains.</li>
+            </ul>
+            <a class="learn-more" href="learn#what-income-to-enter" data-route="/learn">Learn more <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </details>
         <div class="input-prefix">
           <input type="text" id="rev-income" inputmode="numeric" placeholder="0">
         </div>

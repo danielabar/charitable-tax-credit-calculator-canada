@@ -49,3 +49,57 @@ Then("the Calculate button should be enabled", async ({ page }) => {
   const button = page.locator(".btn-calculate");
   await expect(button).toBeEnabled();
 });
+
+const explainerSelector = "#forward-view details.income-explainer";
+
+Then(
+  'I should see the "What should I enter?" income explainer',
+  async ({ page }) => {
+    const summary = page.locator(`${explainerSelector} summary`);
+    await expect(summary).toBeVisible();
+    await expect(summary).toHaveText("What should I enter?");
+  }
+);
+
+Then("the income explainer should be collapsed", async ({ page }) => {
+  const isOpen = await page
+    .locator(explainerSelector)
+    .evaluate((el) => el.hasAttribute("open"));
+  expect(isOpen).toBe(false);
+});
+
+When(
+  'I click the "What should I enter?" income explainer',
+  async ({ page }) => {
+    await page.locator(`${explainerSelector} summary`).click();
+  }
+);
+
+Then("the income explainer should be expanded", async ({ page }) => {
+  const isOpen = await page
+    .locator(explainerSelector)
+    .evaluate((el) => el.hasAttribute("open"));
+  expect(isOpen).toBe(true);
+  await expect(page.locator(`${explainerSelector} .income-explainer-body`)).toBeVisible();
+});
+
+Then(
+  "the income explainer should mention working, retired, self-employed, and investments",
+  async ({ page }) => {
+    const body = page.locator(`${explainerSelector} .income-explainer-body`);
+    const text = (await body.textContent()).toLowerCase();
+    for (const keyword of ["working", "retired", "self-employed", "investments"]) {
+      expect(text).toContain(keyword);
+    }
+  }
+);
+
+Then(
+  'the income explainer should include a "Learn more" link',
+  async ({ page }) => {
+    const link = page.locator(`${explainerSelector} .income-explainer-body a.learn-more`);
+    await expect(link).toBeVisible();
+    const href = await link.getAttribute("href");
+    expect(href).toContain("#what-income-to-enter");
+  }
+);

@@ -32,6 +32,68 @@
     margin-bottom: var(--space-lg);
   }
 
+  .section-target {
+    /* Make anchored heading land below the sticky-ish header */
+    scroll-margin-top: 72px;
+  }
+
+  /* Income examples block (Learn page section) */
+  .income-source-list {
+    display: grid;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+  .income-source {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    align-items: start;
+    gap: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-md) var(--space-lg);
+  }
+  .income-source-tag {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .income-source-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 2px;
+  }
+  .income-source-detail {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+  }
+
+  .income-aside {
+    background: var(--color-bg-alt);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md) var(--space-lg);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+  .income-aside + .income-aside { margin-top: var(--space-sm); }
+  .income-aside strong { color: var(--color-text); }
+  .income-aside.aside-precise {
+    background: var(--color-primary-light);
+    border-left-color: var(--color-primary-dark);
+  }
+
   /* Scenario cards grid */
   .scenario-cards {
     display: grid;

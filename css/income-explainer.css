@@ -1,0 +1,113 @@
+@layer components {
+  /* Income explainer (<details>)
+     Collapsed: plain inline text link with chevron — deliberately NOT
+     boxed, so it never reads as another input field. Opens into a soft
+     teal panel that visually contains the explanation. */
+  .income-explainer {
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition: background-color 0.15s ease;
+  }
+  .income-explainer[open] {
+    background: var(--color-primary-light);
+    border: 1px solid oklch(85% 0.04 192);
+  }
+
+  .income-explainer summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .income-explainer summary::-webkit-details-marker { display: none; }
+  .income-explainer summary::before {
+    content: "";
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230d7377' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='4 6 8 10 12 6'/></svg>");
+    background-size: 12px 12px;
+    transform: rotate(-90deg);
+    transition: transform 0.15s ease;
+  }
+  .income-explainer[open] summary::before {
+    transform: rotate(0deg);
+  }
+  .income-explainer summary:hover { color: var(--color-primary-dark); }
+  .income-explainer summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* When the panel is open, the summary becomes the panel's heading row,
+     so style it as a flush block header instead of an inline link. */
+  .income-explainer[open] summary {
+    display: flex;
+    width: 100%;
+    padding: 10px 14px;
+    color: var(--color-primary-dark);
+    text-decoration: none;
+    border-bottom: 1px solid oklch(88% 0.03 192);
+  }
+  .income-explainer[open] summary::before {
+    width: 14px;
+    height: 14px;
+    background-size: 14px 14px;
+  }
+
+  .income-explainer-body {
+    padding: 12px 14px 14px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+  .income-explainer-body p { margin: 0; }
+  .income-explainer-body p + p { margin-top: 8px; }
+  .income-explainer-body ul {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 4px;
+  }
+  .income-explainer-body ul li {
+    position: relative;
+    padding-left: 14px;
+  }
+  .income-explainer-body ul li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0.7em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+  .income-explainer-body ul li strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  .income-explainer-body .learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: gap 0.15s ease;
+  }
+  .income-explainer-body .learn-more:hover { gap: 8px; text-decoration: underline; }
+}
