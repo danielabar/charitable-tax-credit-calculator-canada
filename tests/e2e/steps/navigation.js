@@ -125,6 +125,36 @@ Then("I should see the forward calculator", async ({ page }) => {
  * to wait for the async popstate handler to finish rendering (it may call
  * runCalculation or updateSlider which fetch config files).
  */
+When(
+  'I expand the "What should I enter?" income explainer',
+  async ({ page }) => {
+    await page.locator("#forward-view details.income-explainer summary").click();
+  }
+);
+
+When(
+  'I click the "Learn more" link in the income explainer',
+  async ({ page }) => {
+    await page
+      .locator("#forward-view details.income-explainer .learn-more")
+      .click();
+    await page.waitForSelector(".learn-page");
+  }
+);
+
+Then(
+  'the "What income should I enter?" section should be in view',
+  async ({ page }) => {
+    const heading = page.locator("#what-income-to-enter h2");
+    await expect(heading).toBeVisible();
+    const inView = await heading.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.top >= 0 && rect.top < window.innerHeight;
+    });
+    expect(inView).toBe(true);
+  }
+);
+
 When("I press Back on the same page", async ({ page }) => {
   const currentUrl = page.url();
   await page.evaluate(() => {

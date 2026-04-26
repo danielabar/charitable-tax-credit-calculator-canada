@@ -49,9 +49,10 @@ function buildFullPath(routePath) {
  * @param {string} routePath - e.g. "/" or "/about"
  * @param {object} options
  * @param {boolean} options.pushState - whether to push a history entry (false for popstate/initial load)
+ * @param {string} options.hash - optional fragment ("#foo") to preserve in URL and scroll to after render
  */
-async function navigate(routePath, { pushState = true, force = false } = {}) {
-  if (routePath === currentRoute && !force) return;
+async function navigate(routePath, { pushState = true, force = false, hash = "" } = {}) {
+  if (routePath === currentRoute && !force && !hash) return;
 
   const viewDir = routes[routePath];
   if (!viewDir) {
@@ -61,7 +62,7 @@ async function navigate(routePath, { pushState = true, force = false } = {}) {
 
   // Update URL and state synchronously (before async content loading)
   if (pushState) {
-    history.pushState({ route: routePath }, "", buildFullPath(routePath));
+    history.pushState({ route: routePath }, "", buildFullPath(routePath) + hash);
   }
 
   document.querySelectorAll("[data-route]").forEach((link) => {
@@ -70,6 +71,12 @@ async function navigate(routePath, { pushState = true, force = false } = {}) {
       link.getAttribute("data-route") === routePath,
     );
   });
+
+  // Same-route navigation with a fragment: just scroll, don't re-init the view.
+  if (routePath === currentRoute && !force) {
+    if (hash) scrollToHash(hash);
+    return;
+  }
 
   currentRoute = routePath;
 
@@ -93,7 +100,14 @@ async function navigate(routePath, { pushState = true, force = false } = {}) {
   // Signal that navigation is complete (used by e2e tests to detect route changes)
   contentEl.setAttribute("data-view", viewDir);
 
+  if (hash) scrollToHash(hash);
+
   trackPageView(currentRoute);
+}
+
+function scrollToHash(hash) {
+  const target = document.querySelector(hash);
+  if (target) target.scrollIntoView({ behavior: "instant", block: "start" });
 }
 
 /**
@@ -103,7 +117,7 @@ function start() {
   // Browser back/forward
   window.addEventListener("popstate", () => {
     const routePath = normalizePath(location.pathname);
-    navigate(routePath, { pushState: false });
+    navigate(routePath, { pushState: false, hash: location.hash });
   });
 
   // Intercept clicks on [data-route] links
@@ -113,12 +127,12 @@ function start() {
     event.preventDefault();
     const route = link.getAttribute("data-route");
     // Logo click forces fresh render even if already on the route
-    navigate(route, { force: link.classList.contains("logo") });
+    navigate(route, { force: link.classList.contains("logo"), hash: link.hash });
   });
 
   // Initial route
   const routePath = normalizePath(location.pathname);
-  navigate(routePath, { pushState: false });
+  navigate(routePath, { pushState: false, hash: location.hash });
 
   // Replace the initial history entry with a SPA-managed one.
   // Without this, the initial entry (from a real page load) can cause a full
